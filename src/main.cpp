@@ -1,7 +1,14 @@
 #include <iostream>
+#include <vector>
+
+#define _USE_MATH_DEFINES
+#include <cmath>
+
 #include "SDL2/SDL.h"
+#include "Spaceship.hpp"
 
 using namespace std;
+using namespace glm;
 
 const int WIDTH = 800, HEIGHT = 600; 
 
@@ -24,29 +31,14 @@ int main(int argc, char* argv[]) {
   SDL_Renderer* renderer = NULL;
   renderer =  SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED);
 
-  // Set render color to red ( background will be rendered in this color )
-  SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
+  vec2 base_dir = vec2(1.0f,0.0f);
+  vec2 position = vec2(200.0f,200.0f);
+  Spaceship* uss_enterprise = new Spaceship(position,0,base_dir,renderer);
+  uss_enterprise->draw();
 
-  // Clear winow
-  SDL_RenderClear( renderer );
-
-  // Creat a rect at pos ( 50, 50 ) that's 50 pixels wide and 50 pixels high.
-  SDL_Rect r;
-  r.x = 50;
-  r.y = 50;
-  r.w = 50;
-  r.h = 50;
-
-
-  // Set render color to blue ( rect will be rendered in this color )
-  SDL_SetRenderDrawColor( renderer, 255, 0, 255, 255 );
-
-  // Render rect
-  SDL_RenderFillRect( renderer, &r );
-  SDL_RenderDrawLine( renderer , 20, 20, 400, 400 );
-
-  // Render the rect to the screen
-  SDL_RenderPresent(renderer);
+  double angle = 0.0f;
+  double delta_angle = M_PI/64.0f;
+  double speed = 1.0f;
 
   SDL_Event windowEvent;
   while(true){
@@ -55,9 +47,42 @@ int main(int argc, char* argv[]) {
         break;
       }
     }
+    const Uint8 *keystates = SDL_GetKeyboardState(NULL);
+    if(keystates[SDL_SCANCODE_LEFT] && keystates[SDL_SCANCODE_UP]){
+      cout << "rotate left and acceleration" << endl;
+      angle -= 0.3f * delta_angle;
+      uss_enterprise->setDirection(angle);
+      uss_enterprise->accelerate(speed);
+      uss_enterprise->draw();
+    }
+    else if(keystates[SDL_SCANCODE_RIGHT] && keystates[SDL_SCANCODE_UP]){
+      cout << "rotate right and acceleration" << endl;
+      angle += 0.3f * delta_angle;
+      uss_enterprise->setDirection(angle);
+      uss_enterprise->accelerate(speed);
+      uss_enterprise->draw();
+    }
+    else if (keystates[SDL_SCANCODE_LEFT]) {
+      cout << "rotate right " << angle << endl;
+      angle -= 0.3f * delta_angle;
+      uss_enterprise->setDirection(angle);
+      uss_enterprise->draw();
+    }
+    else if (keystates[SDL_SCANCODE_RIGHT]) {
+      cout << "rotate left" << endl;
+      angle += 0.3f * delta_angle;
+      uss_enterprise->setDirection(angle);
+      uss_enterprise->draw();
+    }
+    else if(keystates[SDL_SCANCODE_UP]) {
+      cout << "acceleration" << endl;
+      uss_enterprise->accelerate(speed);
+      uss_enterprise->draw();
+    }
   }
 
   SDL_DestroyWindow(window);
   SDL_Quit();
   return EXIT_SUCCESS;
 }
+

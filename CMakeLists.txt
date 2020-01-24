@@ -5,8 +5,10 @@ cmake_minimum_required(VERSION 3.0)
 project(Test)
 
 find_package(SDL2 REQUIRED)
+find_package(glm REQUIRED)
 
 include_directories(${SDL2_INCLUDE_DIR})
+# include_directories(${GLM_INCLUDE_DIR})
 
 include_directories(include)
 
@@ -19,3 +21,4 @@ file(GLOB sources "src/*.cpp")
 add_executable(${TARGET} ${sources})
 
 target_link_libraries(${TARGET} ${SDL2_LIBRARY})
+target_link_libraries(${TARGET} glm)
