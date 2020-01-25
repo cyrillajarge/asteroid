@@ -13,12 +13,15 @@ include_directories(${SDL2_INCLUDE_DIR})
 include_directories(include)
 
 # add_subdirectory(src)
-
+set(BINDIR bin)
 set(TARGET main)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/${BINDIR})
 
 file(GLOB sources "src/*.cpp")
 add_executable(${TARGET} ${sources})
 
-target_link_libraries(${TARGET} ${SDL2_LIBRARY})
-target_link_libraries(${TARGET} glm)
+target_link_libraries(${TARGET} ${SDL2_LIBRARY} glm)
+
+if (APPLE)
+    target_link_libraries(${TARGET} "-F/Library/Frameworks" "-framework SDL2")
+endif (APPLE)
