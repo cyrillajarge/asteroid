@@ -10,19 +10,25 @@
 using namespace std;
 using namespace glm;
 
+const float VEL_ATTENUATION = 0.98f;
+const float DIR_VECTOR_REGULATION = 0.4f;
+
 class Spaceship{
-  public:
+  private:
     vec2 position;
-    double angle;
-    vec2 direction;
     SDL_Renderer* renderer;
+    double direction_angle;
+    vec2 velocity;
+    bool boostActive;
 
   public:
     Spaceship(vec2 position, SDL_Renderer* renderer);
-    void draw(bool accelerationmarker);
-    void accelerate(double acceleration);
-    void rotate(double angle);
-    void setDirection(double angle);
+    void activateBoost();
+    void deactivateBoost();
+    void update(double rotation);
+    void boost();
+    void draw();
+    
 };
 
 #endif
