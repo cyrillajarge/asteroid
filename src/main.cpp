@@ -28,15 +28,10 @@ int main(int argc, char* argv[]) {
     return EXIT_FAILURE;
   }
 
-
   SDL_Renderer* renderer = NULL;
   renderer =  SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED);
 
-  int window_width;
-  int window_height;
-  SDL_GetWindowSize(window, &window_width, &window_height);
-
-  vec2 position = vec2(window_width / 2.0f, window_height / 2.0f);
+  vec2 position = vec2(WIDTH / 2.0f, HEIGHT / 2.0f);
   Spaceship* uss_enterprise = new Spaceship(position,renderer);
   
   int lastTime = 0, currentTime = 0;
