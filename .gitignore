@@ -93,3 +93,5 @@ Temporary Items
 .history
 
 # End of https://www.gitignore.io/api/c++,macos,cmake,visualstudiocode
+build
+.vscode
