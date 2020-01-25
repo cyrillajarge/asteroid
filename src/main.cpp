@@ -31,14 +31,24 @@ int main(int argc, char* argv[]) {
   SDL_Renderer* renderer = NULL;
   renderer =  SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED);
 
-  vec2 base_dir = vec2(1.0f,0.0f);
   vec2 position = vec2(200.0f,200.0f);
-  Spaceship* uss_enterprise = new Spaceship(position,0,base_dir,renderer);
-  uss_enterprise->draw();
+  Spaceship* uss_enterprise = new Spaceship(position,renderer);
+  uss_enterprise->draw(false);
 
   double angle = 0.0f;
-  double delta_angle = M_PI/64.0f;
-  double speed = 1.0f;
+  double delta_angle = 180.0f;
+  double acceleration = 0.2f;
+  double deceleration = 0.02f;
+  double speed = 150.0f;
+  vec2 dir = vec2(0.0f, 0.0f);
+  vec2 motion = vec2(0.0f, 0.0f);
+  int lastTime = 0, currentTime = 0;
+
+
+  double deltaTime = 0.0f;
+  double test = 0.0f;
+  double last_angle = 0.0f;
+  bool accelerationmarker = false;
 
   SDL_Event windowEvent;
   while(true){
@@ -47,37 +57,46 @@ int main(int argc, char* argv[]) {
         break;
       }
     }
-    const Uint8 *keystates = SDL_GetKeyboardState(NULL);
-    if(keystates[SDL_SCANCODE_LEFT] && keystates[SDL_SCANCODE_UP]){
-      cout << "rotate left and acceleration" << endl;
-      angle -= 0.3f * delta_angle;
-      uss_enterprise->setDirection(angle);
-      uss_enterprise->accelerate(speed);
-      uss_enterprise->draw();
-    }
-    else if(keystates[SDL_SCANCODE_RIGHT] && keystates[SDL_SCANCODE_UP]){
-      cout << "rotate right and acceleration" << endl;
-      angle += 0.3f * delta_angle;
-      uss_enterprise->setDirection(angle);
-      uss_enterprise->accelerate(speed);
-      uss_enterprise->draw();
-    }
-    else if (keystates[SDL_SCANCODE_LEFT]) {
-      cout << "rotate right " << angle << endl;
-      angle -= 0.3f * delta_angle;
-      uss_enterprise->setDirection(angle);
-      uss_enterprise->draw();
-    }
-    else if (keystates[SDL_SCANCODE_RIGHT]) {
-      cout << "rotate left" << endl;
-      angle += 0.3f * delta_angle;
-      uss_enterprise->setDirection(angle);
-      uss_enterprise->draw();
-    }
-    else if(keystates[SDL_SCANCODE_UP]) {
-      cout << "acceleration" << endl;
-      uss_enterprise->accelerate(speed);
-      uss_enterprise->draw();
+    currentTime = SDL_GetTicks();
+    deltaTime = currentTime - lastTime;
+    if (deltaTime > 30) /* Si 30 ms se sont écoulées */
+    {
+        const Uint8 *keystates = SDL_GetKeyboardState(NULL);
+        if (keystates[SDL_SCANCODE_LEFT]) {
+          angle -= 0.05f * delta_angle;
+          uss_enterprise->rotate(angle);
+        }
+        if (keystates[SDL_SCANCODE_RIGHT]) {
+          angle += 0.05f * delta_angle;
+          uss_enterprise->rotate(angle);
+        }
+        if(keystates[SDL_SCANCODE_UP]) {
+          accelerationmarker = true;
+          dir = vec2(cos(uss_enterprise->angle), sin(uss_enterprise->angle));
+          if(angle != last_angle){
+            motion = length(motion) * dir;
+            last_angle = angle;
+          }
+
+          if(abs(motion.x - dir.x) >= 0.0001f || abs(motion.y - dir.y) >= 0.0001f){
+            double dist = distance(motion, 2.0f * dir);
+            motion += dir * (float)dist * (float)acceleration;
+          }
+        }
+        if( abs(motion.x) > 0.0f || abs(motion.y) > 0.0f){
+          double dist = distance(vec2(0.0f, 0.0f), motion);
+          if(dist > 0.1f){
+            motion -= dir * (float)dist * (float)deceleration;
+          }
+          else{
+            motion = vec2(0.0f, 0.0f);
+          }
+        }
+
+        uss_enterprise->position += motion * (float)speed * 0.03f;
+        uss_enterprise->draw(accelerationmarker);
+        accelerationmarker = false;
+        lastTime = currentTime;
     }
   }
 

@@ -4,6 +4,7 @@
 #include "SDL2/SDL.h"
 #include <iostream>
 #include <vector>
+#include <cmath>
 #include <glm/glm.hpp>
 
 using namespace std;
@@ -17,9 +18,10 @@ class Spaceship{
     SDL_Renderer* renderer;
 
   public:
-    Spaceship(vec2 position, double angle, vec2 direction, SDL_Renderer* renderer);
-    void draw();
-    void accelerate(double speed);
+    Spaceship(vec2 position, SDL_Renderer* renderer);
+    void draw(bool accelerationmarker);
+    void accelerate(double acceleration);
+    void rotate(double angle);
     void setDirection(double angle);
 };
 
