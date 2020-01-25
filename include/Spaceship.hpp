@@ -25,7 +25,7 @@ class Spaceship{
     Spaceship(vec2 position, SDL_Renderer* renderer);
     void activateBoost();
     void deactivateBoost();
-    void update(double rotation);
+    void update(double rotation, int width, int height);
     void boost();
     void draw();
     

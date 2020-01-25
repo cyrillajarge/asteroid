@@ -18,12 +18,24 @@ void Spaceship::deactivateBoost(){
   this->boostActive = false;
 }
 
-void Spaceship::update(double rotation){
+void Spaceship::update(double rotation, int width, int height){
   this->direction_angle += rotation;
   if(this->boostActive){
     this->boost();
   }
   this->position += this->velocity;
+  if(this->position.x > width){
+    this->position.x = 0;
+  }
+  if(this->position.x < 0){
+    this->position.x = width;
+  }
+  if(this->position.y > height){
+    this->position.y = 0;
+  }
+  if(this->position.y < 0){
+    this->position.y = height;
+  }
   this->velocity *= VEL_ATTENUATION;
 }
 

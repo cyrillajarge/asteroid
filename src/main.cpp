@@ -10,8 +10,8 @@
 using namespace std;
 using namespace glm;
 
-#define WIDTH 800
-#define HEIGHT 600
+#define WIDTH 1080
+#define HEIGHT 720
 #define DELTA_ANGLE 0.15f
 
 int main(int argc, char* argv[]) {
@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
         if(keystates[SDL_SCANCODE_UP]) {
           uss_enterprise->activateBoost();
         }
-        uss_enterprise->update(deltaRotation);
+        uss_enterprise->update(deltaRotation, WIDTH, HEIGHT);
         uss_enterprise->draw();
         
         deltaRotation = 0.0f;
