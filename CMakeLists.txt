@@ -13,9 +13,9 @@ include_directories(${SDL2_INCLUDE_DIR})
 include_directories(include)
 
 # add_subdirectory(src)
-
+set(BINDIR bin)
 set(TARGET main)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/${BINDIR})
 
 file(GLOB sources "src/*.cpp")
 add_executable(${TARGET} ${sources})
