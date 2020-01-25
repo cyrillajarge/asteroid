@@ -10,8 +10,9 @@
 using namespace std;
 using namespace glm;
 
-const int WIDTH = 800, HEIGHT = 600; 
-
+#define WIDTH 800
+#define HEIGHT 600
+#define DELTA_ANGLE 0.15f
 
 int main(int argc, char* argv[]) {
 
@@ -31,9 +32,12 @@ int main(int argc, char* argv[]) {
   SDL_Renderer* renderer = NULL;
   renderer =  SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED);
 
-  vec2 position = vec2(200.0f,200.0f);
+  int window_width;
+  int window_height;
+  SDL_GetWindowSize(window, &window_width, &window_height);
+
+  vec2 position = vec2(window_width / 2.0f, window_height / 2.0f);
   Spaceship* uss_enterprise = new Spaceship(position,renderer);
-  // uss_enterprise->draw(false);
   
   int lastTime = 0, currentTime = 0;
 
@@ -53,10 +57,10 @@ int main(int argc, char* argv[]) {
     {
         const Uint8 *keystates = SDL_GetKeyboardState(NULL);
         if (keystates[SDL_SCANCODE_LEFT]) {
-          deltaRotation = -0.15f;
+          deltaRotation = -DELTA_ANGLE;
         }
         if (keystates[SDL_SCANCODE_RIGHT]) {
-          deltaRotation = 0.15f;
+          deltaRotation = DELTA_ANGLE;
         }
         if(keystates[SDL_SCANCODE_UP]) {
           uss_enterprise->activateBoost();

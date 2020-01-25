@@ -10,8 +10,8 @@
 using namespace std;
 using namespace glm;
 
-const float VEL_ATTENUATION = 0.98f;
-const float DIR_VECTOR_REGULATION = 0.4f;
+#define VEL_ATTENUATION 0.98f
+#define DIR_VECTOR_REGULATION 0.4f
 
 class Spaceship{
   private:
