@@ -2,7 +2,7 @@
 #define SPACESHIP_H
 
 #include "SDL2/SDL.h"
-#include <glm/glm.hpp>
+#include "glm/glm.hpp"
 
 using namespace std;
 using namespace glm;
@@ -24,6 +24,7 @@ class Spaceship {
     void deactivateBoost();
     void update(double rotation, int width, int height);
     void boost();
+    void fireRocket();
     void draw();
 
 };

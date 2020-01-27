@@ -46,6 +46,10 @@ void Spaceship::boost(){
   this->velocity += direction_vector;
 }
 
+void Spaceship::fireRocket(){
+  
+}
+
 void Spaceship::draw(){
   // Set render color to black ( background will be rendered in this color )
   SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
