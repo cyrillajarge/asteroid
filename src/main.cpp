@@ -26,12 +26,12 @@ int main(int argc, char* argv[]) {
   GameWindow *window = new GameWindow("Hemoroids", WIDTH, HEIGHT);
 
   vec2 position = vec2(WIDTH / 2.0f, HEIGHT / 2.0f);
-  window->InitShip(position);
+  window->initShip(position);
 
   // vec2 rocket_pos = vec2(40.0f,40.0f);
   // Rocket* rocket = new Rocket(rocket_pos);
   // rocket->draw(renderer);
-  window->MainLoop();
+  window->mainLoop();
   
   delete window;
   SDL_Quit();

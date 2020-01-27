@@ -15,8 +15,8 @@ class GameWindow {
   public:
     GameWindow(const char *name, int width, int height);
     ~GameWindow();
-    void InitShip(vec2 position);
-    void MainLoop();
+    void initShip(vec2 position);
+    void mainLoop();
 
 };
 

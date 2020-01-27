@@ -27,14 +27,12 @@ GameWindow::GameWindow(const char *name, int width, int height) {
 }
 
 
-void GameWindow::InitShip(vec2 position) {
+void GameWindow::initShip(vec2 position) {
   this->spaceship = new Spaceship(position, this->renderer);
 }
 
-void GameWindow::MainLoop(void) {
-  int lastTime = 0, currentTime = 0;
-
-  double deltaTime = 0.0f;
+void GameWindow::mainLoop(void) {
+  int deltaTime = 0, lastTime = 0, currentTime = 0, lastRocket = 0;
   double deltaRotation = 0.0f;
 
   SDL_Event windowEvent;
@@ -58,10 +56,11 @@ void GameWindow::MainLoop(void) {
       if(keystates[SDL_SCANCODE_UP]) {
         this->spaceship->activateBoost();
       }
-      if(keystates[SDL_SCANCODE_SPACE]){
+      if ((keystates[SDL_SCANCODE_SPACE]) && (currentTime - lastRocket > 200)) {
         vec2 rocket_dir = vec2(cos(this->spaceship->direction_angle), sin(this->spaceship->direction_angle));
         Rocket* rocket = new Rocket(this->spaceship->position + 30.0f * rocket_dir, rocket_dir);
         this->spaceship->fireRocket(rocket);
+        lastRocket = currentTime;
       }
       this->spaceship->update(deltaRotation, this->width, this->height);
       this->spaceship->draw();
