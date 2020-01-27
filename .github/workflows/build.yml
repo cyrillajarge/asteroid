@@ -10,7 +10,9 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: install SDL2
-      run: sudo apt-get install libsdl2-dev
+      run: sudo apt-get install -y libsdl2-dev
+    - name: install GLM
+      run: sudo apt-get install -y libglm-dev
     - name: configure
       run: cmake CMakeLists.txt
     - name: build
