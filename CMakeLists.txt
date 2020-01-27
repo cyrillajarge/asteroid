@@ -1,6 +1,7 @@
 # Minimum version of CMake required to build this project
 cmake_minimum_required(VERSION 3.0)
 set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
 # Name of the project
 project(Asteroid)
@@ -23,6 +24,6 @@ add_executable(${TARGET} ${sources})
 
 target_link_libraries(${TARGET} ${SDL2_LIBRARY} glm)
 
-if (APPLE)
-    target_link_libraries(${TARGET} "-F/Library/Frameworks" "-framework SDL2")
-endif (APPLE)
+# if (APPLE)
+#     target_link_libraries(${TARGET} "-F/Library/Frameworks" "-framework SDL2")
+# endif (APPLE)
