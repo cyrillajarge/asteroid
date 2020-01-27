@@ -1,0 +1,17 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: install SDL2
+      run: sudo apt-get install libsdl2-dev
+    - name: configure
+      run: cmake CMakeLists.txt
+    - name: build
+      run: make
