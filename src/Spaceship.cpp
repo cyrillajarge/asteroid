@@ -43,7 +43,7 @@ void Spaceship::update(double rotation, int width, int height){
 	auto it = this->rockets.begin();
 	while (it != this->rockets.end())
 	{
-		if ((*it)->position.x < 0 || (*it)->position.x > width || (*it)->position.y < 0 || (*it)->position.y > height) {
+		if((*it)->position.x < 0 || (*it)->position.x > width || (*it)->position.y < 0 || (*it)->position.y > height) {
 			it = this->rockets.erase(it);
 		}
 		else {
