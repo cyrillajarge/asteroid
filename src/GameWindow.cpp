@@ -34,8 +34,8 @@ void GameWindow::initShip(vec2 position) {
 void GameWindow::initAsteroids(int number){
 
   for(int i=0;i<number;i++){
-    int posx = -5.0f + rand() % 5;
-    int posy = -5.0f + rand() % 5;
+    int posx = -10.0f + rand() % (this->width + 10);
+    int posy =  -10.0f + rand() % (this->height + 10);
 
     int angle = rand() % 360;
     float angle_rad = (angle / 180.0f)* M_PI;
