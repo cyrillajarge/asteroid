@@ -3,6 +3,9 @@
 
 #include "SDL2/SDL.h"
 #include "glm/glm.hpp"
+#include "Rocket.hpp"
+#include <list>
+#include <iterator>
 
 using namespace std;
 using namespace glm;
@@ -11,12 +14,13 @@ using namespace glm;
 #define DIR_VECTOR_REGULATION 0.4f
 
 class Spaceship {
-  private:
+  public:
     vec2 position;
     SDL_Renderer* renderer;
     double direction_angle;
     vec2 velocity;
     bool boostActive;
+    list<Rocket*> rockets;
 
   public:
     Spaceship(vec2 position, SDL_Renderer* renderer);
@@ -24,7 +28,7 @@ class Spaceship {
     void deactivateBoost();
     void update(double rotation, int width, int height);
     void boost();
-    void fireRocket();
+    void fireRocket(Rocket* rocket);
     void draw();
 
 };

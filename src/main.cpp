@@ -35,10 +35,6 @@ int main(int argc, char* argv[]) {
   vec2 position = vec2(WIDTH / 2.0f, HEIGHT / 2.0f);
   Spaceship* uss_enterprise = new Spaceship(position,renderer);
 
-  vec2 rocket_pos = vec2(40.0f,40.0f);
-  Rocket* rocket = new Rocket(rocket_pos);
-  // rocket->draw(renderer);
-  
   int lastTime = 0, currentTime = 0;
 
   double deltaTime = 0.0f;
@@ -66,7 +62,9 @@ int main(int argc, char* argv[]) {
           uss_enterprise->activateBoost();
         }
         if(keystates[SDL_SCANCODE_SPACE]){
-          uss_enterprise->fireRocket();
+          vec2 rocket_dir = vec2(cos(uss_enterprise->direction_angle), sin(uss_enterprise->direction_angle));
+          Rocket* rocket = new Rocket(uss_enterprise->position + 30.0f * rocket_dir, rocket_dir);
+          uss_enterprise->fireRocket(rocket);
         }
         uss_enterprise->update(deltaRotation, WIDTH, HEIGHT);
         uss_enterprise->draw();

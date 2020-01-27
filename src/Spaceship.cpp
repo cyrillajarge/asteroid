@@ -39,6 +39,18 @@ void Spaceship::update(double rotation, int width, int height){
     this->position.y = height;
   }
   this->velocity *= VEL_ATTENUATION;
+
+	auto it = this->rockets.begin();
+	while (it != this->rockets.end())
+	{
+		if ((*it)->position.x < 0 || (*it)->position.x > width || (*it)->position.y < 0 || (*it)->position.y > height) {
+			it = this->rockets.erase(it);
+		}
+		else {
+      (*it)->position += ROCKET_VEL * (*it)->direction;
+			++it;
+		}
+	}
 }
 
 void Spaceship::boost(){
@@ -46,8 +58,8 @@ void Spaceship::boost(){
   this->velocity += direction_vector;
 }
 
-void Spaceship::fireRocket(){
-  
+void Spaceship::fireRocket(Rocket* rocket){
+  this->rockets.push_back(rocket);
 }
 
 void Spaceship::draw(){
@@ -61,7 +73,7 @@ void Spaceship::draw(){
   vec2 lower_left = vec2(this->position.x + d * cos((2*M_PI/3) + this->direction_angle), this->position.y + d * sin((2*M_PI)/3 + direction_angle));
   vec2 lower_right = vec2(this->position.x + d * cos((4*M_PI/3) + this->direction_angle), this->position.y + d * sin((4*M_PI)/3 + direction_angle));
   vec2 tip = vec2(this->position.x + 2 * d * cos(this->direction_angle), this->position.y + 2 * d * sin(this->direction_angle));
- 
+
  if(this->boostActive){
     // Propulseur
     SDL_SetRenderDrawColor(this->renderer, 255, 0, 0, 255 );
@@ -78,6 +90,10 @@ void Spaceship::draw(){
   SDL_RenderDrawLine(this->renderer, lower_right.x, lower_right.y, tip.x, tip.y);
   SDL_RenderDrawLine(this->renderer, lower_right.x, lower_right.y, lower_left.x, lower_left.y);
   SDL_RenderDrawLine(this->renderer, lower_left.x, lower_left.y, tip.x, tip.y);
+
+  for(Rocket* r: this->rockets){
+    r->draw(this->renderer);
+  }
 
   // Render the rect to the screen
   SDL_RenderPresent(this->renderer);
