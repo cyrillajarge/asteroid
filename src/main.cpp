@@ -6,6 +6,7 @@
 
 #include "SDL2/SDL.h"
 #include "Spaceship.hpp"
+#include "Rocket.hpp"
 
 using namespace std;
 using namespace glm;
@@ -21,7 +22,7 @@ int main(int argc, char* argv[]) {
       return EXIT_FAILURE;
   }
 
-  SDL_Window *window = SDL_CreateWindow("Asteroid", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, SDL_WINDOW_ALLOW_HIGHDPI);
+  SDL_Window *window = SDL_CreateWindow("Asteroid", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, SDL_WINDOW_RESIZABLE);
 
   if( window == NULL){
     cout << "Could not create window: " << SDL_GetError() << endl;
@@ -33,6 +34,10 @@ int main(int argc, char* argv[]) {
 
   vec2 position = vec2(WIDTH / 2.0f, HEIGHT / 2.0f);
   Spaceship* uss_enterprise = new Spaceship(position,renderer);
+
+  vec2 rocket_pos = vec2(40.0f,40.0f);
+  Rocket* rocket = new Rocket(rocket_pos);
+  // rocket->draw(renderer);
   
   int lastTime = 0, currentTime = 0;
 
@@ -59,6 +64,9 @@ int main(int argc, char* argv[]) {
         }
         if(keystates[SDL_SCANCODE_UP]) {
           uss_enterprise->activateBoost();
+        }
+        if(keystates[SDL_SCANCODE_SPACE]){
+          uss_enterprise->fireRocket();
         }
         uss_enterprise->update(deltaRotation, WIDTH, HEIGHT);
         uss_enterprise->draw();

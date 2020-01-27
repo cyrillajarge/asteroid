@@ -5,7 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
-#include <glm/glm.hpp>
+#include "glm/glm.hpp"
 
 using namespace std;
 using namespace glm;
@@ -27,6 +27,7 @@ class Spaceship{
     void deactivateBoost();
     void update(double rotation, int width, int height);
     void boost();
+    void fireRocket();
     void draw();
     
 };
