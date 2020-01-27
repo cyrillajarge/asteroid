@@ -1,4 +1,6 @@
 #include "Spaceship.hpp"
+#include <iostream>
+#include <cmath>
 
 using namespace std;
 

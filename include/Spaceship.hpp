@@ -2,9 +2,6 @@
 #define SPACESHIP_H
 
 #include "SDL2/SDL.h"
-#include <iostream>
-#include <vector>
-#include <cmath>
 #include <glm/glm.hpp>
 
 using namespace std;
@@ -13,7 +10,7 @@ using namespace glm;
 #define VEL_ATTENUATION 0.98f
 #define DIR_VECTOR_REGULATION 0.4f
 
-class Spaceship{
+class Spaceship {
   private:
     vec2 position;
     SDL_Renderer* renderer;
@@ -28,7 +25,7 @@ class Spaceship{
     void update(double rotation, int width, int height);
     void boost();
     void draw();
-    
+
 };
 
 #endif
