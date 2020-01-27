@@ -16,20 +16,19 @@ using namespace glm;
 class Spaceship {
   public:
     vec2 position;
-    SDL_Renderer* renderer;
     double direction_angle;
     vec2 velocity;
     bool boostActive;
     list<Rocket*> rockets;
 
   public:
-    Spaceship(vec2 position, SDL_Renderer* renderer);
+    Spaceship(vec2 position);
     void activateBoost();
     void deactivateBoost();
     void update(double rotation, int width, int height);
     void boost();
     void fireRocket(Rocket* rocket);
-    void draw();
+    void draw(SDL_Renderer* renderer);
 
 };
 

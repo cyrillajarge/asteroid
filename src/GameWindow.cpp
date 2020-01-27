@@ -28,7 +28,7 @@ GameWindow::GameWindow(const char *name, int width, int height) {
 
 
 void GameWindow::initShip(vec2 position) {
-  this->spaceship = new Spaceship(position, this->renderer);
+  this->spaceship = new Spaceship(position);
 }
 
 void GameWindow::mainLoop(void) {
@@ -63,7 +63,7 @@ void GameWindow::mainLoop(void) {
         lastRocket = currentTime;
       }
       this->spaceship->update(deltaRotation, this->width, this->height);
-      this->spaceship->draw();
+      this->spaceship->draw(this->renderer);
       deltaRotation = 0.0f;
       this->spaceship->deactivateBoost();
       lastTime = currentTime;
