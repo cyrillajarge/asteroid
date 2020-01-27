@@ -7,7 +7,6 @@ Rocket::Rocket(vec2 position, vec2 direction){
 
 void Rocket::draw(SDL_Renderer* renderer){
 
-
   SDL_Rect r;
   r.x = this->position.x;
   r.y = this->position.y;

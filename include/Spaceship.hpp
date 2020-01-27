@@ -4,6 +4,7 @@
 #include "SDL2/SDL.h"
 #include "glm/glm.hpp"
 #include "Rocket.hpp"
+#include "Asteroid.hpp"
 #include <list>
 #include <iterator>
 
@@ -20,6 +21,7 @@ class Spaceship {
     vec2 velocity;
     bool boostActive;
     list<Rocket*> rockets;
+    Asteroid* asteroid;
 
   public:
     Spaceship(vec2 position);

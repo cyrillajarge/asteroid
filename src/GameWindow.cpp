@@ -24,11 +24,67 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   }
 
   this->spaceship = NULL;
+  initAsteroids(10);
 }
-
 
 void GameWindow::initShip(vec2 position) {
   this->spaceship = new Spaceship(position);
+}
+
+void GameWindow::initAsteroids(int number){
+
+  for(int i=0;i<number;i++){
+    int posx = -5.0f + rand() % 5;
+    int posy = -5.0f + rand() % 5;
+
+    int angle = rand() % 360;
+    float angle_rad = (angle / 180.0f)* M_PI;
+    
+    vec2 position = vec2(posx, posy);
+    vec2 direction = vec2(cos(angle), sin(angle));
+
+    this->asteroids.push_back(new Asteroid(position, direction, 12));
+  }
+}
+
+void GameWindow::updateAsteroids(){
+  for(int i=0;i<this->asteroids.size();i++){
+    if(this->asteroids[i]->center.x < 0){
+      this->asteroids[i]->center.x = this->width;
+    }
+    if(this->asteroids[i]->center.x > width){
+      this->asteroids[i]->center.x = 0;
+    }
+    if(this->asteroids[i]->center.y < 0){
+      this->asteroids[i]->center.y = this->height;
+    }
+    if(this->asteroids[i]->center.y > height){
+      this->asteroids[i]->center.y = 0;
+    }
+
+    this->asteroids[i]->center += 2.0f * this->asteroids[i]->direction;
+  }
+}
+
+void GameWindow::draw(){
+  // Set render color to black ( background will be rendered in this color )
+  SDL_SetRenderDrawColor( this->renderer, 0, 0, 0, 255 );
+
+  // // Clear winow
+  SDL_RenderClear( this->renderer );
+
+  this->spaceship->draw(this->renderer);
+
+  SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, 255 );
+  
+  for(int i=0;i<this->asteroids.size(); i++){
+    this->asteroids[i]->draw(this->renderer);
+  }
+
+  // cout << this->asteroids.size() << endl;
+
+  // // Render the rect to the screen
+  SDL_RenderPresent(renderer);
 }
 
 void GameWindow::mainLoop(void) {
@@ -63,7 +119,9 @@ void GameWindow::mainLoop(void) {
         lastRocket = currentTime;
       }
       this->spaceship->update(deltaRotation, this->width, this->height);
-      this->spaceship->draw(this->renderer);
+      this->updateAsteroids();
+      this->draw();
+
       deltaRotation = 0.0f;
       this->spaceship->deactivateBoost();
       lastTime = currentTime;
@@ -76,5 +134,4 @@ GameWindow::~GameWindow(void) {
   SDL_DestroyWindow(this->window);
   SDL_DestroyRenderer(this->renderer);
   delete this->spaceship;
-
 }

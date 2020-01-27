@@ -9,6 +9,7 @@ Spaceship::Spaceship(vec2 position){
   this->direction_angle = 0.0f;
   this->velocity = vec2(0.0f, 0.0f);
   this->boostActive = false;
+  // this->asteroid = new Asteroid(vec2(200.0f, 200.0f));
 }
 
 void Spaceship::activateBoost(){
@@ -62,11 +63,6 @@ void Spaceship::fireRocket(Rocket* rocket){
 }
 
 void Spaceship::draw(SDL_Renderer* renderer){
-  // Set render color to black ( background will be rendered in this color )
-  SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
-
-  // Clear winow
-  SDL_RenderClear( renderer );
 
   int d = 20;
   vec2 lower_left = vec2(this->position.x + d * cos((2*M_PI/3) + this->direction_angle), this->position.y + d * sin((2*M_PI)/3 + direction_angle));
@@ -93,7 +89,4 @@ void Spaceship::draw(SDL_Renderer* renderer){
   for(Rocket* r: this->rockets){
     r->draw(renderer);
   }
-
-  // Render the rect to the screen
-  SDL_RenderPresent(renderer);
 }
