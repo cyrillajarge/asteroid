@@ -1,6 +1,6 @@
 #include "Asteroid.hpp"
 
-Asteroid::Asteroid(vec2 position, vec2 direction, int nrays){
+Asteroid::Asteroid(glm::vec2 position, glm::vec2 direction, int nrays){
   
   this->center = position;
   this->nrays = nrays;

@@ -8,23 +8,20 @@
 #include <list>
 #include <iterator>
 
-using namespace std;
-using namespace glm;
-
 #define VEL_ATTENUATION 0.98f
 #define DIR_VECTOR_REGULATION 0.4f
 
 class Spaceship {
   public:
-    vec2 position;
+    glm::vec2 position;
     double direction_angle;
-    vec2 velocity;
+    glm::vec2 velocity;
     bool boostActive;
-    list<Rocket*> rockets;
+    std::list<Rocket*> rockets;
     Asteroid* asteroid;
 
   public:
-    Spaceship(vec2 position);
+    Spaceship(glm::vec2 position);
     void activateBoost();
     void deactivateBoost();
     void update(double rotation, int width, int height);

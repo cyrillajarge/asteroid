@@ -3,7 +3,6 @@
 
 #include "Spaceship.hpp"
 #include <vector>
-#include <random>
 
 #define DELTA_ANGLE 0.15f
 
@@ -12,7 +11,7 @@ class GameWindow {
     SDL_Window *window;
     SDL_Renderer *renderer;
     Spaceship *spaceship;
-    vector<Asteroid*> asteroids;
+    std::vector<Asteroid*> asteroids;
     
     int width;
     int height;
@@ -20,7 +19,7 @@ class GameWindow {
   public:
     GameWindow(const char *name, int width, int height);
     ~GameWindow();
-    void initShip(vec2 position);
+    void initShip(glm::vec2 position);
     void initAsteroids(int number);
     void updateAsteroids();
     void draw();

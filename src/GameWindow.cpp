@@ -1,5 +1,6 @@
 #include "GameWindow.hpp"
 #include <iostream>
+#include <random>
 
 GameWindow::GameWindow(const char *name, int width, int height) {
   // Create window
@@ -10,8 +11,8 @@ GameWindow::GameWindow(const char *name, int width, int height) {
     SDL_WINDOW_RESIZABLE
   );
   if(this->window == NULL){
-    cerr << "Could not create window: " << SDL_GetError() << endl;
-    exit(EXIT_FAILURE);
+    std::cerr << "Could not create window: " << SDL_GetError() << std::endl;
+    std::exit(EXIT_FAILURE);
   }
   this->width = width;
   this->height = height;
@@ -19,15 +20,15 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   // Create renderer
   this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
   if(this->renderer == NULL){
-    cerr << "Could not create renderer: " << SDL_GetError() << endl;
-    exit(EXIT_FAILURE);
+    std::cerr << "Could not create renderer: " << SDL_GetError() << std::endl;
+    std::exit(EXIT_FAILURE);
   }
 
   this->spaceship = NULL;
   initAsteroids(10);
 }
 
-void GameWindow::initShip(vec2 position) {
+void GameWindow::initShip(glm::vec2 position) {
   this->spaceship = new Spaceship(position);
 }
 
@@ -40,8 +41,8 @@ void GameWindow::initAsteroids(int number){
     int angle = rand() % 360;
     float angle_rad = (angle / 180.0f)* M_PI;
     
-    vec2 position = vec2(posx, posy);
-    vec2 direction = vec2(cos(angle), sin(angle));
+    glm::vec2 position = glm::vec2(posx, posy);
+    glm::vec2 direction = glm::vec2(cos(angle), sin(angle));
 
     this->asteroids.push_back(new Asteroid(position, direction, 12));
   }
@@ -113,7 +114,7 @@ void GameWindow::mainLoop(void) {
         this->spaceship->activateBoost();
       }
       if ((keystates[SDL_SCANCODE_SPACE]) && (currentTime - lastRocket > 200)) {
-        vec2 rocket_dir = vec2(cos(this->spaceship->direction_angle), sin(this->spaceship->direction_angle));
+        glm::vec2 rocket_dir = glm::vec2(cos(this->spaceship->direction_angle), sin(this->spaceship->direction_angle));
         Rocket* rocket = new Rocket(this->spaceship->position + 30.0f * rocket_dir, rocket_dir);
         this->spaceship->fireRocket(rocket);
         lastRocket = currentTime;
