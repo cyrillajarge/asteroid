@@ -8,7 +8,7 @@ Asteroid::Asteroid(glm::vec2 position, glm::vec2 direction, int nrays){
   float random_ray;
 
   for(int i=0;i<nrays;i++){
-    random_ray =  30.0f + rand() % 20;
+    random_ray =  30.0f + std::rand() % 20;
     this->rays.push_back(random_ray);
   }
   this->rays.push_back(this->rays[0]);

@@ -35,10 +35,10 @@ void GameWindow::initShip(glm::vec2 position) {
 void GameWindow::initAsteroids(int number){
 
   for(int i=0;i<number;i++){
-    int posx = -10.0f + rand() % (this->width + 10);
-    int posy =  -10.0f + rand() % (this->height + 10);
+    int posx = -10.0f + std::rand() % (this->width + 10);
+    int posy =  -10.0f + std::rand() % (this->height + 10);
 
-    int angle = rand() % 360;
+    int angle = std::rand() % 360;
     float angle_rad = (angle / 180.0f)* M_PI;
     
     glm::vec2 position = glm::vec2(posx, posy);
