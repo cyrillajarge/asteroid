@@ -43,7 +43,7 @@ void GameWindow::initAsteroids(int number){
     vec2 position = vec2(posx, posy);
     vec2 direction = vec2(cos(angle), sin(angle));
 
-    this->asteroids.push_back(new Asteroid(position, direction, 12));
+    this->asteroids.push_back(new Asteroid(position, direction, 40 ,12));
   }
 }
 

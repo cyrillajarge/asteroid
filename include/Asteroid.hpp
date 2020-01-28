@@ -17,12 +17,15 @@ class Asteroid {
   public:
     vec2 center;
     vector<int> rays;
+    int averageray;
+    vector<vec2> BB;
     int  nrays;
     vec2 direction;
 
   public:
-    Asteroid(vec2 position, vec2 direction, int nrays);
+    Asteroid(vec2 position, vec2 direction, int averageray, int nrays);
     ~Asteroid();
+    void computeBB();
     void draw(SDL_Renderer* renderer);
 };
 
