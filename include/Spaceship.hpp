@@ -17,7 +17,7 @@ class Spaceship {
     double direction_angle;
     glm::vec2 velocity;
     bool boostActive;
-    std::list<Rocket*> rockets;
+    std::vector<Rocket*> rockets;
     Asteroid* asteroid;
 
   public:

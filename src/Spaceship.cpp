@@ -38,6 +38,7 @@ void Spaceship::update(double rotation, int width, int height){
   }
   this->velocity *= VEL_ATTENUATION;
 
+  
 	auto it = this->rockets.begin();
 	while (it != this->rockets.end())
 	{

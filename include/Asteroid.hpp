@@ -17,10 +17,11 @@ class Asteroid {
     int averageray;
     std::vector<glm::vec2> BB;
     int  nrays;
+    int level;
     glm::vec2 direction;
 
   public:
-    Asteroid(glm::vec2 position, glm::vec2 direction, int averageray, int nrays);
+    Asteroid(glm::vec2 position, glm::vec2 direction, int averageray, int nrays, int level);
     ~Asteroid();
     void computeBB();
     void draw(SDL_Renderer* renderer);
