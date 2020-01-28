@@ -2,14 +2,12 @@
 #include <iostream>
 #include <cmath>
 
-using namespace std;
-
-Spaceship::Spaceship(vec2 position){
+Spaceship::Spaceship(glm::vec2 position){
   this->position = position;
   this->direction_angle = 0.0f;
-  this->velocity = vec2(0.0f, 0.0f);
+  this->velocity = glm::vec2(0.0f, 0.0f);
   this->boostActive = false;
-  // this->asteroid = new Asteroid(vec2(200.0f, 200.0f));
+  // this->asteroid = new Asteroid(glm::vec2(200.0f, 200.0f));
 }
 
 void Spaceship::activateBoost(){
@@ -54,7 +52,7 @@ void Spaceship::update(double rotation, int width, int height){
 }
 
 void Spaceship::boost(){
-  vec2 direction_vector = DIR_VECTOR_REGULATION * vec2(cos(this->direction_angle), sin(this->direction_angle));
+  glm::vec2 direction_vector = DIR_VECTOR_REGULATION * glm::vec2(cos(this->direction_angle), sin(this->direction_angle));
   this->velocity += direction_vector;
 }
 
@@ -65,16 +63,16 @@ void Spaceship::fireRocket(Rocket* rocket){
 void Spaceship::draw(SDL_Renderer* renderer){
 
   int d = 20;
-  vec2 lower_left = vec2(this->position.x + d * cos((2*M_PI/3) + this->direction_angle), this->position.y + d * sin((2*M_PI)/3 + direction_angle));
-  vec2 lower_right = vec2(this->position.x + d * cos((4*M_PI/3) + this->direction_angle), this->position.y + d * sin((4*M_PI)/3 + direction_angle));
-  vec2 tip = vec2(this->position.x + 2 * d * cos(this->direction_angle), this->position.y + 2 * d * sin(this->direction_angle));
+  glm::vec2 lower_left = glm::vec2(this->position.x + d * cos((2*M_PI/3) + this->direction_angle), this->position.y + d * sin((2*M_PI)/3 + direction_angle));
+  glm::vec2 lower_right = glm::vec2(this->position.x + d * cos((4*M_PI/3) + this->direction_angle), this->position.y + d * sin((4*M_PI)/3 + direction_angle));
+  glm::vec2 tip = glm::vec2(this->position.x + 2 * d * cos(this->direction_angle), this->position.y + 2 * d * sin(this->direction_angle));
 
  if(this->boostActive){
     // Propulseur
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255 );
-    vec2 boost_left = 0.2f * lower_left + 0.8f * lower_right;
-    vec2 boost_right = 0.2f * lower_right + 0.8f * lower_left;
-    vec2 boost_tip = this->position - 30.0f * vec2(cos(this->direction_angle), sin(this->direction_angle));
+    glm::vec2 boost_left = 0.2f * lower_left + 0.8f * lower_right;
+    glm::vec2 boost_right = 0.2f * lower_right + 0.8f * lower_left;
+    glm::vec2 boost_tip = this->position - 30.0f * glm::vec2(cos(this->direction_angle), sin(this->direction_angle));
     SDL_RenderDrawLine(renderer, boost_left.x, boost_left.y, boost_right.x, boost_right.y);
     SDL_RenderDrawLine(renderer, boost_left.x, boost_left.y, boost_tip.x, boost_tip.y);
     SDL_RenderDrawLine(renderer, boost_right.x, boost_right.y, boost_tip.x, boost_tip.y);

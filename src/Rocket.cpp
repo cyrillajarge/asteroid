@@ -1,6 +1,6 @@
 #include "Rocket.hpp"
 
-Rocket::Rocket(vec2 position, vec2 direction){
+Rocket::Rocket(glm::vec2 position, glm::vec2 direction){
   this->position = position;
   this->direction = direction;
 }

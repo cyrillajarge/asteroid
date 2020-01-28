@@ -1,6 +1,6 @@
 #include "Asteroid.hpp"
 
-Asteroid::Asteroid(vec2 position, vec2 direction, int averageray, int nrays){
+Asteroid::Asteroid(glm::vec2 position, glm::vec2 direction, int averageray, int nrays){
   
   this->center = position;
   this->nrays = nrays;
@@ -9,7 +9,7 @@ Asteroid::Asteroid(vec2 position, vec2 direction, int averageray, int nrays){
   float random_ray;
 
   for(int i=0;i<nrays;i++){
-    random_ray =  (this->averageray + rand() % 20) - 10;
+    random_ray =  30.0f + std::rand() % 20;
     this->rays.push_back(random_ray);
   }
   this->rays.push_back(this->rays[0]);
@@ -21,10 +21,10 @@ Asteroid::Asteroid(vec2 position, vec2 direction, int averageray, int nrays){
 
 void Asteroid::computeBB(){
   int rayoffset = this->averageray - (this->averageray / 4.0f);
-  vec2 topright = vec2(rayoffset);
-  vec2 topleft = vec2(-rayoffset,rayoffset);
-  vec2 bottomright = vec2(rayoffset, -rayoffset);
-  vec2 bottomleft = vec2(-rayoffset, -rayoffset);
+  glm::vec2 topright = glm::vec2(rayoffset);
+  glm::vec2 topleft = glm::vec2(-rayoffset,rayoffset);
+  glm::vec2 bottomright = glm::vec2(rayoffset, -rayoffset);
+  glm::vec2 bottomleft = glm::vec2(-rayoffset, -rayoffset);
 
   this->BB.push_back(topright);
   this->BB.push_back(topleft);

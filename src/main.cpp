@@ -9,8 +9,6 @@
 #include "Spaceship.hpp"
 #include "Rocket.hpp"
 
-using namespace std;
-using namespace glm;
 
 #define WIDTH 1080
 #define HEIGHT 720
@@ -19,13 +17,13 @@ using namespace glm;
 int main(int argc, char* argv[]) {
 
   if( SDL_Init( SDL_INIT_EVERYTHING) < 0){
-      cout << "SDL could not initialize! SDL Error: " << SDL_GetError() << endl;
+      std::cerr << "SDL could not initialize! SDL Error: " << SDL_GetError() << std::endl;
       return EXIT_FAILURE;
   }
 
   GameWindow *window = new GameWindow("Hemoroids", WIDTH, HEIGHT);
 
-  vec2 position = vec2(WIDTH / 2.0f, HEIGHT / 2.0f);
+  glm::vec2 position = glm::vec2(WIDTH / 2.0f, HEIGHT / 2.0f);
   window->initShip(position);
 
   // vec2 rocket_pos = vec2(40.0f,40.0f);

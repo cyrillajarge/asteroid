@@ -9,16 +9,13 @@
 
 #define ROCKET_VEL 15.0f
 
-using namespace glm;
-using namespace std;
-
 class Rocket{
   public:
-    vec2 position;
-    vec2 direction;
+    glm::vec2 position;
+    glm::vec2 direction;
 
   public:
-    Rocket(vec2 position, vec2 direction);
+    Rocket(glm::vec2 position, glm::vec2 direction);
     void draw(SDL_Renderer* renderer);
 };
 

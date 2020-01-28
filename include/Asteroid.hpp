@@ -10,20 +10,17 @@
 #include "glm/glm.hpp"
 #include "SDL2/SDL.h"
 
-using namespace glm;
-using namespace std;
-
 class Asteroid {
   public:
-    vec2 center;
-    vector<int> rays;
+    glm::vec2 center;
+    std::vector<int> rays;
     int averageray;
-    vector<vec2> BB;
+    std::vector<glm::vec2> BB;
     int  nrays;
-    vec2 direction;
+    glm::vec2 direction;
 
   public:
-    Asteroid(vec2 position, vec2 direction, int averageray, int nrays);
+    Asteroid(glm::vec2 position, glm::vec2 direction, int averageray, int nrays);
     ~Asteroid();
     void computeBB();
     void draw(SDL_Renderer* renderer);
