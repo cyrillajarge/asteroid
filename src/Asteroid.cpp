@@ -21,7 +21,7 @@ Asteroid::Asteroid(glm::vec2 position, glm::vec2 direction, int averageray, int 
 }
 
 void Asteroid::computeBB(){
-  int rayoffset = this->averageray - (this->averageray / 6.0f);
+  int rayoffset = this->averageray /*- (this->averageray / 6.0f)*/;
   glm::vec2 topright = glm::vec2(rayoffset,-rayoffset);
   glm::vec2 topleft = glm::vec2(-rayoffset);
   glm::vec2 bottomright = glm::vec2(rayoffset);

@@ -28,8 +28,8 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   initAsteroids(6);
 }
 
-void GameWindow::initShip(glm::vec2 position) {
-  this->spaceship = new Spaceship(position);
+void GameWindow::initShip(glm::vec2 position, int size) {
+  this->spaceship = new Spaceship(position, size);
 }
 
 void GameWindow::initAsteroids(int number){
@@ -129,7 +129,7 @@ void GameWindow::mainLoop(void) {
           int lev = this->asteroids[inter]->level;
           this->asteroids.erase(this->asteroids.begin() + inter);
           if(lev > 0){
-            for(int i=0;i<3;i++){
+            for(int i=0;i<2;i++){
               double angle = ((rand() % 360) / 180.0f) * M_PI;
               glm::vec2 dir = glm::vec2(cos(angle), sin(angle));
               this->asteroids.push_back(new Asteroid(aster_pos, dir, ar/2, nr, lev-1));
@@ -139,6 +139,10 @@ void GameWindow::mainLoop(void) {
         else {
           ++it;
         }
+      }
+
+      if(this->spaceship->intersectsAsteroid(this->asteroids)){
+        break;
       }
 
       this->spaceship->update(deltaRotation, this->width, this->height);

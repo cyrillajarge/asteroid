@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
   GameWindow *window = new GameWindow("Hemoroids", WIDTH, HEIGHT);
 
   glm::vec2 position = glm::vec2(WIDTH / 2.0f, HEIGHT / 2.0f);
-  window->initShip(position);
+  window->initShip(position, 20);
 
   // vec2 rocket_pos = vec2(40.0f,40.0f);
   // Rocket* rocket = new Rocket(rocket_pos);

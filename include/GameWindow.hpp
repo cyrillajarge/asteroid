@@ -19,7 +19,7 @@ class GameWindow {
   public:
     GameWindow(const char *name, int width, int height);
     ~GameWindow();
-    void initShip(glm::vec2 position);
+    void initShip(glm::vec2 position, int size);
     void initAsteroids(int number);
     void updateAsteroids();
     void draw();

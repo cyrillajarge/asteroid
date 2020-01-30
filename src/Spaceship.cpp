@@ -2,12 +2,12 @@
 #include <iostream>
 #include <cmath>
 
-Spaceship::Spaceship(glm::vec2 position){
+Spaceship::Spaceship(glm::vec2 position, int size){
   this->position = position;
+  this->size = size;
   this->direction_angle = 0.0f;
   this->velocity = glm::vec2(0.0f, 0.0f);
   this->boostActive = false;
-  // this->asteroid = new Asteroid(glm::vec2(200.0f, 200.0f));
 }
 
 void Spaceship::activateBoost(){
@@ -61,9 +61,31 @@ void Spaceship::fireRocket(Rocket* rocket){
   this->rockets.push_back(rocket);
 }
 
+bool Spaceship::intersectsAsteroid(std::vector<Asteroid*> asteroids){
+  glm::vec2 lower_left = glm::vec2(this->position.x + this->size * cos((2*M_PI/3) + this->direction_angle), this->position.y + this->size * sin((2*M_PI)/3 + direction_angle));
+  glm::vec2 lower_right = glm::vec2(this->position.x + this->size * cos((4*M_PI/3) + this->direction_angle), this->position.y + this->size * sin((4*M_PI)/3 + direction_angle));
+  glm::vec2 tip = glm::vec2(this->position.x + 2 * this->size * cos(this->direction_angle), this->position.y + 2 * this->size * sin(this->direction_angle));
+
+  for(int i=0;i<asteroids.size();i++){
+    std::vector<glm::vec2> BB = asteroids[i]->BB;
+    glm::vec2 asteroid_position = asteroids[i]->center;
+    if((lower_left.x < (asteroid_position.x + BB[0].x)) && (lower_left.x > (asteroid_position.x + BB[1].x)) && (lower_left.y < (asteroid_position.y + BB[2].y)) && (lower_left.y >(asteroid_position.y + BB[0].y))){
+      return true;
+    }
+    if((lower_right.x < (asteroid_position.x + BB[0].x)) && (lower_right.x > (asteroid_position.x + BB[1].x)) && (lower_right.y < (asteroid_position.y + BB[2].y)) && (lower_right.y >(asteroid_position.y + BB[0].y))){
+      return true;
+    }
+    if((tip.x < (asteroid_position.x + BB[0].x)) && (tip.x > (asteroid_position.x + BB[1].x)) && (tip.y < (asteroid_position.y + BB[2].y)) && (tip.y >(asteroid_position.y + BB[0].y))){
+      return true;
+    }
+  }
+  return false;
+}
+
+
 void Spaceship::draw(SDL_Renderer* renderer){
 
-  int d = 20;
+  int d = this->size;
   glm::vec2 lower_left = glm::vec2(this->position.x + d * cos((2*M_PI/3) + this->direction_angle), this->position.y + d * sin((2*M_PI)/3 + direction_angle));
   glm::vec2 lower_right = glm::vec2(this->position.x + d * cos((4*M_PI/3) + this->direction_angle), this->position.y + d * sin((4*M_PI)/3 + direction_angle));
   glm::vec2 tip = glm::vec2(this->position.x + 2 * d * cos(this->direction_angle), this->position.y + 2 * d * sin(this->direction_angle));

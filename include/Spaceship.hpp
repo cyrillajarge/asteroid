@@ -6,6 +6,7 @@
 #include "Rocket.hpp"
 #include "Asteroid.hpp"
 #include <list>
+#include <vector>
 #include <iterator>
 
 #define VEL_ATTENUATION 0.98f
@@ -17,16 +18,17 @@ class Spaceship {
     double direction_angle;
     glm::vec2 velocity;
     bool boostActive;
+    int size;
     std::vector<Rocket*> rockets;
-    Asteroid* asteroid;
 
   public:
-    Spaceship(glm::vec2 position);
+    Spaceship(glm::vec2 position, int size);
     void activateBoost();
     void deactivateBoost();
     void update(double rotation, int width, int height);
     void boost();
     void fireRocket(Rocket* rocket);
+    bool intersectsAsteroid(std::vector<Asteroid*> asteroids);
     void draw(SDL_Renderer* renderer);
 
 };
