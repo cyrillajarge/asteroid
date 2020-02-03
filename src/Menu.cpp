@@ -1,2 +1,13 @@
 #include "Menu.hpp"
-#include "SDL2_ttf/SDL_ttf.h"
+
+Menu::Menu() {
+  this->hello = "Salux !";
+}
+
+void Menu::drawHello(SDL_Renderer *renderer) {
+  (void) renderer;
+}
+
+Menu::~Menu() {
+  
+}

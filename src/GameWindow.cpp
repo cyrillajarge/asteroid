@@ -1,4 +1,5 @@
 #include "GameWindow.hpp"
+#include "Menu.hpp"
 #include <iostream>
 #include <random>
 
@@ -88,7 +89,7 @@ void GameWindow::draw(){
 void GameWindow::mainLoop(void) {
   int deltaTime = 0, lastTime = 0, currentTime = 0, lastRocket = 0;
   double deltaRotation = 0.0f;
-
+  Menu *m = new Menu();
   SDL_Event windowEvent;
   while(true){
     if(SDL_PollEvent( &windowEvent)){
@@ -96,6 +97,7 @@ void GameWindow::mainLoop(void) {
         break;
       }
     }
+    m->drawHello(this->renderer);
     currentTime = SDL_GetTicks();
     deltaTime = currentTime - lastTime;
     if (deltaTime > 30) /* Si 30 ms se sont écoulées */
@@ -154,6 +156,7 @@ void GameWindow::mainLoop(void) {
       lastTime = currentTime;
     }
   }
+  delete m;
 }
 
 

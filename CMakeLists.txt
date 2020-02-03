@@ -7,11 +7,9 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 project(Asteroid)
 
 find_package(SDL2 REQUIRED)
-find_package(SDL2_ttf REQUIRED)
 find_package(glm REQUIRED)
 
 include_directories(${SDL2_INCLUDE_DIR})
-include_directories(${SDL2_TTF_INCLUDE_DIR})
 # include_directories(${GLM_INCLUDE_DIR})
 
 include_directories(include)
@@ -24,7 +22,10 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/${BINDIR})
 file(GLOB sources "src/*.cpp")
 add_executable(${TARGET} ${sources})
 
-target_link_libraries(${TARGET} ${SDL2_LIBRARY} ${SDL2_TTF_LIBRARY} glm)
+target_link_libraries(${TARGET} 
+  ${SDL2_LIBRARY}
+  glm
+)
 
 # if (APPLE)
 #     target_link_libraries(${TARGET} "-F/Library/Frameworks" "-framework SDL2")
