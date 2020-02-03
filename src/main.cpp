@@ -13,8 +13,7 @@
 #define HEIGHT 720
 #define DELTA_ANGLE 0.15f
 
-int main(int argc, char* argv[]) {
-
+int main() {
   if(SDL_Init( SDL_INIT_EVERYTHING) < 0){
       std::cerr << "SDL could not initialize! SDL Error: " << SDL_GetError() << std::endl;
       return EXIT_FAILURE;

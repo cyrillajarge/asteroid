@@ -29,6 +29,7 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   this->spaceship = NULL;
   this->font = new Font({ 255, 255, 0, 255 });
   initAsteroids(6);
+  this->started = true;
 }
 
 void GameWindow::initShip(glm::vec2 position, int size) {
@@ -42,7 +43,7 @@ void GameWindow::initAsteroids(int number){
     int posy =  -10.0f + std::rand() % (this->height + 10);
 
     int angle = std::rand() % 360;
-    float angle_rad = (angle / 180.0f)* M_PI;
+    // float angle_rad = (angle / 180.0f)* M_PI;
 
     glm::vec2 position = glm::vec2(posx, posy);
     glm::vec2 direction = glm::vec2(cos(angle), sin(angle));
@@ -52,7 +53,7 @@ void GameWindow::initAsteroids(int number){
 }
 
 void GameWindow::updateAsteroids(){
-  for(int i=0;i<this->asteroids.size();i++){
+  for(size_t i=0; i<this->asteroids.size(); i++){
     if(this->asteroids[i]->center.x < 0){
       this->asteroids[i]->center.x = this->width;
     }
@@ -83,7 +84,7 @@ void GameWindow::draw(){
 
   SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, 255 );
   
-  for(int i=0;i<this->asteroids.size(); i++){
+  for(size_t i=0;i<this->asteroids.size(); i++){
     this->asteroids[i]->draw(this->renderer);
   }
   // Render the rect to the screen
@@ -96,7 +97,7 @@ void GameWindow::mainLoop(void) {
   Menu *m = new Menu();
 
   SDL_Event windowEvent;
-  while(true){
+  while(this->started){
     if(SDL_PollEvent( &windowEvent)){
       if(SDL_QUIT == windowEvent.type){
         break;
@@ -149,7 +150,7 @@ void GameWindow::mainLoop(void) {
       }
 
       if(this->spaceship->intersectsAsteroid(this->asteroids)){
-        break;
+        this->started = false;
       }
 
       this->spaceship->update(deltaRotation, this->width, this->height);

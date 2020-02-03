@@ -66,7 +66,7 @@ bool Spaceship::intersectsAsteroid(std::vector<Asteroid*> asteroids){
   glm::vec2 lower_right = glm::vec2(this->position.x + this->size * cos((4*M_PI/3) + this->direction_angle), this->position.y + this->size * sin((4*M_PI)/3 + direction_angle));
   glm::vec2 tip = glm::vec2(this->position.x + 2 * this->size * cos(this->direction_angle), this->position.y + 2 * this->size * sin(this->direction_angle));
 
-  for(int i=0;i<asteroids.size();i++){
+  for(size_t i=0; i < asteroids.size() ;i++){
     std::vector<glm::vec2> BB = asteroids[i]->BB;
     glm::vec2 asteroid_position = asteroids[i]->center;
     if((lower_left.x < (asteroid_position.x + BB[0].x)) && (lower_left.x > (asteroid_position.x + BB[1].x)) && (lower_left.y < (asteroid_position.y + BB[2].y)) && (lower_left.y >(asteroid_position.y + BB[0].y))){

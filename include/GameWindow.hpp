@@ -14,9 +14,9 @@ class GameWindow {
     Spaceship *spaceship;
     Font *font;
     std::vector<Asteroid*> asteroids;
-    
     int width;
     int height;
+    bool started;
 
   public:
     GameWindow(const char *name, int width, int height);
