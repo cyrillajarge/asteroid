@@ -27,8 +27,7 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   }
 
   this->spaceship = NULL;
-  this->font = new Font();
-  this->font->color = { 255, 255, 0, 255 };
+  this->font = new Font({ 255, 255, 0, 255 });
   initAsteroids(6);
 }
 
@@ -44,7 +43,7 @@ void GameWindow::initAsteroids(int number){
 
     int angle = std::rand() % 360;
     float angle_rad = (angle / 180.0f)* M_PI;
-    
+
     glm::vec2 position = glm::vec2(posx, posy);
     glm::vec2 direction = glm::vec2(cos(angle), sin(angle));
 
@@ -78,7 +77,7 @@ void GameWindow::draw(){
   // // Clear winow
   SDL_RenderClear( this->renderer );
 
-  this->font->drawText(this->renderer, "Salux !", 30, 50);
+  this->font->drawText(this->renderer, "Salux !", 50, 100);
 
   this->spaceship->draw(this->renderer);
 

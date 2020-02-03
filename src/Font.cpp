@@ -1,9 +1,21 @@
 #include "Font.hpp"
-
+#define DEFAULT_SPACING 4
 Font::Font(){
-  this->size = 28;
+  this->size = 1;
   this->spacing = 4;
   this->color = { 255, 255, 255, 255 };
+}
+
+Font::Font(double size){
+  this->size = size;
+  this->spacing = DEFAULT_SPACING;
+  this->color = { 255, 255, 255, 255 };
+}
+
+Font::Font(SDL_Color color){
+  this->size = 1;
+  this->spacing = DEFAULT_SPACING;
+  this->color = color;
 }
 
 Font::~Font(){
@@ -23,17 +35,22 @@ int Font::drawLetter(SDL_Renderer *renderer , char letter, int x, int y){
       this->color.b,
       this->color.a
     );
-    for(int i=2;i<111;i+=2){
+    for (int i=2; i<108; i+=2){
       int x1val = simplex[idx][i];
       int y1val = simplex[idx][i+1];
       int x2val = simplex[idx][i+2];
       int y2val = simplex[idx][i+3];
       if(x1val != -1 && y1val != -1 && x2val != -1 && y2val != -1){
-        SDL_RenderDrawLine(renderer, x2val+x, - y2val+y, x1val+x, - y1val+y); 
+        SDL_RenderDrawLine(renderer,
+          x1val * this->size+ x,
+          - y1val * this->size + y,
+          x2val * this->size + x,
+          - y2val * this->size + y
+        );
       }
     }
   }
-  return simplex[idx][1];
+  return simplex[idx][1] * this->size;
 }
 
 void Font::drawText(SDL_Renderer *renderer, std::string text, int x, int y) {
