@@ -35,7 +35,7 @@ int Font::drawLetter(SDL_Renderer *renderer , char letter, int x, int y){
       this->color.b,
       this->color.a
     );
-    for (int i=2; i<108; i+=2){
+    for (int i=2; i<= 108; i+=2){
       int x1val = simplex[idx][i];
       int y1val = simplex[idx][i+1];
       int x2val = simplex[idx][i+2];
