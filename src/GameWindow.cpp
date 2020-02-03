@@ -27,6 +27,8 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   }
 
   this->spaceship = NULL;
+  this->font = new Font();
+  this->font->color = { 255, 255, 0, 255 };
   initAsteroids(6);
 }
 
@@ -75,9 +77,8 @@ void GameWindow::draw(){
 
   // // Clear winow
   SDL_RenderClear( this->renderer );
-  
-  Font* f = new Font();
-  f->drawLetter(this->renderer, '!');
+
+  this->font->drawText(this->renderer, "Salux !", 30, 50);
 
   this->spaceship->draw(this->renderer);
 
@@ -86,7 +87,7 @@ void GameWindow::draw(){
   for(int i=0;i<this->asteroids.size(); i++){
     this->asteroids[i]->draw(this->renderer);
   }
-  // // Render the rect to the screen
+  // Render the rect to the screen
   SDL_RenderPresent(renderer);
 }
 
@@ -169,4 +170,5 @@ GameWindow::~GameWindow(void) {
   SDL_DestroyWindow(this->window);
   SDL_DestroyRenderer(this->renderer);
   delete this->spaceship;
+  delete this->font;
 }

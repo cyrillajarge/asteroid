@@ -2,6 +2,7 @@
 #define GAMEWINDOW_H
 
 #include "Spaceship.hpp"
+#include "Font.hpp"
 #include <vector>
 
 #define DELTA_ANGLE 0.15f
@@ -11,6 +12,7 @@ class GameWindow {
     SDL_Window *window;
     SDL_Renderer *renderer;
     Spaceship *spaceship;
+    Font *font;
     std::vector<Asteroid*> asteroids;
     
     int width;
