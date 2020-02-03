@@ -9,7 +9,6 @@
 #include "Spaceship.hpp"
 #include "Rocket.hpp"
 
-
 #define WIDTH 1080
 #define HEIGHT 720
 #define DELTA_ANGLE 0.15f

@@ -1,5 +1,6 @@
 #include "GameWindow.hpp"
 #include "Menu.hpp"
+#include "Font.hpp"
 #include <iostream>
 #include <random>
 
@@ -74,6 +75,9 @@ void GameWindow::draw(){
 
   // // Clear winow
   SDL_RenderClear( this->renderer );
+  
+  Font* f = new Font();
+  f->drawLetter(this->renderer, '!');
 
   this->spaceship->draw(this->renderer);
 
@@ -90,6 +94,7 @@ void GameWindow::mainLoop(void) {
   int deltaTime = 0, lastTime = 0, currentTime = 0, lastRocket = 0;
   double deltaRotation = 0.0f;
   Menu *m = new Menu();
+
   SDL_Event windowEvent;
   while(true){
     if(SDL_PollEvent( &windowEvent)){

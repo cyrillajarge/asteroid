@@ -2,6 +2,8 @@
 #define FONT_H
 
 #include "Hershey.hpp"
+#include <iostream>
+#include "SDL2/SDL.h"
 
 class Font{
   public:
@@ -9,7 +11,7 @@ class Font{
   public:
     Font();
     ~Font();
-    void drawLetter(char letter);
+    void drawLetter(SDL_Renderer* renderer ,char letter);
 };
 
 #endif

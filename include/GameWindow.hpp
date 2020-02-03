@@ -7,7 +7,7 @@
 #define DELTA_ANGLE 0.15f
 
 class GameWindow {
-  private:
+  public:
     SDL_Window *window;
     SDL_Renderer *renderer;
     Spaceship *spaceship;
