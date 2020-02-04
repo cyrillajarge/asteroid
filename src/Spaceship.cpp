@@ -1,6 +1,7 @@
 #include "Spaceship.hpp"
 #include <iostream>
 #include <cmath>
+#include "Blade.hpp"
 
 Spaceship::Spaceship(Player *p, glm::vec2 position, int size){
   this->position = position;
@@ -9,6 +10,10 @@ Spaceship::Spaceship(Player *p, glm::vec2 position, int size){
   this->direction_angle = 0.0f;
   this->velocity = glm::vec2(0.0f, 0.0f);
   this->boostActive = false;
+}
+
+glm::vec2 Spaceship::getDirection() {
+  return glm::vec2(cos(this->direction_angle), sin(this->direction_angle));
 }
 
 void Spaceship::activateBoost(){
@@ -39,7 +44,7 @@ void Spaceship::update(double rotation, int width, int height){
   }
   this->velocity *= VEL_ATTENUATION;
 
-  
+
 	auto it = this->rockets.begin();
 	while (it != this->rockets.end())
 	{
@@ -111,4 +116,6 @@ void Spaceship::draw(SDL_Renderer* renderer){
   for(Rocket* r: this->rockets){
     r->draw(renderer);
   }
+  Blade b = Blade(tip, this->getDirection());
+  b.draw(renderer);
 }

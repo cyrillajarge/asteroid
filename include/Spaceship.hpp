@@ -22,6 +22,7 @@ class Spaceship {
     bool boostActive;
     int size;
     std::vector<Rocket*> rockets;
+    
 
   public:
     Spaceship(Player *p, glm::vec2 position, int size);
@@ -32,6 +33,7 @@ class Spaceship {
     void fireRocket(Rocket* rocket);
     bool intersectsAsteroid(std::vector<Asteroid*> asteroids);
     void draw(SDL_Renderer* renderer);
+    glm::vec2 getDirection();
 
 };
 

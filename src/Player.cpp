@@ -1,6 +1,5 @@
 #include "Player.hpp"
 
-
 Player::Player() {
   this->score = 0;
   this->name = "anonymous";

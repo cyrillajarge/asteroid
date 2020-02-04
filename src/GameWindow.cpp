@@ -1,18 +1,15 @@
 #include "GameWindow.hpp"
 #include "Font.hpp"
 #include <iostream>
-#include <string>
 #include <random>
+#include <string>
 
 GameWindow::GameWindow(const char *name, int width, int height) {
   // Create window
-  this->window = SDL_CreateWindow(name,
-    SDL_WINDOWPOS_UNDEFINED,
-    SDL_WINDOWPOS_UNDEFINED,
-    width, height,
-    SDL_WINDOW_RESIZABLE
-  );
-  if(this->window == NULL){
+  this->window =
+      SDL_CreateWindow(name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                       width, height, SDL_WINDOW_RESIZABLE);
+  if (this->window == NULL) {
     std::cerr << "Could not create window: " << SDL_GetError() << std::endl;
     std::exit(EXIT_FAILURE);
   }
@@ -20,14 +17,15 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   this->height = height;
 
   // Create renderer
-  this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
-  if(this->renderer == NULL){
+  this->renderer =
+      SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
+  if (this->renderer == NULL) {
     std::cerr << "Could not create renderer: " << SDL_GetError() << std::endl;
     std::exit(EXIT_FAILURE);
   }
 
   this->spaceship = NULL;
-  this->font = new Font({ 255, 255, 255, 255 });
+  this->font = new Font({255, 255, 255, 255});
   initAsteroids(6);
   this->p1 = new Player();
   this->menu = new Menu(this->font);
@@ -38,11 +36,11 @@ void GameWindow::initShip(glm::vec2 position, int size) {
   this->spaceship = new Spaceship(this->p1, position, size);
 }
 
-void GameWindow::initAsteroids(int number){
+void GameWindow::initAsteroids(int number) {
 
-  for(int i=0;i<number;i++){
+  for (int i = 0; i < number; i++) {
     int posx = -10.0f + std::rand() % (this->width + 10);
-    int posy =  -10.0f + std::rand() % (this->height + 10);
+    int posy = -10.0f + std::rand() % (this->height + 10);
 
     int angle = std::rand() % 360;
     // float angle_rad = (angle / 180.0f)* M_PI;
@@ -50,22 +48,22 @@ void GameWindow::initAsteroids(int number){
     glm::vec2 position = glm::vec2(posx, posy);
     glm::vec2 direction = glm::vec2(cos(angle), sin(angle));
 
-    this->asteroids.push_back(new Asteroid(position, direction, 40 ,12, 2));
+    this->asteroids.push_back(new Asteroid(position, direction, 40, 12, 2));
   }
 }
 
-void GameWindow::updateAsteroids(){
-  for(size_t i=0; i<this->asteroids.size(); i++){
-    if(this->asteroids[i]->center.x < 0){
+void GameWindow::updateAsteroids() {
+  for (size_t i = 0; i < this->asteroids.size(); i++) {
+    if (this->asteroids[i]->center.x < 0) {
       this->asteroids[i]->center.x = this->width;
     }
-    if(this->asteroids[i]->center.x > width){
+    if (this->asteroids[i]->center.x > width) {
       this->asteroids[i]->center.x = 0;
     }
-    if(this->asteroids[i]->center.y < 0){
+    if (this->asteroids[i]->center.y < 0) {
       this->asteroids[i]->center.y = this->height;
     }
-    if(this->asteroids[i]->center.y > height){
+    if (this->asteroids[i]->center.y > height) {
       this->asteroids[i]->center.y = 0;
     }
 
@@ -73,39 +71,38 @@ void GameWindow::updateAsteroids(){
   }
 }
 
-void GameWindow::updateScore(int level){
-  switch(level){
-    case 2:
-      this->p1->score += 20;
-      break;
-    case 1:
-      this->p1->score += 50;
-      break;
-    case 0:
-      this->p1->score += 100;
-      break;
+void GameWindow::updateScore(int level) {
+  switch (level) {
+  case 2:
+    this->p1->score += 20;
+    break;
+  case 1:
+    this->p1->score += 50;
+    break;
+  case 0:
+    this->p1->score += 100;
+    break;
   }
 }
 
-
-void GameWindow::draw(){
+void GameWindow::draw() {
   // Set render color to black ( background will be rendered in this color )
-  SDL_SetRenderDrawColor( this->renderer, 0, 0, 0, 255 );
+  SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 255);
 
   // // Clear winow
-  SDL_RenderClear( this->renderer );
+  SDL_RenderClear(this->renderer);
 
   this->menu->draw(this->renderer, this->width, this->height);
 
   this->font->drawText(this->renderer, "Score :", 50, 50);
   std::string score = std::to_string(this->p1->score);
-  this->font->drawText(this->renderer, score, 200 , 50);
+  this->font->drawText(this->renderer, score, 200, 50);
 
   this->spaceship->draw(this->renderer);
 
-  SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, 255 );
-  
-  for(size_t i=0;i<this->asteroids.size(); i++){
+  SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, 255);
+
+  for (size_t i = 0; i < this->asteroids.size(); i++) {
     this->asteroids[i]->draw(this->renderer);
   }
   // Render the rect to the screen
@@ -117,9 +114,9 @@ void GameWindow::mainLoop(void) {
   double deltaRotation = 0.0f;
 
   SDL_Event windowEvent;
-  while(this->started){
-    if(SDL_PollEvent( &windowEvent)){
-      if(SDL_QUIT == windowEvent.type){
+  while (this->started) {
+    if (SDL_PollEvent(&windowEvent)) {
+      if (SDL_QUIT == windowEvent.type) {
         break;
       }
     }
@@ -134,21 +131,22 @@ void GameWindow::mainLoop(void) {
       if (keystates[SDL_SCANCODE_RIGHT]) {
         deltaRotation = DELTA_ANGLE;
       }
-      if(keystates[SDL_SCANCODE_UP]) {
+      if (keystates[SDL_SCANCODE_UP]) {
         this->spaceship->activateBoost();
       }
       if ((keystates[SDL_SCANCODE_SPACE]) && (currentTime - lastRocket > 200)) {
-        glm::vec2 rocket_dir = glm::vec2(cos(this->spaceship->direction_angle), sin(this->spaceship->direction_angle));
-        Rocket* rocket = new Rocket(this->spaceship->position + 30.0f * rocket_dir, rocket_dir);
+        glm::vec2 rocket_dir = glm::vec2(cos(this->spaceship->direction_angle),
+                                         sin(this->spaceship->direction_angle));
+        Rocket *rocket = new Rocket(
+            this->spaceship->position + 30.0f * rocket_dir, rocket_dir);
         this->spaceship->fireRocket(rocket);
         lastRocket = currentTime;
       }
 
       auto it = this->spaceship->rockets.begin();
-      while (it != this->spaceship->rockets.end())
-      {
+      while (it != this->spaceship->rockets.end()) {
         int inter = (*it)->intersectsAsteroid(this->asteroids);
-        if(inter != -1) {
+        if (inter != -1) {
           it = this->spaceship->rockets.erase(it);
           glm::vec2 aster_pos = this->asteroids[inter]->center;
           int ar = this->asteroids[inter]->averageray;
@@ -158,20 +156,20 @@ void GameWindow::mainLoop(void) {
           this->updateScore(lev);
 
           this->asteroids.erase(this->asteroids.begin() + inter);
-          if(lev > 0){
-            for(int i=0;i<2;i++){
+          if (lev > 0) {
+            for (int i = 0; i < 2; i++) {
               double angle = ((rand() % 360) / 180.0f) * M_PI;
               glm::vec2 dir = glm::vec2(cos(angle), sin(angle));
-              this->asteroids.push_back(new Asteroid(aster_pos, dir, ar/2, nr, lev-1));
+              this->asteroids.push_back(
+                  new Asteroid(aster_pos, dir, ar / 2, nr, lev - 1));
             }
           }
-        }
-        else {
+        } else {
           ++it;
         }
       }
 
-      if(this->spaceship->intersectsAsteroid(this->asteroids)){
+      if (this->spaceship->intersectsAsteroid(this->asteroids)) {
         this->started = false;
       }
 
@@ -185,7 +183,6 @@ void GameWindow::mainLoop(void) {
     }
   }
 }
-
 
 GameWindow::~GameWindow(void) {
   SDL_DestroyWindow(this->window);
