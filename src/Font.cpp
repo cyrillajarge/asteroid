@@ -1,5 +1,6 @@
 #include "Font.hpp"
 #define DEFAULT_SPACING 4
+
 Font::Font(){
   this->size = 1;
   this->spacing = 4;

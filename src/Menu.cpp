@@ -1,11 +1,15 @@
 #include "Menu.hpp"
 
-Menu::Menu() {
-  this->hello = "Salux !";
+Menu::Menu(Font* font) {
+  this->font = font;  
 }
 
-void Menu::drawHello(SDL_Renderer *renderer) {
-  (void) renderer;
+void Menu::draw(SDL_Renderer *renderer, int width, int height) {
+  
+  this->font->drawText(renderer, "ASTEROID", (width/2)-100, (height/2)-100);
+
+  this->font->drawText(renderer, "Play", (width/2)-100, (height/2)+100);
+
 }
 
 Menu::~Menu() {

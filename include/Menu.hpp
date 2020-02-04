@@ -2,14 +2,16 @@
 #define MENU_H
 #include <string>
 #include "SDL2/SDL.h"
+#include "Font.hpp"
 
 class Menu {
-  private:
-    std::string hello;
   public:
-    Menu();
+    Font* font;
+
+  public:
+    Menu(Font* font);
     ~Menu();
-    void drawHello(SDL_Renderer *renderer);
+    void draw(SDL_Renderer *renderer, int width, int height);
 };
 
 #endif

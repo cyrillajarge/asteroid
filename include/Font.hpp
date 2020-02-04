@@ -10,6 +10,7 @@ class Font{
     double size;
     int spacing;
     SDL_Color color;
+
   public:
     Font();
     Font(double size);

@@ -1,5 +1,4 @@
 #include "GameWindow.hpp"
-#include "Menu.hpp"
 #include "Font.hpp"
 #include <iostream>
 #include <string>
@@ -28,9 +27,10 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   }
 
   this->spaceship = NULL;
-  this->font = new Font({ 255, 255, 0, 255 });
+  this->font = new Font({ 255, 255, 255, 255 });
   initAsteroids(6);
   this->score = 0;
+  this->menu = new Menu(this->font);
   this->started = true;
 }
 
@@ -95,6 +95,7 @@ void GameWindow::draw(){
   // // Clear winow
   SDL_RenderClear( this->renderer );
 
+  this->menu->draw(this->renderer, this->width, this->height);
 
   this->font->drawText(this->renderer, "Score :", 50, 50);
   std::string score = std::to_string(this->score);
@@ -114,7 +115,6 @@ void GameWindow::draw(){
 void GameWindow::mainLoop(void) {
   int deltaTime = 0, lastTime = 0, currentTime = 0, lastRocket = 0;
   double deltaRotation = 0.0f;
-  Menu *m = new Menu();
 
   SDL_Event windowEvent;
   while(this->started){
@@ -123,7 +123,6 @@ void GameWindow::mainLoop(void) {
         break;
       }
     }
-    m->drawHello(this->renderer);
     currentTime = SDL_GetTicks();
     deltaTime = currentTime - lastTime;
     if (deltaTime > 30) /* Si 30 ms se sont écoulées */
@@ -185,7 +184,6 @@ void GameWindow::mainLoop(void) {
       lastTime = currentTime;
     }
   }
-  delete m;
 }
 
 
@@ -193,5 +191,6 @@ GameWindow::~GameWindow(void) {
   SDL_DestroyWindow(this->window);
   SDL_DestroyRenderer(this->renderer);
   delete this->spaceship;
+  delete this->menu;
   delete this->font;
 }
