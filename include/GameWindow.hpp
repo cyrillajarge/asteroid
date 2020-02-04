@@ -13,6 +13,7 @@ class GameWindow {
     SDL_Renderer *renderer;
     Spaceship *spaceship;
     Font *font;
+    int score;
     std::vector<Asteroid*> asteroids;
     int width;
     int height;
@@ -24,6 +25,7 @@ class GameWindow {
     void initShip(glm::vec2 position, int size);
     void initAsteroids(int number);
     void updateAsteroids();
+    void updateScore(int level);
     void draw();
     void mainLoop();
 

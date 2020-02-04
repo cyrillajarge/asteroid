@@ -2,6 +2,7 @@
 #include "Menu.hpp"
 #include "Font.hpp"
 #include <iostream>
+#include <string>
 #include <random>
 
 GameWindow::GameWindow(const char *name, int width, int height) {
@@ -29,6 +30,7 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   this->spaceship = NULL;
   this->font = new Font({ 255, 255, 0, 255 });
   initAsteroids(6);
+  this->score = 0;
   this->started = true;
 }
 
@@ -71,6 +73,21 @@ void GameWindow::updateAsteroids(){
   }
 }
 
+void GameWindow::updateScore(int level){
+  switch(level){
+    case 2:
+      this->score += 20;
+      break;
+    case 1:
+      this->score += 50;
+      break;
+    case 0:
+      this->score += 100;
+      break;
+  }
+}
+
+
 void GameWindow::draw(){
   // Set render color to black ( background will be rendered in this color )
   SDL_SetRenderDrawColor( this->renderer, 0, 0, 0, 255 );
@@ -78,7 +95,10 @@ void GameWindow::draw(){
   // // Clear winow
   SDL_RenderClear( this->renderer );
 
-  this->font->drawText(this->renderer, "Salux !", 50, 100);
+
+  this->font->drawText(this->renderer, "Score :", 50, 50);
+  std::string score = std::to_string(this->score);
+  this->font->drawText(this->renderer, score, 200 , 50);
 
   this->spaceship->draw(this->renderer);
 
@@ -135,6 +155,9 @@ void GameWindow::mainLoop(void) {
           int ar = this->asteroids[inter]->averageray;
           int nr = this->asteroids[inter]->nrays;
           int lev = this->asteroids[inter]->level;
+
+          this->updateScore(lev);
+
           this->asteroids.erase(this->asteroids.begin() + inter);
           if(lev > 0){
             for(int i=0;i<2;i++){
