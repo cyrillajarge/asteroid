@@ -5,6 +5,7 @@
 #include "glm/glm.hpp"
 #include "Rocket.hpp"
 #include "Asteroid.hpp"
+#include "Player.hpp"
 #include <list>
 #include <vector>
 #include <iterator>
@@ -14,6 +15,7 @@
 
 class Spaceship {
   public:
+    Player *player;
     glm::vec2 position;
     double direction_angle;
     glm::vec2 velocity;
@@ -22,7 +24,7 @@ class Spaceship {
     std::vector<Rocket*> rockets;
 
   public:
-    Spaceship(glm::vec2 position, int size);
+    Spaceship(Player *p, glm::vec2 position, int size);
     void activateBoost();
     void deactivateBoost();
     void update(double rotation, int width, int height);

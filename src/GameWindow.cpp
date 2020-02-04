@@ -29,13 +29,13 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   this->spaceship = NULL;
   this->font = new Font({ 255, 255, 255, 255 });
   initAsteroids(6);
-  this->score = 0;
+  this->p1 = new Player();
   this->menu = new Menu(this->font);
   this->started = true;
 }
 
 void GameWindow::initShip(glm::vec2 position, int size) {
-  this->spaceship = new Spaceship(position, size);
+  this->spaceship = new Spaceship(this->p1, position, size);
 }
 
 void GameWindow::initAsteroids(int number){
@@ -76,13 +76,13 @@ void GameWindow::updateAsteroids(){
 void GameWindow::updateScore(int level){
   switch(level){
     case 2:
-      this->score += 20;
+      this->p1->score += 20;
       break;
     case 1:
-      this->score += 50;
+      this->p1->score += 50;
       break;
     case 0:
-      this->score += 100;
+      this->p1->score += 100;
       break;
   }
 }
@@ -98,7 +98,7 @@ void GameWindow::draw(){
   this->menu->draw(this->renderer, this->width, this->height);
 
   this->font->drawText(this->renderer, "Score :", 50, 50);
-  std::string score = std::to_string(this->score);
+  std::string score = std::to_string(this->p1->score);
   this->font->drawText(this->renderer, score, 200 , 50);
 
   this->spaceship->draw(this->renderer);
@@ -193,4 +193,5 @@ GameWindow::~GameWindow(void) {
   delete this->spaceship;
   delete this->menu;
   delete this->font;
+  delete this->p1;
 }
