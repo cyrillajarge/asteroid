@@ -10,6 +10,12 @@
 
 #define DELTA_ANGLE 0.15f
 
+enum GAME_STATE {
+  STOPPED,
+  MENU,
+  GAME
+};
+
 class GameWindow {
   public:
     SDL_Window *window;
@@ -21,13 +27,14 @@ class GameWindow {
     Player *p1;
     int width;
     int height;
-    bool started;
+    GAME_STATE state;
 
   public:
     GameWindow(const char *name, int width, int height);
     ~GameWindow();
     void initShip(glm::vec2 position, int size);
     void initAsteroids(int number);
+    void initGame();
     void updateAsteroids();
     void updateScore(int level);
     void draw();

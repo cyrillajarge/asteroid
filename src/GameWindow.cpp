@@ -25,12 +25,16 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   }
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
-  this->spaceship = NULL;
+  this->spaceship = nullptr;
   this->font = new Font({255, 255, 255, 255});
-  initAsteroids(6);
   this->p1 = new Player();
   this->menu = new Menu(this->font);
-  this->started = true;
+  // this->initAsteroids(1);
+  this->state = MENU;
+  this->menu->components[0]->handler = [this]() {
+    this->state = GAME;
+    this->initGame();
+  };
 }
 
 void GameWindow::initShip(glm::vec2 position, int size) {
@@ -51,6 +55,12 @@ void GameWindow::initAsteroids(int number) {
 
     this->asteroids.push_back(new Asteroid(position, direction, 40, 12, 2));
   }
+}
+
+void GameWindow::initGame() {
+  glm::vec2 position = glm::vec2(this->width / 2.0f, this->height / 2.0f);
+  this->initShip(position, 20);
+  this->initAsteroids(6);
 }
 
 void GameWindow::updateAsteroids() {
@@ -93,18 +103,20 @@ void GameWindow::draw() {
   // // Clear winow
   SDL_RenderClear(this->renderer);
 
-  this->menu->draw(this->renderer, this->width, this->height);
+  if (this->state == MENU) {
+    this->menu->draw(this->renderer, this->width, this->height);
+  } else if (this->state == GAME) {
+    this->font->drawText(this->renderer, "Score :", 50, 50);
+    std::string score = std::to_string(this->p1->score);
+    this->font->drawText(this->renderer, score, 200, 50);
 
-  this->font->drawText(this->renderer, "Score :", 50, 50);
-  std::string score = std::to_string(this->p1->score);
-  this->font->drawText(this->renderer, score, 200, 50);
+    this->spaceship->draw(this->renderer);
 
-  this->spaceship->draw(this->renderer);
+    SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, 255);
 
-  SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, 255);
-
-  for (size_t i = 0; i < this->asteroids.size(); i++) {
-    this->asteroids[i]->draw(this->renderer);
+    for (size_t i = 0; i < this->asteroids.size(); i++) {
+      this->asteroids[i]->draw(this->renderer);
+    }
   }
   // Render the rect to the screen
   SDL_RenderPresent(renderer);
@@ -115,11 +127,11 @@ void GameWindow::mainLoop(void) {
   double deltaRotation = 0.0f;
 
   SDL_Event windowEvent;
-  while (this->started) {
+  while (this->state != STOPPED) {
     if (SDL_PollEvent(&windowEvent)) {
       switch(windowEvent.type) {
         case SDL_QUIT:
-          this->started = false;
+          this->state = STOPPED;
           break;
         case SDL_MOUSEBUTTONDOWN:
           for (UIComponent *comp : this->menu->components) {
@@ -130,87 +142,91 @@ void GameWindow::mainLoop(void) {
         default: break;
       }
     }
-    currentTime = SDL_GetTicks();
-    deltaTime = currentTime - lastTime;
-    if (deltaTime > 30) /* Si 30 ms se sont écoulées */
-    {
-      const Uint8 *keystates = SDL_GetKeyboardState(NULL);
-      if (keystates[SDL_SCANCODE_LEFT]) {
-        deltaRotation = -DELTA_ANGLE;
-      }
-      if (keystates[SDL_SCANCODE_RIGHT]) {
-        deltaRotation = DELTA_ANGLE;
-      }
-      if (keystates[SDL_SCANCODE_UP]) {
-        this->spaceship->activateBoost();
-      }
-      if ((keystates[SDL_SCANCODE_SPACE]) && (currentTime - lastRocket > 200)) {
-        glm::vec2 rocket_dir = glm::vec2(cos(this->spaceship->direction_angle),
-                                         sin(this->spaceship->direction_angle));
-        Rocket *rocket = new Rocket(
-            this->spaceship->position + 30.0f * rocket_dir, rocket_dir);
-        this->spaceship->fireRocket(rocket);
-        lastRocket = currentTime;
-      }
-
-      int inter;
-      auto it = this->spaceship->rockets.begin();
-      while (it != this->spaceship->rockets.end()) {
-        inter = (*it)->intersectsAsteroid(this->asteroids);
-        if (inter != -1) {
-          it = this->spaceship->rockets.erase(it);
-          glm::vec2 aster_pos = this->asteroids[inter]->center;
-          int ar = this->asteroids[inter]->averageray;
-          int nr = this->asteroids[inter]->nrays;
-          int lev = this->asteroids[inter]->level;
-
-          this->updateScore(lev);
-
-          this->asteroids.erase(this->asteroids.begin() + inter);
-          if (lev > 0) {
-            for (int i = 0; i < 2; i++) {
-              double angle = ((rand() % 360) / 180.0f) * M_PI;
-              glm::vec2 dir = glm::vec2(cos(angle), sin(angle));
-              this->asteroids.push_back(
-                  new Asteroid(aster_pos, dir, ar / 2, nr, lev - 1));
-            }
-          }
-        } else {
-          ++it;
+    if (this->state == GAME) {
+      currentTime = SDL_GetTicks();
+      deltaTime = currentTime - lastTime;
+      if (deltaTime > 30) /* Si 30 ms s@e sont écoulées */
+      {
+        const Uint8 *keystates = SDL_GetKeyboardState(NULL);
+        if (keystates[SDL_SCANCODE_LEFT]) {
+          deltaRotation = -DELTA_ANGLE;
         }
+        if (keystates[SDL_SCANCODE_RIGHT]) {
+          deltaRotation = DELTA_ANGLE;
+        }
+        if (keystates[SDL_SCANCODE_UP]) {
+          this->spaceship->activateBoost();
+        }
+        if ((keystates[SDL_SCANCODE_SPACE]) && (currentTime - lastRocket > 200)) {
+          glm::vec2 rocket_dir = glm::vec2(cos(this->spaceship->direction_angle),
+                                          sin(this->spaceship->direction_angle));
+          Rocket *rocket = new Rocket(
+              this->spaceship->position + 30.0f * rocket_dir, rocket_dir);
+          this->spaceship->fireRocket(rocket);
+          lastRocket = currentTime;
+        }
+
+        int inter;
+        auto it = this->spaceship->rockets.begin();
+        while (it != this->spaceship->rockets.end()) {
+          inter = (*it)->intersectsAsteroid(this->asteroids);
+          if (inter != -1) {
+            it = this->spaceship->rockets.erase(it);
+            glm::vec2 aster_pos = this->asteroids[inter]->center;
+            int ar = this->asteroids[inter]->averageray;
+            int nr = this->asteroids[inter]->nrays;
+            int lev = this->asteroids[inter]->level;
+
+            this->updateScore(lev);
+
+            this->asteroids.erase(this->asteroids.begin() + inter);
+            if (lev > 0) {
+              for (int i = 0; i < 2; i++) {
+                double angle = ((rand() % 360) / 180.0f) * M_PI;
+                glm::vec2 dir = glm::vec2(cos(angle), sin(angle));
+                this->asteroids.push_back(
+                    new Asteroid(aster_pos, dir, ar / 2, nr, lev - 1));
+              }
+            }
+          } else {
+            ++it;
+          }
+        }
+
+        // inter = this->spaceship->blade->intersectsAsteroid(this->asteroids);
+        // if (inter != -1) {
+        //   glm::vec2 aster_pos = this->asteroids[inter]->center;
+        //   int ar = this->asteroids[inter]->averageray;
+        //   int nr = this->asteroids[inter]->nrays;
+        //   int lev = this->asteroids[inter]->level;
+
+        //   this->updateScore(lev);
+
+        //   this->asteroids.erase(this->asteroids.begin() + inter);
+        //   if (lev > 0) {
+        //     for (int i = 0; i < 2; i++) {
+        //       double angle = ((rand() % 360) / 180.0f) * M_PI;
+        //       glm::vec2 dir = glm::vec2(cos(angle), sin(angle));
+        //       this->asteroids.push_back(
+        //           new Asteroid(aster_pos, dir, ar / 2, nr, lev - 1));
+        //     }
+        //   }
+        // }
+
+        if (this->spaceship->intersectsAsteroid(this->asteroids)) {
+          this->state = STOPPED;
+        }
+
+        this->spaceship->update(deltaRotation, this->width, this->height);
+        this->updateAsteroids();
+        this->draw();
+
+        deltaRotation = 0.0f;
+        this->spaceship->deactivateBoost();
+        lastTime = currentTime;
       }
-
-      // inter = this->spaceship->blade->intersectsAsteroid(this->asteroids);
-      // if (inter != -1) {
-      //   glm::vec2 aster_pos = this->asteroids[inter]->center;
-      //   int ar = this->asteroids[inter]->averageray;
-      //   int nr = this->asteroids[inter]->nrays;
-      //   int lev = this->asteroids[inter]->level;
-
-      //   this->updateScore(lev);
-
-      //   this->asteroids.erase(this->asteroids.begin() + inter);
-      //   if (lev > 0) {
-      //     for (int i = 0; i < 2; i++) {
-      //       double angle = ((rand() % 360) / 180.0f) * M_PI;
-      //       glm::vec2 dir = glm::vec2(cos(angle), sin(angle));
-      //       this->asteroids.push_back(
-      //           new Asteroid(aster_pos, dir, ar / 2, nr, lev - 1));
-      //     }
-      //   }
-      // }
-
-      if (this->spaceship->intersectsAsteroid(this->asteroids)) {
-        this->started = false;
-      }
-
-      this->spaceship->update(deltaRotation, this->width, this->height);
-      this->updateAsteroids();
+    } else if (this->state == MENU) {
       this->draw();
-
-      deltaRotation = 0.0f;
-      this->spaceship->deactivateBoost();
-      lastTime = currentTime;
     }
   }
 }
