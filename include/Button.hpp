@@ -14,6 +14,8 @@ public:
 
 public:
   void draw(SDL_Renderer *renderer);
+  void setX(int x);
+  void setY(int y);
 
 private:
   glm::vec2 label_pos;

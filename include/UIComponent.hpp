@@ -19,7 +19,7 @@ public:
   std::function<void()> handler;
 
 public:
-  virtual void draw(SDL_Renderer *renderer);
+  virtual void draw(SDL_Renderer *renderer) = 0;
 
   void setPadding(int top, int right, int bottom, int left) {
     this->padding = {top, right, bottom, left};
