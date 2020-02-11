@@ -17,7 +17,6 @@ struct padding {
 class UIComponent {
 public:
   std::function<void()> handler;
-  int x, y, w, h;
 
 public:
   virtual void draw(SDL_Renderer *renderer);
@@ -31,6 +30,7 @@ public:
   void setPadding(int val) { this->padding = {val, val, val, val}; }
 
 protected:
+  int x, y, w, h;
   Font *font;
   std::string label;
   struct padding padding = {DEFAULT_PADDING, DEFAULT_PADDING, DEFAULT_PADDING,

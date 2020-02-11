@@ -21,6 +21,15 @@ Font::Font(SDL_Color color) {
 
 Font::~Font() {}
 
+int Font::getLetterWidth(char letter) {
+  int idx = letter - 32;
+  if (idx < 0 || idx > 95) {
+    std::cerr << "Letter not supported!" << std::endl;
+    exit(EXIT_FAILURE);
+  }
+  return simplex[idx][1] * this->size;
+}
+
 int Font::drawLetter(SDL_Renderer *renderer, char letter, int x, int y) {
   int idx = letter - 32;
   if (idx < 0 || idx > 95) {
@@ -44,10 +53,20 @@ int Font::drawLetter(SDL_Renderer *renderer, char letter, int x, int y) {
   return simplex[idx][1] * this->size;
 }
 
-void Font::drawText(SDL_Renderer *renderer, std::string text, int x, int y) {
+int Font::drawText(SDL_Renderer *renderer, std::string text, int x, int y) {
   int xcur = x;
   for (char const c : text) {
     xcur += this->drawLetter(renderer, c, xcur, y);
     xcur += this->spacing;
   }
+  return xcur - this->spacing;
+}
+
+int Font::getEndPos(std::string text, int x) {
+  int xcur = x;
+  for (char const c : text) {
+    xcur += this->getLetterWidth(c);
+    xcur += this->spacing;
+  }
+  return xcur - this->spacing;
 }
