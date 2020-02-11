@@ -1,12 +1,15 @@
 #ifndef MENU_H
 #define MENU_H
 #include <string>
+#include <vector>
 #include "SDL2/SDL.h"
 #include "Font.hpp"
+#include "UIComponent.hpp"
 
 class Menu {
   public:
     Font* font;
+    std::vector<UIComponent *> components;
 
   public:
     Menu(Font* font);

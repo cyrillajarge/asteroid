@@ -23,6 +23,7 @@ GameWindow::GameWindow(const char *name, int width, int height) {
     std::cerr << "Could not create renderer: " << SDL_GetError() << std::endl;
     std::exit(EXIT_FAILURE);
   }
+  SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
   this->spaceship = NULL;
   this->font = new Font({255, 255, 255, 255});
@@ -116,8 +117,17 @@ void GameWindow::mainLoop(void) {
   SDL_Event windowEvent;
   while (this->started) {
     if (SDL_PollEvent(&windowEvent)) {
-      if (SDL_QUIT == windowEvent.type) {
-        break;
+      switch(windowEvent.type) {
+        case SDL_QUIT:
+          this->started = false;
+          break;
+        case SDL_MOUSEBUTTONDOWN:
+          for (UIComponent *comp : this->menu->components) {
+            if (comp->isIn(windowEvent.button.x, windowEvent.button.y)) {
+              comp->handler();
+            }
+          }
+        default: break;
       }
     }
     currentTime = SDL_GetTicks();

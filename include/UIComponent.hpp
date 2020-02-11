@@ -17,6 +17,7 @@ struct padding {
 class UIComponent {
 public:
   std::function<void()> handler;
+  bool enabled = true;
 
 public:
   virtual void draw(SDL_Renderer *renderer) = 0;
@@ -28,6 +29,14 @@ public:
   void setPadding(int v, int h) { this->padding = {v, h, v, h}; }
 
   void setPadding(int val) { this->padding = {val, val, val, val}; }
+
+  virtual ~UIComponent() {}
+
+  SDL_bool isIn(int x, int y) {
+    SDL_Rect r = { this->x, this->y, this->w, this->h };
+    SDL_Point p = { x, y };
+    return SDL_PointInRect(&p, &r);
+  }
 
 protected:
   int x, y, w, h;
