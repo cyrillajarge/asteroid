@@ -4,6 +4,7 @@
 #include "Font.hpp"
 #include "SDL2/SDL.h"
 #include <iostream>
+#include <functional>
 
 #define DEFAULT_PADDING 10
 
@@ -33,8 +34,8 @@ public:
   virtual ~UIComponent() {}
 
   SDL_bool isIn(int x, int y) {
-    SDL_Rect r = { this->x, this->y, this->w, this->h };
-    SDL_Point p = { x, y };
+    SDL_Rect r = {this->x, this->y, this->w, this->h};
+    SDL_Point p = {x, y};
     return SDL_PointInRect(&p, &r);
   }
 

@@ -12,20 +12,20 @@ public:
          std::function<void()> handler);
   // ~Button();
 
-  public:
-    bool border = false;
+public:
+  bool border = false;
 
-  public:
-    void draw(SDL_Renderer *renderer);
-    void setX(int x);
-    void setY(int y);
-    void setPos(int x, int y);
+public:
+  void draw(SDL_Renderer *renderer);
+  void setX(int x);
+  void setY(int y);
+  void setPos(int x, int y);
 
-  private:
-    glm::vec2 label_pos;
+private:
+  glm::vec2 label_pos;
 
-  private:
-    void computeBox();
+private:
+  void computeBox();
 };
 
 #endif
