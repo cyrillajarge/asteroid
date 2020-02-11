@@ -10,6 +10,7 @@ Spaceship::Spaceship(Player *p, glm::vec2 position, int size){
   this->direction_angle = 0.0f;
   this->velocity = glm::vec2(0.0f, 0.0f);
   this->boostActive = false;
+  // this->blade = new Blade(this->position, glm::vec2(1,0));
 }
 
 glm::vec2 Spaceship::getDirection() {
@@ -56,6 +57,9 @@ void Spaceship::update(double rotation, int width, int height){
 			++it;
 		}
 	}
+
+  // this->blade->position = this->position;
+  // this->blade->direction = this->getDirection();
 }
 
 void Spaceship::boost(){
@@ -116,6 +120,9 @@ void Spaceship::draw(SDL_Renderer* renderer){
   for(Rocket* r: this->rockets){
     r->draw(renderer);
   }
-  Blade b = Blade(tip, this->getDirection());
-  b.draw(renderer);
+  // this->blade->draw(renderer);
+}
+
+Spaceship::~Spaceship() {
+  // delete this->blade;
 }

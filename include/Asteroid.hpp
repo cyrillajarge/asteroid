@@ -25,6 +25,14 @@ class Asteroid {
     ~Asteroid();
     void computeBB();
     void draw(SDL_Renderer* renderer);
+    
+    /**
+     * @brief returns the coordinates of the hitbox points
+     * starts from top left and ends at bottom left
+     * 
+     * @return std::vector<int> 
+     */
+    std::vector<int> getHB();
 };
 
 #endif

@@ -6,6 +6,7 @@
 #include "Rocket.hpp"
 #include "Asteroid.hpp"
 #include "Player.hpp"
+#include "Blade.hpp"
 #include <list>
 #include <vector>
 #include <iterator>
@@ -22,10 +23,11 @@ class Spaceship {
     bool boostActive;
     int size;
     std::vector<Rocket*> rockets;
-    
+    // Blade *blade;
 
   public:
     Spaceship(Player *p, glm::vec2 position, int size);
+    ~Spaceship();
     void activateBoost();
     void deactivateBoost();
     void update(double rotation, int width, int height);

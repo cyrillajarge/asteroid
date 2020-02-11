@@ -143,9 +143,10 @@ void GameWindow::mainLoop(void) {
         lastRocket = currentTime;
       }
 
+      int inter;
       auto it = this->spaceship->rockets.begin();
       while (it != this->spaceship->rockets.end()) {
-        int inter = (*it)->intersectsAsteroid(this->asteroids);
+        inter = (*it)->intersectsAsteroid(this->asteroids);
         if (inter != -1) {
           it = this->spaceship->rockets.erase(it);
           glm::vec2 aster_pos = this->asteroids[inter]->center;
@@ -168,6 +169,26 @@ void GameWindow::mainLoop(void) {
           ++it;
         }
       }
+
+      // inter = this->spaceship->blade->intersectsAsteroid(this->asteroids);
+      // if (inter != -1) {
+      //   glm::vec2 aster_pos = this->asteroids[inter]->center;
+      //   int ar = this->asteroids[inter]->averageray;
+      //   int nr = this->asteroids[inter]->nrays;
+      //   int lev = this->asteroids[inter]->level;
+
+      //   this->updateScore(lev);
+
+      //   this->asteroids.erase(this->asteroids.begin() + inter);
+      //   if (lev > 0) {
+      //     for (int i = 0; i < 2; i++) {
+      //       double angle = ((rand() % 360) / 180.0f) * M_PI;
+      //       glm::vec2 dir = glm::vec2(cos(angle), sin(angle));
+      //       this->asteroids.push_back(
+      //           new Asteroid(aster_pos, dir, ar / 2, nr, lev - 1));
+      //     }
+      //   }
+      // }
 
       if (this->spaceship->intersectsAsteroid(this->asteroids)) {
         this->started = false;

@@ -35,6 +35,15 @@ void Asteroid::computeBB() {
   this->BB.push_back(topright);
 }
 
+std::vector<int> Asteroid::getHB() {
+  std::vector<int> hb;
+  hb.push_back(this->center.x + this->BB[1].x);
+  hb.push_back(this->center.x + this->BB[0].x);
+  hb.push_back(this->center.y + this->BB[2].y);
+  hb.push_back(this->center.y + this->BB[0].y);
+  return hb;
+}
+
 void Asteroid::draw(SDL_Renderer *renderer) {
 
   float angle = (2.0f * M_PI) / this->nrays;
