@@ -6,6 +6,7 @@
 #include "Menu.hpp"
 #include "Player.hpp"
 #include "UI/UIComponent.hpp"
+#include "Particles/ParticlesManager.hpp"
 #include <vector>
 
 #define DELTA_ANGLE 0.15f
@@ -21,6 +22,7 @@ class GameWindow {
     SDL_Window *window;
     SDL_Renderer *renderer;
     Spaceship *spaceship;
+    ParticlesManager *particleManager;
     Font *font;
     Menu* menu;
     std::vector<Asteroid*> asteroids;

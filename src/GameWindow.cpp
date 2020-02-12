@@ -3,6 +3,7 @@
 #include "UI/Clickable.hpp"
 #include <iostream>
 #include <random>
+#include "Random/Alea.hpp"
 #include <string>
 
 GameWindow::GameWindow(const char *name, int width, int height) {
@@ -16,6 +17,8 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   }
   this->width = width;
   this->height = height;
+
+  this->particleManager= new ParticlesManager();
 
   // Create renderer
   this->renderer =
@@ -119,6 +122,8 @@ void GameWindow::draw() {
     for (size_t i = 0; i < this->asteroids.size(); i++) {
       this->asteroids[i]->draw(this->renderer);
     }
+
+    this->particleManager->drawParticles(this->renderer);
   }
   // Render the rect to the screen
   SDL_RenderPresent(renderer);
@@ -127,6 +132,8 @@ void GameWindow::draw() {
 void GameWindow::mainLoop(void) {
   int deltaTime = 0, lastTime = 0, currentTime = 0, lastRocket = 0;
   double deltaRotation = 0.0f;
+
+  auto gen_float = alea_generator(-1.0f, 1.0f);
 
   SDL_Event windowEvent;
   while (this->state != STOPPED) {
@@ -184,6 +191,11 @@ void GameWindow::mainLoop(void) {
             this->updateScore(lev);
 
             this->asteroids.erase(this->asteroids.begin() + inter);
+            for(int i=0;i<10;i++){
+              float speedx = gen_float();
+              float speedy = gen_float();
+              this->particleManager->addLifeParticle(new LifeParticle(glm::vec4(0,255,0,255), aster_pos, glm::vec2(speedx, speedy), 50)); 
+            }
             if (lev > 0) {
               for (int i = 0; i < 2; i++) {
                 double angle = ((rand() % 360) / 180.0f) * M_PI;
@@ -223,6 +235,7 @@ void GameWindow::mainLoop(void) {
 
         this->spaceship->update(deltaRotation, this->width, this->height);
         this->updateAsteroids();
+        this->particleManager->updateParticles();
         this->draw();
 
         deltaRotation = 0.0f;
