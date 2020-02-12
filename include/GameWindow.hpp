@@ -5,7 +5,7 @@
 #include "Font.hpp"
 #include "Menu.hpp"
 #include "Player.hpp"
-#include "UIComponent.hpp"
+#include "UI/UIComponent.hpp"
 #include <vector>
 
 #define DELTA_ANGLE 0.15f

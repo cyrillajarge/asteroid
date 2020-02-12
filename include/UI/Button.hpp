@@ -1,14 +1,13 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
-#include "UIComponent.hpp"
+#include "UI/Clickable.hpp"
 #include "glm/vec2.hpp"
 
-class Button : public UIComponent {
+class Button : public Clickable {
 public:
-  Button();
-  Button(Font *font, std::string label, glm::vec2 label_pos);
-  Button(Font *font, std::string label, glm::vec2 label_pos,
+  Button(std::string label, glm::vec2 label_pos);
+  Button(std::string label, glm::vec2 label_pos,
          std::function<void()> handler);
   // ~Button();
 

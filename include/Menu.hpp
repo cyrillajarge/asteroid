@@ -4,7 +4,7 @@
 #include <vector>
 #include "SDL2/SDL.h"
 #include "Font.hpp"
-#include "UIComponent.hpp"
+#include "UI/UIComponent.hpp"
 
 class Menu {
   public:

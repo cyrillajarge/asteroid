@@ -1,17 +1,17 @@
-#include "Button.hpp"
+#include "UI/Button.hpp"
 
-Button::Button() {}
-
-Button::Button(Font *font, std::string label, glm::vec2 label_pos) {
-  this->font = font;
+Button::Button(std::string label, glm::vec2 label_pos) {
+  assert(UIComponent::default_font != nullptr);
+  this->font = UIComponent::default_font;
   this->label = label;
   this->label_pos = label_pos;
   this->computeBox();
 }
 
-Button::Button(Font *font, std::string label, glm::vec2 label_pos,
+Button::Button(std::string label, glm::vec2 label_pos,
                std::function<void()> handler) {
-  this->font = font;
+  assert(UIComponent::default_font != nullptr);
+  this->font = UIComponent::default_font;
   this->label = label;
   this->handler = handler;
   this->label_pos = label_pos;

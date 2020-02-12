@@ -1,5 +1,6 @@
 #include "GameWindow.hpp"
 #include "Font.hpp"
+#include "UI/Clickable.hpp"
 #include <iostream>
 #include <random>
 #include <string>
@@ -27,11 +28,12 @@ GameWindow::GameWindow(const char *name, int width, int height) {
 
   this->spaceship = nullptr;
   this->font = new Font({255, 255, 255, 255});
+  UIComponent::default_font = this->font;
   this->p1 = new Player();
   this->menu = new Menu(this->font);
   // this->initAsteroids(1);
   this->state = MENU;
-  this->menu->components[0]->handler = [this]() {
+  dynamic_cast<Clickable *>(this->menu->components[0])->handler = [this]() {
     this->state = GAME;
     this->initGame();
   };
@@ -134,9 +136,11 @@ void GameWindow::mainLoop(void) {
           this->state = STOPPED;
           break;
         case SDL_MOUSEBUTTONDOWN:
-          for (UIComponent *comp : this->menu->components) {
-            if (comp->isIn(windowEvent.button.x, windowEvent.button.y)) {
-              comp->handler();
+          for (UIComponent *_comp : this->menu->components) {
+            if (Clickable *comp = dynamic_cast<Clickable *>(_comp)) {
+              if (comp->isIn(windowEvent.button.x, windowEvent.button.y)) {
+                comp->handler();
+              }
             }
           }
         default: break;

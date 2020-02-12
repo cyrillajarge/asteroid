@@ -1,9 +1,9 @@
 #include "Menu.hpp"
-#include "Button.hpp"
+#include "UI/Button.hpp"
 
 Menu::Menu(Font *font) {
   this->font = font;
-  Button *b = new Button(font, "SALUX", { 400, 400 });
+  Button *b = new Button("SALUX", { 400, 400 });
   this->components = { b };
 }
 
