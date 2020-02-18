@@ -19,6 +19,9 @@ public:
   void setX(int x);
   void setY(int y);
   void setPos(int x, int y);
+  void centerVertically(int height);
+  void centerHorizontally(int width);
+  void center(int width, int height);
 
 private:
   glm::vec2 label_pos;
