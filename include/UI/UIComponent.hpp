@@ -3,9 +3,12 @@
 
 #include "Font.hpp"
 #include "SDL2/SDL.h"
+#include "glm/vec2.hpp"
+#include "glm/vec4.hpp"
 #include <iostream>
 
 #define DEFAULT_PADDING 10
+#define TEXT_HEIGHT 23
 
 struct padding {
   int top;
@@ -15,34 +18,31 @@ struct padding {
 };
 
 class UIComponent {
-public:
-  bool enabled = true;
-  static Font *default_font;
+  public:
+    bool enabled = true;
+    glm::vec2 position;
+    int xbox, ybox, wbox, hbox;
+    struct padding padding = {DEFAULT_PADDING, DEFAULT_PADDING, DEFAULT_PADDING,
+                              DEFAULT_PADDING};
+    std::string label;
+    static Font *font;
+    bool border = false;
+    glm::vec4 border_color = {255,255,255,255};
 
-public:
-  virtual void draw(SDL_Renderer *renderer) = 0;
-  virtual ~UIComponent() {}
+  public:
+    void setPadding(int top, int right, int bottom, int left);
+    void setPadding(int v, int h);
+    void setPadding(int val);
+    void setX(int x);
+    void setY(int y);
+    void setPosition(int x, int y);
+    void centerVertically(int height);
+    void centerHorizontally(int width);
+    void center(int height, int width);
+    virtual void draw(SDL_Renderer *renderer) = 0;
+    virtual void computeBox() = 0;
+    virtual ~UIComponent() {}
 
-  void setPadding(int top, int right, int bottom, int left) {
-    this->padding = {top, right, bottom, left};
-  }
-
-  void setPadding(int v, int h) { this->padding = {v, h, v, h}; }
-
-  void setPadding(int val) { this->padding = {val, val, val, val}; }
-
-  SDL_bool isIn(int x, int y) {
-    SDL_Rect r = {this->x, this->y, this->w, this->h};
-    SDL_Point p = {x, y};
-    return SDL_PointInRect(&p, &r);
-  }
-
-protected:
-  int x, y, w, h;
-  std::string label;
-  Font *font;
-  struct padding padding = {DEFAULT_PADDING, DEFAULT_PADDING, DEFAULT_PADDING,
-                            DEFAULT_PADDING};
 };
 
 #endif

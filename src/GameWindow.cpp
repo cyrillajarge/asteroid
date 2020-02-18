@@ -31,7 +31,7 @@ GameWindow::GameWindow(const char *name, int width, int height) {
 
   this->spaceship = nullptr;
   this->font = new Font({255, 255, 255, 255});
-  UIComponent::default_font = this->font;
+  UIComponent::font = this->font;
   this->p1 = new Player();
   this->menu = new Menu(this->font);
   // this->initAsteroids(1);

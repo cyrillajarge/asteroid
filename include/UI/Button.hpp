@@ -3,6 +3,7 @@
 
 #include "UI/Clickable.hpp"
 #include "glm/vec2.hpp"
+#include "glm/vec4.hpp"
 
 class Button : public Clickable {
 public:
@@ -12,22 +13,8 @@ public:
   // ~Button();
 
 public:
-  bool border = false;
-
-public:
-  void draw(SDL_Renderer *renderer);
-  void setX(int x);
-  void setY(int y);
-  void setPos(int x, int y);
-  void centerVertically(int height);
-  void centerHorizontally(int width);
-  void center(int width, int height);
-
-private:
-  glm::vec2 label_pos;
-
-private:
   void computeBox();
+  void draw(SDL_Renderer *renderer);
 };
 
 #endif
