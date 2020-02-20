@@ -8,32 +8,37 @@
 
 GameWindow::GameWindow(const char *name, int width, int height) {
   // Create window
-  this->window =
-      SDL_CreateWindow(name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+  this->window = SDL_CreateWindow(name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                        width, height, SDL_WINDOW_RESIZABLE);
   if (this->window == NULL) {
     std::cerr << "Could not create window: " << SDL_GetError() << std::endl;
     std::exit(EXIT_FAILURE);
   }
+
+  // Setting game window properties
   this->width = width;
   this->height = height;
 
+  // Particle Manager
   this->particleManager= new ParticlesManager();
 
   // Create renderer
-  this->renderer =
-      SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
+  this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
   if (this->renderer == NULL) {
     std::cerr << "Could not create renderer: " << SDL_GetError() << std::endl;
     std::exit(EXIT_FAILURE);
   }
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
-  this->spaceship = nullptr;
+  // Setting up UI
   this->font = new Font({255, 255, 255, 255});
   UIComponent::font = this->font;
-  this->p1 = new Player();
   this->menu = new Menu(this->font);
+  
+  // Setting up game entities
+  this->spaceship = nullptr;
+  this->p1 = new Player();
+  
   // this->initAsteroids(1);
   this->state = MENU;
   dynamic_cast<Clickable *>(this->menu->components[0])->handler = [this]() {
