@@ -33,20 +33,20 @@ void UIComponent::setPosition(int x, int y){
 }
 
 void UIComponent::centerVertically(int height) {
-    int buttonmiddley = TEXT_HEIGHT/2;
+    int buttonmiddley = this->hbox/2;
     int windmiddley = height/2;
     this->position.y = windmiddley + buttonmiddley;
     this->computeBox();
-  }
+}
 
-  void UIComponent::centerHorizontally(int width) {
-    int buttonmiddlex = (this->font->getEndPos(this->label, this->position.x) - this->position.x)/2;
-    int windmiddlex = width/2;
-    this->position.x = windmiddlex - buttonmiddlex;
-    this->computeBox();
-  }
+void UIComponent::centerHorizontally(int width) {
+  int buttonmiddlex = this->wbox/2;
+  int windmiddlex = width/2;
+  this->position.x = windmiddlex - buttonmiddlex;
+  this->computeBox();
+}
 
-  void UIComponent::center(int width, int height) {
-    this->centerVertically(height);
-    this->centerHorizontally(width);
-  }
+void UIComponent::center(int width, int height) {
+  this->centerVertically(height);
+  this->centerHorizontally(width);
+}

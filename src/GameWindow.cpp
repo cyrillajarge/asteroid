@@ -1,6 +1,7 @@
 #include "GameWindow.hpp"
 #include "Font.hpp"
 #include "UI/Clickable.hpp"
+#include "UI/Checkbox.hpp"
 #include <iostream>
 #include <random>
 #include "Random/Alea.hpp"
@@ -41,6 +42,14 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   
   // this->initAsteroids(1);
   this->state = MENU;
+  dynamic_cast<Clickable *>(this->menu->components[2])->handler = [this]() {
+    dynamic_cast<Checkbox *>(this->menu->components[2])->checked = !dynamic_cast<Checkbox *>(this->menu->components[2])->checked;
+  };
+
+  dynamic_cast<Clickable *>(this->menu->components[3])->handler = [this]() {
+    dynamic_cast<Checkbox *>(this->menu->components[3])->checked = !dynamic_cast<Checkbox *>(this->menu->components[3])->checked;
+  }; 
+
   dynamic_cast<Clickable *>(this->menu->components[0])->handler = [this]() {
     this->state = GAME;
     this->initGame();
