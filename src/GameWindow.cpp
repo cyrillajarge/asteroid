@@ -44,6 +44,7 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   this->state = MENU;
   dynamic_cast<Clickable *>(this->menu->components[2])->handler = [this]() {
     dynamic_cast<Checkbox *>(this->menu->components[2])->checked = !dynamic_cast<Checkbox *>(this->menu->components[2])->checked;
+    this->menu->musicbg->playPause();
   };
 
   dynamic_cast<Clickable *>(this->menu->components[3])->handler = [this]() {

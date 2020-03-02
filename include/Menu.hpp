@@ -5,10 +5,12 @@
 #include "SDL2/SDL.h"
 #include "Font.hpp"
 #include "UI/UIComponent.hpp"
+#include "Sound/Sound.hpp"
 
 class Menu {
   public:
     Font* font;
+    Sound* musicbg;
     std::vector<UIComponent *> components;
 
   public:

@@ -5,6 +5,7 @@
 
 Menu::Menu(Font *font) {
   this->font = font;
+  this->musicbg = new Sound("media/Star_Wars.wav");
   PlainText *title = new PlainText("ASTEROID", {200,200});
   Button *b = new Button("PLAY", { 200, 200 });
   Checkbox *music = new Checkbox("MUSIC", {400,400});
