@@ -7,6 +7,7 @@
 #include "Player.hpp"
 #include "UI/UIComponent.hpp"
 #include "Particles/ParticlesManager.hpp"
+#include "Sound/SoundManager.hpp"
 #include <vector>
 
 #define DELTA_ANGLE 0.15f
@@ -24,7 +25,8 @@ class GameWindow {
     Spaceship *spaceship;
     ParticlesManager *particleManager;
     Font *font;
-    Menu* menu;
+    Menu *menu;
+    SoundManager* soundManager;
     std::vector<Asteroid*> asteroids;
     Player *p1;
     int width;
