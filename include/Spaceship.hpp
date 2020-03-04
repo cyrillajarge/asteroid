@@ -6,6 +6,8 @@
 #include "Rocket.hpp"
 #include "Asteroid.hpp"
 #include "Player.hpp"
+#include "Particles/ParticlesManager.hpp"
+#include "Particles/LifeParticle.hpp"
 #include "Blade.hpp"
 #include <list>
 #include <vector>
@@ -21,6 +23,7 @@ class Spaceship {
     double direction_angle;
     glm::vec2 velocity;
     bool boostActive;
+    ParticlesManager* pmship;
     int size;
     std::vector<Rocket*> rockets;
     // Blade *blade;

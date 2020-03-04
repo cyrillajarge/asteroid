@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cmath>
 #include "Blade.hpp"
+#include "Random/Alea.hpp"
 
 Spaceship::Spaceship(Player *p, glm::vec2 position, int size){
   this->position = position;
@@ -10,6 +11,7 @@ Spaceship::Spaceship(Player *p, glm::vec2 position, int size){
   this->direction_angle = 0.0f;
   this->velocity = glm::vec2(0.0f, 0.0f);
   this->boostActive = false;
+  this->pmship = new ParticlesManager();
   // this->blade = new Blade(this->position, glm::vec2(1,0));
 }
 
@@ -99,6 +101,8 @@ void Spaceship::draw(SDL_Renderer* renderer){
   glm::vec2 lower_left = glm::vec2(this->position.x + d * cos((2*M_PI/3) + this->direction_angle), this->position.y + d * sin((2*M_PI)/3 + direction_angle));
   glm::vec2 lower_right = glm::vec2(this->position.x + d * cos((4*M_PI/3) + this->direction_angle), this->position.y + d * sin((4*M_PI)/3 + direction_angle));
   glm::vec2 tip = glm::vec2(this->position.x + 2 * d * cos(this->direction_angle), this->position.y + 2 * d * sin(this->direction_angle));
+  auto gen_float = alea_generator(0.0f, 1.0f);
+  auto gen_angle = alea_generator(0, 30);
 
  if(this->boostActive){
     // Propulseur
@@ -109,7 +113,16 @@ void Spaceship::draw(SDL_Renderer* renderer){
     SDL_RenderDrawLine(renderer, boost_left.x, boost_left.y, boost_right.x, boost_right.y);
     SDL_RenderDrawLine(renderer, boost_left.x, boost_left.y, boost_tip.x, boost_tip.y);
     SDL_RenderDrawLine(renderer, boost_right.x, boost_right.y, boost_tip.x, boost_tip.y);
+    for(int i=0;i<10;i++){
+      auto barcoord = gen_float();
+      glm::vec2 boostParticlePos = barcoord * boost_left + (1.0f - barcoord) * boost_right;
+      auto angle = gen_angle();
+      glm::vec2 boostParticleDir = glm::vec2(cos(angle) * this->getDirection().x - sin(angle) * this->getDirection().y,sin(angle) * this->getDirection().x + cos(angle) * this->getDirection().y);
+      this->pmship->addParticle(new LifeParticle(glm::vec4(255,0,0,255),boostParticlePos,-boostParticleDir/10.0f,10));
+    }
   }
+  this->pmship->updateParticles();
+  this->pmship->drawParticles(renderer);
 
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255 );
 

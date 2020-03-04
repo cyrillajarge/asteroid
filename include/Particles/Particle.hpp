@@ -13,7 +13,7 @@ class Particle{
     glm::vec2 speed;
   
     Particle(glm::vec4 color, glm::vec2 position, glm::vec2 speed): color(color), position(position), speed(speed){}
-    void update();
+    void virtual update();
     void draw(SDL_Renderer* renderer);
 };
 

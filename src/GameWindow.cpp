@@ -214,7 +214,7 @@ void GameWindow::mainLoop(void) {
             for(int i=0;i<10;i++){
               float speedx = gen_float();
               float speedy = gen_float();
-              this->particleManager->addLifeParticle(new LifeParticle(glm::vec4(0,255,0,255), aster_pos, glm::vec2(speedx, speedy), 50)); 
+              this->particleManager->addParticle(new LifeParticle(glm::vec4(0,255,0,255), aster_pos, glm::vec2(speedx, speedy), 50)); 
             }
             if (lev > 0) {
               for (int i = 0; i < 2; i++) {
