@@ -87,6 +87,15 @@ void GameWindow::initGame() {
   this->initAsteroids(6);
 }
 
+void GameWindow::endGame() {
+  for (size_t i = 0; i < this->asteroids.size(); i++) {
+    delete this->asteroids[i];
+  }
+  delete this->spaceship;
+  this->menu->setTitle("Gaime Heauveur");
+  this->state = MENU;
+}
+
 void GameWindow::updateAsteroids() {
   for (size_t i = 0; i < this->asteroids.size(); i++) {
     if (this->asteroids[i]->center.x < 0) {

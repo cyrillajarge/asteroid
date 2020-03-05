@@ -39,6 +39,7 @@ class GameWindow {
     void initShip(glm::vec2 position, int size);
     void initAsteroids(int number);
     void initGame();
+    void endGame(); // RIP TONY STARK
     void updateAsteroids();
     void updateScore(int level);
     void draw();

@@ -12,6 +12,14 @@ Menu::Menu(Font *font) {
   this->components = { b, title, music, sounds };
 }
 
+void Menu::setTitle(std::string t) {
+  for (UIComponent *c : this->components) {
+    if (PlainText *_t = dynamic_cast<PlainText *>(c)) {
+      _t->label = t;
+    }
+  }
+}
+
 void Menu::draw(SDL_Renderer *renderer, int width, int height) {
 
   

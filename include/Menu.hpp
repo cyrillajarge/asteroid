@@ -16,6 +16,8 @@ class Menu {
   public:
     Menu(Font* font);
     ~Menu();
+    void setTitle(std::string t);
+    // void gameOver(SDL_Renderer *renderer, int width, int height);
     void draw(SDL_Renderer *renderer, int width, int height);
 };
 
