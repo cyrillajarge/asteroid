@@ -56,7 +56,6 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   }; 
 
   dynamic_cast<Clickable *>(this->menu->components[0])->handler = [this]() {
-    this->state = GAME;
     this->initGame();
   };
 }
@@ -82,17 +81,23 @@ void GameWindow::initAsteroids(int number) {
 }
 
 void GameWindow::initGame() {
-  glm::vec2 position = glm::vec2(this->width / 2.0f, this->height / 2.0f);
-  this->initShip(position, 20);
-  this->initAsteroids(6);
+  if (this->state != GAME) {
+    this->state = GAME;
+    glm::vec2 position = glm::vec2(this->width / 2.0f, this->height / 2.0f);
+    this->initShip(position, 20);
+    this->initAsteroids(6);
+  }
 }
 
 void GameWindow::endGame() {
-  for (size_t i = 0; i < this->asteroids.size(); i++) {
-    delete this->asteroids[i];
-  }
+  // for (size_t i = 0; i < this->asteroids.size(); i++) {
+  //   delete this->asteroids[i];
+  // }
+  this->asteroids.clear();
   delete this->spaceship;
-  this->menu->setTitle("Gaime Heauveur");
+  this->p1->score = 0;
+  this->menu->renameComponent("title", "LMAO u ded");
+  this->menu->renameComponent("play", "Play Again");
   this->state = MENU;
 }
 
@@ -259,7 +264,7 @@ void GameWindow::mainLoop(void) {
         // }
 
         if (this->spaceship->intersectsAsteroid(this->asteroids)) {
-          this->state = STOPPED;
+          this->endGame();
         }
 
         this->spaceship->update(deltaRotation, this->width, this->height);
@@ -280,7 +285,7 @@ void GameWindow::mainLoop(void) {
 GameWindow::~GameWindow(void) {
   SDL_DestroyWindow(this->window);
   SDL_DestroyRenderer(this->renderer);
-  delete this->spaceship;
+  if (this->spaceship) delete this->spaceship;
   delete this->menu;
   delete this->font;
   delete this->p1;

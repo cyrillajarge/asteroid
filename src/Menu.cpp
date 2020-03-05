@@ -10,14 +10,12 @@ Menu::Menu(Font *font) {
   Checkbox *music = new Checkbox("MUSIC", {400,400});
   Checkbox *sounds = new Checkbox("SOUNDS", {400,400});
   this->components = { b, title, music, sounds };
+  this->main_components["title"] = title;
+  this->main_components["play"] = b;
 }
 
-void Menu::setTitle(std::string t) {
-  for (UIComponent *c : this->components) {
-    if (PlainText *_t = dynamic_cast<PlainText *>(c)) {
-      _t->label = t;
-    }
-  }
+void Menu::renameComponent(std::string key, std::string val) {
+  this->main_components[key]->label = val;
 }
 
 void Menu::draw(SDL_Renderer *renderer, int width, int height) {
