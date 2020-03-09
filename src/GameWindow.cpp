@@ -1,15 +1,16 @@
 #include "GameWindow.hpp"
 #include "Font.hpp"
-#include "UI/Clickable.hpp"
+#include "Random/Alea.hpp"
 #include "UI/Checkbox.hpp"
+#include "UI/Clickable.hpp"
 #include <iostream>
 #include <random>
-#include "Random/Alea.hpp"
 #include <string>
 
 GameWindow::GameWindow(const char *name, int width, int height) {
   // Create window
-  this->window = SDL_CreateWindow(name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+  this->window =
+      SDL_CreateWindow(name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                        width, height, SDL_WINDOW_RESIZABLE);
   if (this->window == NULL) {
     std::cerr << "Could not create window: " << SDL_GetError() << std::endl;
@@ -21,13 +22,14 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   this->height = height;
 
   // Particle Manager
-  this->particleManager= new ParticlesManager();
+  this->particleManager = new ParticlesManager();
 
   // Sound Manager
-  this->soundManager = new SoundManager("media/fire.wav","media/fire.wav");
+  this->soundManager = new SoundManager("media/fire.wav", "media/fire.wav");
 
   // Create renderer
-  this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
+  this->renderer =
+      SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
   if (this->renderer == NULL) {
     std::cerr << "Could not create renderer: " << SDL_GetError() << std::endl;
     std::exit(EXIT_FAILURE);
@@ -38,22 +40,24 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   this->font = new Font({255, 255, 255, 255});
   UIComponent::font = this->font;
   this->menu = new Menu(this->font);
-  
+
   // Setting up game entities
   this->spaceship = nullptr;
   this->p1 = new Player();
-  
+
   // this->initAsteroids(1);
   this->state = MENU;
   dynamic_cast<Clickable *>(this->menu->components[2])->handler = [this]() {
-    dynamic_cast<Checkbox *>(this->menu->components[2])->checked = !dynamic_cast<Checkbox *>(this->menu->components[2])->checked;
+    dynamic_cast<Checkbox *>(this->menu->components[2])->checked =
+        !dynamic_cast<Checkbox *>(this->menu->components[2])->checked;
     this->soundManager->playPauseMusic();
   };
 
   dynamic_cast<Clickable *>(this->menu->components[3])->handler = [this]() {
-    dynamic_cast<Checkbox *>(this->menu->components[3])->checked = !dynamic_cast<Checkbox *>(this->menu->components[3])->checked;
+    dynamic_cast<Checkbox *>(this->menu->components[3])->checked =
+        !dynamic_cast<Checkbox *>(this->menu->components[3])->checked;
     this->soundManager->activateSoundFX();
-  }; 
+  };
 
   dynamic_cast<Clickable *>(this->menu->components[0])->handler = [this]() {
     this->initGame();
@@ -144,9 +148,19 @@ void GameWindow::draw() {
   if (this->state == MENU) {
     this->menu->draw(this->renderer, this->width, this->height);
   } else if (this->state == GAME) {
-    this->font->drawText(this->renderer, "Score :", 50, 50);
+    int eos;
+    // Draw score
+    eos = this->font->drawText(this->renderer, "Score :", 50, 50);
     std::string score = std::to_string(this->p1->score);
-    this->font->drawText(this->renderer, score, 200, 50);
+    this->font->drawText(this->renderer, score, eos + 20, 50);
+
+    // Draw special cooldown
+
+    eos = this->font->drawText(this->renderer, "Special CD :", 700, 50);
+    std::string cooldown = this->spaceship->cooldown
+                               ? std::to_string(this->spaceship->cooldown)
+                               : "Ready";
+    this->font->drawText(this->renderer, cooldown, eos + 20, 50);
 
     this->spaceship->draw(this->renderer);
 
@@ -171,19 +185,20 @@ void GameWindow::mainLoop(void) {
   SDL_Event windowEvent;
   while (this->state != STOPPED) {
     if (SDL_PollEvent(&windowEvent)) {
-      switch(windowEvent.type) {
-        case SDL_QUIT:
-          this->state = STOPPED;
-          break;
-        case SDL_MOUSEBUTTONDOWN:
-          for (UIComponent *_comp : this->menu->components) {
-            if (Clickable *comp = dynamic_cast<Clickable *>(_comp)) {
-              if (comp->isIn(windowEvent.button.x, windowEvent.button.y)) {
-                comp->handler();
-              }
+      switch (windowEvent.type) {
+      case SDL_QUIT:
+        this->state = STOPPED;
+        break;
+      case SDL_MOUSEBUTTONDOWN:
+        for (UIComponent *_comp : this->menu->components) {
+          if (Clickable *comp = dynamic_cast<Clickable *>(_comp)) {
+            if (comp->isIn(windowEvent.button.x, windowEvent.button.y)) {
+              comp->handler();
             }
           }
-        default: break;
+        }
+      default:
+        break;
       }
     }
     if (this->state == GAME) {
@@ -201,14 +216,15 @@ void GameWindow::mainLoop(void) {
         if (keystates[SDL_SCANCODE_UP]) {
           this->spaceship->activateBoost();
         }
-        if ((keystates[SDL_SCANCODE_SPACE]) && (currentTime - lastRocket > 200)) {
-          glm::vec2 rocket_dir = glm::vec2(cos(this->spaceship->direction_angle),
-                                          sin(this->spaceship->direction_angle));
-          Rocket *rocket = new Rocket(
-              this->spaceship->position + 30.0f * rocket_dir, rocket_dir);
-          this->spaceship->fireRocket(rocket);
+        if ((keystates[SDL_SCANCODE_SPACE]) &&
+            (currentTime - lastRocket > 200)) {
+
+          this->spaceship->fireRocket();
           this->soundManager->playPauseShootSound();
           lastRocket = currentTime;
+        }
+        if (keystates[SDL_SCANCODE_X]) {
+          this->spaceship->fireSpecial();
         }
 
         int inter;
@@ -225,10 +241,12 @@ void GameWindow::mainLoop(void) {
             this->updateScore(lev);
 
             this->asteroids.erase(this->asteroids.begin() + inter);
-            for(int i=0;i<10;i++){
+            for (int i = 0; i < 10; i++) {
               float speedx = gen_float();
               float speedy = gen_float();
-              this->particleManager->addParticle(new LifeParticle(glm::vec4(0,255,0,255), aster_pos, glm::vec2(speedx, speedy), 50)); 
+              this->particleManager->addParticle(
+                  new LifeParticle(glm::vec4(0, 255, 0, 255), aster_pos,
+                                   glm::vec2(speedx, speedy), 50));
             }
             if (lev > 0) {
               for (int i = 0; i < 2; i++) {
@@ -275,6 +293,11 @@ void GameWindow::mainLoop(void) {
         deltaRotation = 0.0f;
         this->spaceship->deactivateBoost();
         lastTime = currentTime;
+        if (this->spaceship->cooldown >= deltaTime) {
+          this->spaceship->cooldown -= deltaTime;
+        } else {
+          this->spaceship->cooldown = 0;
+        }
       }
     } else if (this->state == MENU) {
       this->draw();
@@ -285,7 +308,8 @@ void GameWindow::mainLoop(void) {
 GameWindow::~GameWindow(void) {
   SDL_DestroyWindow(this->window);
   SDL_DestroyRenderer(this->renderer);
-  if (this->spaceship) delete this->spaceship;
+  if (this->spaceship)
+    delete this->spaceship;
   delete this->menu;
   delete this->font;
   delete this->p1;
