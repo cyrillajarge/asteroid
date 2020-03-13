@@ -6,6 +6,7 @@
 #include <iostream>
 #include <random>
 #include <string>
+#include <utility>
 
 GameWindow::GameWindow(const char *name, int width, int height) {
   // Create window
@@ -47,19 +48,19 @@ GameWindow::GameWindow(const char *name, int width, int height) {
 
   // this->initAsteroids(1);
   this->state = MENU;
-  dynamic_cast<Clickable *>(this->menu->components[2])->handler = [this]() {
-    dynamic_cast<Checkbox *>(this->menu->components[2])->checked =
-        !dynamic_cast<Checkbox *>(this->menu->components[2])->checked;
+  dynamic_cast<Clickable *>(this->menu->components["music"])->handler = [this]() {
+    dynamic_cast<Checkbox *>(this->menu->components["music"])->checked =
+        !dynamic_cast<Checkbox *>(this->menu->components["music"])->checked;
     this->soundManager->playPauseMusic();
   };
 
-  dynamic_cast<Clickable *>(this->menu->components[3])->handler = [this]() {
-    dynamic_cast<Checkbox *>(this->menu->components[3])->checked =
-        !dynamic_cast<Checkbox *>(this->menu->components[3])->checked;
+  dynamic_cast<Clickable *>(this->menu->components["sounds"])->handler = [this]() {
+    dynamic_cast<Checkbox *>(this->menu->components["sounds"])->checked =
+        !dynamic_cast<Checkbox *>(this->menu->components["sounds"])->checked;
     this->soundManager->activateSoundFX();
   };
 
-  dynamic_cast<Clickable *>(this->menu->components[0])->handler = [this]() {
+  dynamic_cast<Clickable *>(this->menu->components["play"])->handler = [this]() {
     this->initGame();
   };
 }
@@ -94,14 +95,12 @@ void GameWindow::initGame() {
 }
 
 void GameWindow::endGame() {
-  // for (size_t i = 0; i < this->asteroids.size(); i++) {
-  //   delete this->asteroids[i];
-  // }
   this->asteroids.clear();
-  // delete this->spaceship;
+  this->menu->components["score"]->enabled = true;
+  this->menu->components["score"]->label = "Your score : " + std::to_string(this->p1->score);
+  this->menu->components["title"]->label = "LMAO u ded";
+  this->menu->components["play"]->label = "Play Again";
   this->p1->score = 0;
-  this->menu->renameComponent("title", "LMAO u ded");
-  this->menu->renameComponent("play", "Play Again");
   this->state = MENU;
 }
 
@@ -190,8 +189,8 @@ void GameWindow::mainLoop(void) {
         this->state = STOPPED;
         break;
       case SDL_MOUSEBUTTONDOWN:
-        for (UIComponent *_comp : this->menu->components) {
-          if (Clickable *comp = dynamic_cast<Clickable *>(_comp)) {
+        for (std::pair<std::string, UIComponent *> _comp : this->menu->components) {
+          if (Clickable *comp = dynamic_cast<Clickable *>(_comp.second)) {
             if (comp->isIn(windowEvent.button.x, windowEvent.button.y)) {
               comp->handler();
             }
