@@ -9,6 +9,7 @@
 #include "Particles/ParticlesManager.hpp"
 #include "Sound/SoundManager.hpp"
 #include <vector>
+#include <memory>
 
 #define DELTA_ANGLE 0.15f
 
@@ -22,7 +23,7 @@ class GameWindow {
   public:
     SDL_Window *window;
     SDL_Renderer *renderer;
-    Spaceship *spaceship;
+    std::unique_ptr<Spaceship> spaceship;
     ParticlesManager *particleManager;
     Font *font;
     Menu *menu;

@@ -65,7 +65,7 @@ GameWindow::GameWindow(const char *name, int width, int height) {
 }
 
 void GameWindow::initShip(glm::vec2 position, int size) {
-  this->spaceship = new Spaceship(this->p1, position, size);
+  this->spaceship = std::make_unique<Spaceship>(this->p1, position, size);
 }
 
 void GameWindow::initAsteroids(int number) {
@@ -98,7 +98,7 @@ void GameWindow::endGame() {
   //   delete this->asteroids[i];
   // }
   this->asteroids.clear();
-  delete this->spaceship;
+  // delete this->spaceship;
   this->p1->score = 0;
   this->menu->renameComponent("title", "LMAO u ded");
   this->menu->renameComponent("play", "Play Again");
@@ -308,8 +308,8 @@ void GameWindow::mainLoop(void) {
 GameWindow::~GameWindow(void) {
   SDL_DestroyWindow(this->window);
   SDL_DestroyRenderer(this->renderer);
-  if (this->spaceship)
-    delete this->spaceship;
+  // if (this->spaceship)
+  //   delete this->spaceship;
   delete this->menu;
   delete this->font;
   delete this->p1;
