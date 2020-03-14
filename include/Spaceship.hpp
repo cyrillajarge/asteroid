@@ -8,7 +8,6 @@
 #include "Player.hpp"
 #include "Particles/ParticlesManager.hpp"
 #include "Particles/LifeParticle.hpp"
-#include "Blade.hpp"
 #include <list>
 #include <vector>
 #include <iterator>

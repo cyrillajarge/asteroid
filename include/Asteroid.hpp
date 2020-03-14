@@ -32,7 +32,7 @@ class Asteroid {
      * 
      * @return std::vector<int> 
      */
-    std::vector<int> getHB();
+    // std::vector<int> getHB();
 };
 
 #endif

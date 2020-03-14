@@ -1,5 +1,4 @@
 #include "Spaceship.hpp"
-#include "Blade.hpp"
 #include "Random/Alea.hpp"
 #include <cmath>
 #include <iostream>
@@ -15,7 +14,6 @@ Spaceship::Spaceship(Player *p, glm::vec2 position, int size) {
   this->boostActive = false;
   this->pmship = new ParticlesManager();
   this->cooldown = 0;
-  // this->blade = new Blade(this->position, glm::vec2(1,0));
 }
 
 glm::vec2 Spaceship::getDirection() {
@@ -102,24 +100,16 @@ bool Spaceship::intersectsAsteroid(std::vector<Asteroid *> asteroids) {
                 this->position.y + 2 * this->size * sin(this->direction_angle));
 
   for (size_t i = 0; i < asteroids.size(); i++) {
-    std::vector<glm::vec2> BB = asteroids[i]->BB;
-    glm::vec2 asteroid_position = asteroids[i]->center;
-    if ((lower_left.x < (asteroid_position.x + BB[0].x)) &&
-        (lower_left.x > (asteroid_position.x + BB[1].x)) &&
-        (lower_left.y < (asteroid_position.y + BB[2].y)) &&
-        (lower_left.y > (asteroid_position.y + BB[0].y))) {
+    int asterxcenter = asteroids[i]->center.x;
+    int asterycenter = asteroids[i]->center.y;
+    int averageray = asteroids[i]->averageray;
+    if(pow(lower_left.x-asterxcenter,2.0) + pow(lower_left.y-asterycenter,2.0) <= pow(averageray,2.0)){
       return true;
     }
-    if ((lower_right.x < (asteroid_position.x + BB[0].x)) &&
-        (lower_right.x > (asteroid_position.x + BB[1].x)) &&
-        (lower_right.y < (asteroid_position.y + BB[2].y)) &&
-        (lower_right.y > (asteroid_position.y + BB[0].y))) {
+    if(pow(lower_right.x-asterxcenter,2.0) + pow(lower_right.y-asterycenter,2.0) <= pow(averageray,2.0)){
       return true;
     }
-    if ((tip.x < (asteroid_position.x + BB[0].x)) &&
-        (tip.x > (asteroid_position.x + BB[1].x)) &&
-        (tip.y < (asteroid_position.y + BB[2].y)) &&
-        (tip.y > (asteroid_position.y + BB[0].y))) {
+    if(pow(tip.x-asterxcenter,2.0) + pow(tip.y-asterycenter,2.0) <= pow(averageray,2.0)){
       return true;
     }
   }

@@ -1,4 +1,5 @@
 #include "Asteroid.hpp"
+#include "Random/Alea.hpp"
 
 Asteroid::Asteroid(glm::vec2 position, glm::vec2 direction, int averageray,
                    int nrays, int level) {
@@ -8,41 +9,43 @@ Asteroid::Asteroid(glm::vec2 position, glm::vec2 direction, int averageray,
   this->averageray = averageray;
   this->level = level;
 
-  float random_ray;
+  auto random = alea_generator(-5,5);
+
+  float random_ray = 0.0;
 
   for (int i = 0; i < nrays; i++) {
-    random_ray = this->averageray + std::rand() % (this->averageray / 2);
+    random_ray = this->averageray + random() % (this->averageray / 2);
     this->rays.push_back(random_ray);
   }
   this->rays.push_back(this->rays[0]);
 
-  this->computeBB();
+  // this->computeBB();
 
   this->direction = direction;
 }
 
-void Asteroid::computeBB() {
-  int rayoffset = this->averageray /*- (this->averageray / 6.0f)*/;
-  glm::vec2 topright = glm::vec2(rayoffset, -rayoffset);
-  glm::vec2 topleft = glm::vec2(-rayoffset);
-  glm::vec2 bottomright = glm::vec2(rayoffset);
-  glm::vec2 bottomleft = glm::vec2(-rayoffset, rayoffset);
+// void Asteroid::computeBB() {
+//   int rayoffset = this->averageray /*- (this->averageray / 6.0f)*/;
+//   glm::vec2 topright = glm::vec2(rayoffset, -rayoffset);
+//   glm::vec2 topleft = glm::vec2(-rayoffset);
+//   glm::vec2 bottomright = glm::vec2(rayoffset);
+//   glm::vec2 bottomleft = glm::vec2(-rayoffset, rayoffset);
 
-  this->BB.push_back(topright);
-  this->BB.push_back(topleft);
-  this->BB.push_back(bottomleft);
-  this->BB.push_back(bottomright);
-  this->BB.push_back(topright);
-}
+//   this->BB.push_back(topright);
+//   this->BB.push_back(topleft);
+//   this->BB.push_back(bottomleft);
+//   this->BB.push_back(bottomright);
+//   this->BB.push_back(topright);
+// }
 
-std::vector<int> Asteroid::getHB() {
-  std::vector<int> hb;
-  hb.push_back(this->center.x + this->BB[1].x);
-  hb.push_back(this->center.x + this->BB[0].x);
-  hb.push_back(this->center.y + this->BB[2].y);
-  hb.push_back(this->center.y + this->BB[0].y);
-  return hb;
-}
+// std::vector<int> Asteroid::getHB() {
+//   std::vector<int> hb;
+//   hb.push_back(this->center.x + this->BB[1].x);
+//   hb.push_back(this->center.x + this->BB[0].x);
+//   hb.push_back(this->center.y + this->BB[2].y);
+//   hb.push_back(this->center.y + this->BB[0].y);
+//   return hb;
+// }
 
 void Asteroid::draw(SDL_Renderer *renderer) {
 
