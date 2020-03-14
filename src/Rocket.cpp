@@ -5,26 +5,11 @@ Rocket::Rocket(glm::vec2 position, glm::vec2 direction) {
   this->direction = direction;
 }
 
-// int Rocket::intersectsAsteroid(std::vector<Asteroid *> asteroids) {
-//   for (size_t i = 0; i < asteroids.size(); i++) {
-//     std::vector<glm::vec2> BB = asteroids[i]->BB;
-//     glm::vec2 asteroid_position = asteroids[i]->center;
-//     if ((this->position.x < (asteroid_position.x + BB[0].x)) &&
-//         (this->position.x > (asteroid_position.x + BB[1].x)) &&
-//         (this->position.y < (asteroid_position.y + BB[2].y)) &&
-//         (this->position.y > (asteroid_position.y + BB[0].y))) {
-//       return i;
-//     }
-//   }
-//   return -1;
-// }
-
-
 int Rocket::intersectsAsteroid(std::vector<Asteroid *> asteroids) {
   for (size_t i = 0; i < asteroids.size(); i++) {
     // disk equation
-    int rocketxpos = this->position.x;
-    int rocketypos = this->position.y;
+    int rocketxpos = this->position.x + 2;
+    int rocketypos = this->position.y + 2;
     int asterxcenter = asteroids[i]->center.x;
     int asterycenter = asteroids[i]->center.y; 
     int averageray = asteroids[i]->averageray;

@@ -54,9 +54,6 @@ void Spaceship::update(double rotation, int width, int height) {
       ++it;
     }
   }
-
-  // this->blade->position = this->position;
-  // this->blade->direction = this->getDirection();
 }
 
 void Spaceship::boost() {
@@ -77,9 +74,9 @@ void Spaceship::fireSpecial() {
   if (this->cooldown) { return; }
   Rocket *rocket;
   glm::vec2 rocket_dir;
-  for (double i = 0.; i < 360.; i += 30.) {
+  for (double i = 0.; i < 2*M_PI; i += M_PI/6.) {
     rocket_dir =
-        glm::vec2(cos(this->direction_angle + i), sin(this->direction_angle + i));
+        glm::vec2(cos(/*this->direction_angle + */i), sin(/*this->direction_angle +*/ i));
     rocket = new Rocket(this->position + 30.0f * rocket_dir, rocket_dir);
     this->rockets.push_back(rocket);
   }
@@ -173,9 +170,7 @@ void Spaceship::draw(SDL_Renderer *renderer) {
   for (Rocket *r : this->rockets) {
     r->draw(renderer);
   }
-  // this->blade->draw(renderer);
 }
 
 Spaceship::~Spaceship() {
-  // delete this->blade;
 }

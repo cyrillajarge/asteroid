@@ -25,7 +25,6 @@ class Spaceship {
     ParticlesManager* pmship;
     int size;
     std::vector<Rocket*> rockets;
-    // Blade *blade;
     int cooldown;
 
   public:
