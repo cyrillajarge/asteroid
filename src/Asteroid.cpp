@@ -9,7 +9,7 @@ Asteroid::Asteroid(glm::vec2 position, glm::vec2 direction, int averageray,
   this->averageray = averageray;
   this->level = level;
 
-  auto random = alea_generator(-5,5);
+  auto random = alea_generator(-5, 5);
 
   float random_ray = 0.0;
 

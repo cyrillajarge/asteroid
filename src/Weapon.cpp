@@ -1,6 +1,6 @@
 #include "Weapon.hpp"
-#include <iostream>
 #include <iomanip>
+#include <iostream>
 #include <sstream>
 
 Weapon::Weapon(double &ng, glm::vec2 &p) : angle(ng), pos(p) {}
@@ -21,12 +21,11 @@ std::string Weapon::getCDStr() {
     return cd_stream.str();
   }
   return "Ready";
-
 }
 
 Weapon::~Weapon() { std::cout << "Weapon destroyed" << std::endl; }
 void Weapon::debug() {
-  std::cout << 
-    "(angle: " << this->angle << ") " <<
-    "(pos: " << this->pos.x << ", " << this->pos.y << ")" << std::endl;
+  std::cout << "(angle: " << this->angle << ") "
+            << "(pos: " << this->pos.x << ", " << this->pos.y << ")"
+            << std::endl;
 }

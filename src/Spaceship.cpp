@@ -1,6 +1,6 @@
 #include "Spaceship.hpp"
-#include "RocketLauncher.hpp"
 #include "Random/Alea.hpp"
+#include "RocketLauncher.hpp"
 #include <cmath>
 #include <iostream>
 
@@ -15,7 +15,6 @@ Spaceship::Spaceship(Player *p, glm::vec2 position, int size) {
   this->boostActive = false;
   this->pmship = new ParticlesManager();
   this->weapon = new RocketLauncher(this->direction_angle, this->position);
-  
 }
 
 glm::vec2 Spaceship::getDirection() {
@@ -47,7 +46,6 @@ void Spaceship::update(double rotation, int width, int height) {
 
   this->velocity *= VEL_ATTENUATION;
   this->weapon->update(width, height);
-
 }
 
 void Spaceship::boost() {
@@ -74,13 +72,18 @@ bool Spaceship::intersectsAsteroid(std::vector<Asteroid *> asteroids) {
     int asterxcenter = asteroids[i]->center.x;
     int asterycenter = asteroids[i]->center.y;
     int averageray = asteroids[i]->averageray;
-    if(pow(lower_left.x-asterxcenter,2.0) + pow(lower_left.y-asterycenter,2.0) <= pow(averageray,2.0)){
+    if (pow(lower_left.x - asterxcenter, 2.0) +
+            pow(lower_left.y - asterycenter, 2.0) <=
+        pow(averageray, 2.0)) {
       return true;
     }
-    if(pow(lower_right.x-asterxcenter,2.0) + pow(lower_right.y-asterycenter,2.0) <= pow(averageray,2.0)){
+    if (pow(lower_right.x - asterxcenter, 2.0) +
+            pow(lower_right.y - asterycenter, 2.0) <=
+        pow(averageray, 2.0)) {
       return true;
     }
-    if(pow(tip.x-asterxcenter,2.0) + pow(tip.y-asterycenter,2.0) <= pow(averageray,2.0)){
+    if (pow(tip.x - asterxcenter, 2.0) + pow(tip.y - asterycenter, 2.0) <=
+        pow(averageray, 2.0)) {
       return true;
     }
   }
@@ -147,5 +150,4 @@ void Spaceship::draw(SDL_Renderer *renderer) {
   this->weapon->draw(renderer);
 }
 
-Spaceship::~Spaceship() {
-}
+Spaceship::~Spaceship() {}

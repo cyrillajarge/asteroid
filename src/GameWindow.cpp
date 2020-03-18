@@ -48,21 +48,22 @@ GameWindow::GameWindow(const char *name, int width, int height) {
 
   // this->initAsteroids(1);
   this->state = MENU;
-  dynamic_cast<Clickable *>(this->menu->components["music"])->handler = [this]() {
-    dynamic_cast<Checkbox *>(this->menu->components["music"])->checked =
-        !dynamic_cast<Checkbox *>(this->menu->components["music"])->checked;
-    this->soundManager->playPauseMusic();
-  };
+  dynamic_cast<Clickable *>(this->menu->components["music"])->handler =
+      [this]() {
+        dynamic_cast<Checkbox *>(this->menu->components["music"])->checked =
+            !dynamic_cast<Checkbox *>(this->menu->components["music"])->checked;
+        this->soundManager->playPauseMusic();
+      };
 
-  dynamic_cast<Clickable *>(this->menu->components["sounds"])->handler = [this]() {
+  dynamic_cast<Clickable *>(this->menu->components["sounds"])
+      ->handler = [this]() {
     dynamic_cast<Checkbox *>(this->menu->components["sounds"])->checked =
         !dynamic_cast<Checkbox *>(this->menu->components["sounds"])->checked;
     this->soundManager->activateSoundFX();
   };
 
-  dynamic_cast<Clickable *>(this->menu->components["play"])->handler = [this]() {
-    this->initGame();
-  };
+  dynamic_cast<Clickable *>(this->menu->components["play"])->handler =
+      [this]() { this->initGame(); };
 }
 
 void GameWindow::initShip(glm::vec2 position, int size) {
@@ -97,7 +98,8 @@ void GameWindow::initGame() {
 void GameWindow::endGame() {
   this->asteroids.clear();
   this->menu->components["score"]->enabled = true;
-  this->menu->components["score"]->label = "Your score : " + std::to_string(this->p1->score);
+  this->menu->components["score"]->label =
+      "Your score : " + std::to_string(this->p1->score);
   this->menu->components["title"]->label = "LMAO u ded";
   this->menu->components["play"]->label = "Play Again";
   this->p1->score = 0;
@@ -156,9 +158,9 @@ void GameWindow::draw() {
     // Draw special cooldown
 
     eos = this->font->drawText(this->renderer, "Special CD :", 700, 50);
-    
-    this->font->drawText(this->renderer, 
-      this->spaceship->weapon->getCDStr(), eos + 20, 50);
+
+    this->font->drawText(this->renderer, this->spaceship->weapon->getCDStr(),
+                         eos + 20, 50);
 
     this->spaceship->draw(this->renderer);
 
@@ -188,7 +190,8 @@ void GameWindow::mainLoop(void) {
         this->state = STOPPED;
         break;
       case SDL_MOUSEBUTTONDOWN:
-        for (std::pair<std::string, UIComponent *> _comp : this->menu->components) {
+        for (std::pair<std::string, UIComponent *> _comp :
+             this->menu->components) {
           if (Clickable *comp = dynamic_cast<Clickable *>(_comp.second)) {
             if (comp->isIn(windowEvent.button.x, windowEvent.button.y)) {
               comp->handler();
@@ -239,7 +242,7 @@ void GameWindow::mainLoop(void) {
             float speedy = gen_float();
             this->particleManager->addParticle(
                 new LifeParticle(glm::vec4(0, 255, 0, 255), aster_pos,
-                                  glm::vec2(speedx, speedy), 50));
+                                 glm::vec2(speedx, speedy), 50));
           }
           if (lev > 0) {
             for (int i = 0; i < 2; i++) {
@@ -264,7 +267,6 @@ void GameWindow::mainLoop(void) {
         this->spaceship->deactivateBoost();
         lastTime = currentTime;
         this->spaceship->weapon->updateCooldown(deltaTime);
-        
       }
     } else if (this->state == MENU) {
       this->draw();

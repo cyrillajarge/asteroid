@@ -11,9 +11,11 @@ int Rocket::intersectsAsteroid(std::vector<Asteroid *> asteroids) {
     int rocketxpos = this->position.x + 2;
     int rocketypos = this->position.y + 2;
     int asterxcenter = asteroids[i]->center.x;
-    int asterycenter = asteroids[i]->center.y; 
+    int asterycenter = asteroids[i]->center.y;
     int averageray = asteroids[i]->averageray;
-    if(pow(rocketxpos-asterxcenter,2.0) + pow(rocketypos-asterycenter,2.0) <= pow(averageray,2.0)){
+    if (pow(rocketxpos - asterxcenter, 2.0) +
+            pow(rocketypos - asterycenter, 2.0) <=
+        pow(averageray, 2.0)) {
       return i;
     }
   }

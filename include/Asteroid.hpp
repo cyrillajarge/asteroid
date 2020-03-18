@@ -1,29 +1,30 @@
 #ifndef ASTEROID_H
 #define ASTEROID_H
 
+#include "SDL2/SDL.h"
+#include "glm/glm.hpp"
 #include <cmath>
-#include <random>
-#include <vector>
-#include <list>
 #include <iostream>
 #include <iterator>
-#include "glm/glm.hpp"
-#include "SDL2/SDL.h"
+#include <list>
+#include <random>
+#include <vector>
 
 class Asteroid {
-  public:
-    glm::vec2 center;
-    std::vector<int> rays;
-    int averageray;
-    std::vector<glm::vec2> BB;
-    int  nrays;
-    int level;
-    glm::vec2 direction;
+public:
+  glm::vec2 center;
+  std::vector<int> rays;
+  int averageray;
+  std::vector<glm::vec2> BB;
+  int nrays;
+  int level;
+  glm::vec2 direction;
 
-  public:
-    Asteroid(glm::vec2 position, glm::vec2 direction, int averageray, int nrays, int level);
-    ~Asteroid();
-    void draw(SDL_Renderer* renderer);
+public:
+  Asteroid(glm::vec2 position, glm::vec2 direction, int averageray, int nrays,
+           int level);
+  ~Asteroid();
+  void draw(SDL_Renderer *renderer);
 };
 
 #endif
