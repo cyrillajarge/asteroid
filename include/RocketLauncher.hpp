@@ -14,6 +14,11 @@ public:
   void update(int width, int height);
   void draw(SDL_Renderer *renderer);
   std::vector<int> collided(std::vector<Asteroid *>);
+
+  /**
+   * @brief Rockets fired and "alive"
+   *
+   */
   std::vector<Rocket *> rockets;
 
 public:

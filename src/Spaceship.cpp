@@ -13,8 +13,9 @@ Spaceship::Spaceship(Player *p, glm::vec2 position, int size) {
   this->direction_angle = 0.0f;
   this->velocity = glm::vec2(0.0f, 0.0f);
   this->boostActive = false;
-  this->pmship = new ParticlesManager();
-  this->weapon = new RocketLauncher(this->direction_angle, this->position);
+  this->pmship = std::make_unique<ParticlesManager>();
+  this->weapon =
+      std::make_unique<RocketLauncher>(this->direction_angle, this->position);
 }
 
 glm::vec2 Spaceship::getDirection() {
@@ -144,9 +145,6 @@ void Spaceship::draw(SDL_Renderer *renderer) {
                      lower_left.y);
   SDL_RenderDrawLine(renderer, lower_left.x, lower_left.y, tip.x, tip.y);
 
-  // for (Rocket *r : this->rockets) {
-  //   r->draw(renderer);
-  // }
   this->weapon->draw(renderer);
 }
 

@@ -11,6 +11,7 @@
 #include "glm/glm.hpp"
 #include <iterator>
 #include <list>
+#include <memory>
 #include <vector>
 
 #define VEL_ATTENUATION 0.98f
@@ -23,9 +24,9 @@ public:
   double direction_angle;
   glm::vec2 velocity;
   bool boostActive;
-  ParticlesManager *pmship;
+  std::unique_ptr<ParticlesManager> pmship;
   int size;
-  Weapon *weapon;
+  std::unique_ptr<Weapon> weapon;
 
 public:
   Spaceship(Player *p, glm::vec2 position, int size);
