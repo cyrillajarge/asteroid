@@ -8,6 +8,7 @@
 #include "Player.hpp"
 #include "Particles/ParticlesManager.hpp"
 #include "Particles/LifeParticle.hpp"
+#include "Weapon.hpp"
 #include <list>
 #include <vector>
 #include <iterator>
@@ -26,6 +27,7 @@ class Spaceship {
     int size;
     std::vector<Rocket*> rockets;
     int cooldown;
+    Weapon *w;
 
   public:
     Spaceship(Player *p, glm::vec2 position, int size);

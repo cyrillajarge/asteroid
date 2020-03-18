@@ -14,6 +14,8 @@ Spaceship::Spaceship(Player *p, glm::vec2 position, int size) {
   this->boostActive = false;
   this->pmship = new ParticlesManager();
   this->cooldown = 0;
+  this->w = new Weapon(this->direction_angle, this->position);
+  
 }
 
 glm::vec2 Spaceship::getDirection() {
@@ -68,6 +70,7 @@ void Spaceship::fireRocket() {
       glm::vec2(cos(this->direction_angle), sin(this->direction_angle));
   Rocket *rocket = new Rocket(this->position + 30.0f * rocket_dir, rocket_dir);
   this->rockets.push_back(rocket);
+  this->w->debug();
 }
 
 void Spaceship::fireSpecial() {
