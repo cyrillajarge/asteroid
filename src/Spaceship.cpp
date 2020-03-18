@@ -1,4 +1,5 @@
 #include "Spaceship.hpp"
+#include "RocketLauncher.hpp"
 #include "Random/Alea.hpp"
 #include <cmath>
 #include <iostream>
@@ -13,8 +14,7 @@ Spaceship::Spaceship(Player *p, glm::vec2 position, int size) {
   this->velocity = glm::vec2(0.0f, 0.0f);
   this->boostActive = false;
   this->pmship = new ParticlesManager();
-  this->cooldown = 0;
-  this->w = new Weapon(this->direction_angle, this->position);
+  this->weapon = new RocketLauncher(this->direction_angle, this->position);
   
 }
 
@@ -44,18 +44,10 @@ void Spaceship::update(double rotation, int width, int height) {
   if (this->position.y < 0) {
     this->position.y = height;
   }
-  this->velocity *= VEL_ATTENUATION;
 
-  auto it = this->rockets.begin();
-  while (it != this->rockets.end()) {
-    if ((*it)->position.x < 0 || (*it)->position.x > width ||
-        (*it)->position.y < 0 || (*it)->position.y > height) {
-      it = this->rockets.erase(it);
-    } else {
-      (*it)->position += ROCKET_VEL * (*it)->direction;
-      ++it;
-    }
-  }
+  this->velocity *= VEL_ATTENUATION;
+  this->weapon->update(width, height);
+
 }
 
 void Spaceship::boost() {
@@ -63,27 +55,6 @@ void Spaceship::boost() {
       DIR_VECTOR_REGULATION *
       glm::vec2(cos(this->direction_angle), sin(this->direction_angle));
   this->velocity += direction_vector;
-}
-
-void Spaceship::fireRocket() {
-  glm::vec2 rocket_dir =
-      glm::vec2(cos(this->direction_angle), sin(this->direction_angle));
-  Rocket *rocket = new Rocket(this->position + 30.0f * rocket_dir, rocket_dir);
-  this->rockets.push_back(rocket);
-  this->w->debug();
-}
-
-void Spaceship::fireSpecial() {
-  if (this->cooldown) { return; }
-  Rocket *rocket;
-  glm::vec2 rocket_dir;
-  for (double i = 0.; i < 2*M_PI; i += M_PI/6.) {
-    rocket_dir =
-        glm::vec2(cos(/*this->direction_angle + */i), sin(/*this->direction_angle +*/ i));
-    rocket = new Rocket(this->position + 30.0f * rocket_dir, rocket_dir);
-    this->rockets.push_back(rocket);
-  }
-  this->cooldown = SPEC_CD * 1000;
 }
 
 bool Spaceship::intersectsAsteroid(std::vector<Asteroid *> asteroids) {
@@ -170,9 +141,10 @@ void Spaceship::draw(SDL_Renderer *renderer) {
                      lower_left.y);
   SDL_RenderDrawLine(renderer, lower_left.x, lower_left.y, tip.x, tip.y);
 
-  for (Rocket *r : this->rockets) {
-    r->draw(renderer);
-  }
+  // for (Rocket *r : this->rockets) {
+  //   r->draw(renderer);
+  // }
+  this->weapon->draw(renderer);
 }
 
 Spaceship::~Spaceship() {

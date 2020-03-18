@@ -25,9 +25,7 @@ class Spaceship {
     bool boostActive;
     ParticlesManager* pmship;
     int size;
-    std::vector<Rocket*> rockets;
-    int cooldown;
-    Weapon *w;
+    Weapon *weapon;
 
   public:
     Spaceship(Player *p, glm::vec2 position, int size);

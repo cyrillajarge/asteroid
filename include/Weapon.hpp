@@ -5,22 +5,25 @@
 #include "Asteroid.hpp"
 #include <vector>
 #include <memory>
+#include <string>
 
 class Weapon {
   public:
-    int cooldown = 10;
-    int fire_rate = 10 ;
+    int cooldown;
+    int fire_rate;
     double &angle;
     glm::vec2 &pos;
   public:
-    Weapon(double &ng, glm::vec2 &p) : angle(ng), pos(p) {}
+    Weapon(double &ng, glm::vec2 &p);
     void debug();
-    // virtual ~Weapon();
-    // virtual void fire() = 0;
-    // virtual void fireSpecial() = 0;
-    // virtual std::vector<int> collided(std::vector<Asteroid *>) = 0;
-    // virtual void update(int width, int height) = 0;
-    // virtual void draw(SDL_Renderer *renderer) = 0;
+    void updateCooldown(int delta);
+    std::string getCDStr();
+    virtual ~Weapon();
+    virtual void fire() = 0;
+    virtual void fireSpecial() = 0;
+    virtual std::vector<int> collided(std::vector<Asteroid *>) = 0;
+    virtual void update(int width, int height) = 0;
+    virtual void draw(SDL_Renderer *renderer) = 0;
 };
 
 #endif

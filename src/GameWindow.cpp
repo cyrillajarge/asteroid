@@ -156,10 +156,9 @@ void GameWindow::draw() {
     // Draw special cooldown
 
     eos = this->font->drawText(this->renderer, "Special CD :", 700, 50);
-    std::string cooldown = this->spaceship->cooldown
-                               ? std::to_string(this->spaceship->cooldown)
-                               : "Ready";
-    this->font->drawText(this->renderer, cooldown, eos + 20, 50);
+    
+    this->font->drawText(this->renderer, 
+      this->spaceship->weapon->getCDStr(), eos + 20, 50);
 
     this->spaceship->draw(this->renderer);
 
@@ -218,67 +217,39 @@ void GameWindow::mainLoop(void) {
         if ((keystates[SDL_SCANCODE_SPACE]) &&
             (currentTime - lastRocket > 200)) {
 
-          this->spaceship->fireRocket();
+          this->spaceship->weapon->fire();
           this->soundManager->playPauseShootSound();
           lastRocket = currentTime;
         }
         if (keystates[SDL_SCANCODE_X]) {
-          this->spaceship->fireSpecial();
+          this->spaceship->weapon->fireSpecial();
         }
 
-        int inter;
-        auto it = this->spaceship->rockets.begin();
-        while (it != this->spaceship->rockets.end()) {
-          inter = (*it)->intersectsAsteroid(this->asteroids);
-          if (inter != -1) {
-            it = this->spaceship->rockets.erase(it);
-            glm::vec2 aster_pos = this->asteroids[inter]->center;
-            int ar = this->asteroids[inter]->averageray;
-            int nr = this->asteroids[inter]->nrays;
-            int lev = this->asteroids[inter]->level;
+        for (int inter : this->spaceship->weapon->collided(this->asteroids)) {
+          glm::vec2 aster_pos = this->asteroids[inter]->center;
+          int ar = this->asteroids[inter]->averageray;
+          int nr = this->asteroids[inter]->nrays;
+          int lev = this->asteroids[inter]->level;
 
-            this->updateScore(lev);
+          this->updateScore(lev);
 
-            this->asteroids.erase(this->asteroids.begin() + inter);
-            for (int i = 0; i < 10; i++) {
-              float speedx = gen_float();
-              float speedy = gen_float();
-              this->particleManager->addParticle(
-                  new LifeParticle(glm::vec4(0, 255, 0, 255), aster_pos,
-                                   glm::vec2(speedx, speedy), 50));
+          this->asteroids.erase(this->asteroids.begin() + inter);
+          for (int i = 0; i < 10; i++) {
+            float speedx = gen_float();
+            float speedy = gen_float();
+            this->particleManager->addParticle(
+                new LifeParticle(glm::vec4(0, 255, 0, 255), aster_pos,
+                                  glm::vec2(speedx, speedy), 50));
+          }
+          if (lev > 0) {
+            for (int i = 0; i < 2; i++) {
+              double angle = ((rand() % 360) / 180.0f) * M_PI;
+              glm::vec2 dir = glm::vec2(cos(angle), sin(angle));
+              this->asteroids.push_back(
+                  new Asteroid(aster_pos, dir, ar / 2, nr, lev - 1));
             }
-            if (lev > 0) {
-              for (int i = 0; i < 2; i++) {
-                double angle = ((rand() % 360) / 180.0f) * M_PI;
-                glm::vec2 dir = glm::vec2(cos(angle), sin(angle));
-                this->asteroids.push_back(
-                    new Asteroid(aster_pos, dir, ar / 2, nr, lev - 1));
-              }
-            }
-          } else {
-            ++it;
           }
         }
-
-        // inter = this->spaceship->blade->intersectsAsteroid(this->asteroids);
-        // if (inter != -1) {
-        //   glm::vec2 aster_pos = this->asteroids[inter]->center;
-        //   int ar = this->asteroids[inter]->averageray;
-        //   int nr = this->asteroids[inter]->nrays;
-        //   int lev = this->asteroids[inter]->level;
-
-        //   this->updateScore(lev);
-
-        //   this->asteroids.erase(this->asteroids.begin() + inter);
-        //   if (lev > 0) {
-        //     for (int i = 0; i < 2; i++) {
-        //       double angle = ((rand() % 360) / 180.0f) * M_PI;
-        //       glm::vec2 dir = glm::vec2(cos(angle), sin(angle));
-        //       this->asteroids.push_back(
-        //           new Asteroid(aster_pos, dir, ar / 2, nr, lev - 1));
-        //     }
-        //   }
-        // }
 
         if (this->spaceship->intersectsAsteroid(this->asteroids)) {
           this->endGame();
@@ -292,11 +263,8 @@ void GameWindow::mainLoop(void) {
         deltaRotation = 0.0f;
         this->spaceship->deactivateBoost();
         lastTime = currentTime;
-        if (this->spaceship->cooldown >= deltaTime) {
-          this->spaceship->cooldown -= deltaTime;
-        } else {
-          this->spaceship->cooldown = 0;
-        }
+        this->spaceship->weapon->updateCooldown(deltaTime);
+        
       }
     } else if (this->state == MENU) {
       this->draw();
