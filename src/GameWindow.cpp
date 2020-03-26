@@ -3,6 +3,7 @@
 #include "Random/Alea.hpp"
 #include "UI/Checkbox.hpp"
 #include "UI/Clickable.hpp"
+#include "UI/TextInput.hpp"
 #include <iostream>
 #include <random>
 #include <string>
@@ -185,14 +186,31 @@ void GameWindow::mainLoop(void) {
         this->state = STOPPED;
         break;
       case SDL_MOUSEBUTTONDOWN:
-        for (std::pair<std::string, UIComponent *> _comp :
-             this->menu->components) {
-          if (Clickable *comp = dynamic_cast<Clickable *>(_comp.second)) {
-            if (comp->isIn(windowEvent.button.x, windowEvent.button.y)) {
-              comp->handler();
+        if(this->state == MENU){
+          for (std::pair<std::string, UIComponent *> _comp :
+              this->menu->components) {
+            if (Clickable *comp = dynamic_cast<Clickable *>(_comp.second)) {
+              if (comp->isIn(windowEvent.button.x, windowEvent.button.y)) {
+                comp->handler();
+              }
             }
           }
         }
+      case SDL_TEXTINPUT:
+        if(this->state == MENU){
+				  dynamic_cast<TextInput *>(this->menu->components["gamertag"])->addLetter(windowEvent);
+        }
+				break;
+			case SDL_KEYDOWN:
+        if(this->state == MENU){
+          if(windowEvent.key.keysym.sym == SDLK_BACKSPACE){
+				    dynamic_cast<TextInput *>(this->menu->components["gamertag"])->removeLetter(windowEvent);
+          }
+          if(windowEvent.key.keysym.sym == SDLK_RETURN){
+            this->initGame();
+          }
+        }
+				break;
       default:
         break;
       }

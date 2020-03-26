@@ -2,6 +2,7 @@
 #include "UI/Button.hpp"
 #include "UI/Checkbox.hpp"
 #include "UI/PlainText.hpp"
+#include "UI/TextInput.hpp"
 #include <utility>
 
 Menu::Menu(Font *font) {
@@ -11,11 +12,13 @@ Menu::Menu(Font *font) {
   Checkbox *music = new Checkbox("MUSIC", {400, 400});
   Checkbox *sounds = new Checkbox("SOUNDS", {400, 400});
   PlainText *score = new PlainText("No score yet", {400, 400});
+  TextInput *gamertag = new TextInput("Enter Gamertag:",{400, 400});
   score->enabled = false;
   this->components = {{"title", title},
                       {"play", b},
                       {"music", music},
                       {"sounds", sounds},
+                      {"gamertag", gamertag},
                       {"score", score}};
 }
 
@@ -50,6 +53,11 @@ void Menu::draw(SDL_Renderer *renderer, int width, int height) {
   PlainText *score = static_cast<PlainText *>(this->components["score"]);
   score->center(width, height);
   score->setY(sounds->position.y + 100);
+
+  TextInput *gamertag = static_cast<TextInput *>(this->components["gamertag"]);
+  gamertag->center(width, height);
+  gamertag->setY(gamertag->position.y + 150);
+
 
   for (std::pair<std::string, UIComponent *> comp : this->components) {
     if ((comp.second)->enabled) {
