@@ -43,8 +43,7 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   this->menu = new Menu(this->font);
 
   // Setting up game entities
-  this->spaceship = nullptr;
-  this->p1 = new Player();
+  this->p1 = std::make_unique<Player>();
 
   // this->initAsteroids(1);
   this->state = MENU;
@@ -67,7 +66,7 @@ GameWindow::GameWindow(const char *name, int width, int height) {
 }
 
 void GameWindow::initShip(glm::vec2 position, int size) {
-  this->spaceship = std::make_unique<Spaceship>(this->p1, position, size);
+  this->p1->spaceship = std::make_unique<Spaceship>(position, size);
 }
 
 void GameWindow::initAsteroids(int number) {
@@ -159,10 +158,10 @@ void GameWindow::draw() {
 
     eos = this->font->drawText(this->renderer, "Special CD :", 700, 50);
 
-    this->font->drawText(this->renderer, this->spaceship->weapon->getCDStr(),
+    this->font->drawText(this->renderer, this->p1->spaceship->weapon->getCDStr(),
                          eos + 20, 50);
 
-    this->spaceship->draw(this->renderer);
+    this->p1->spaceship->draw(this->renderer);
 
     SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, 255);
 
@@ -215,20 +214,20 @@ void GameWindow::mainLoop(void) {
           deltaRotation = DELTA_ANGLE;
         }
         if (keystates[SDL_SCANCODE_UP]) {
-          this->spaceship->activateBoost();
+          this->p1->spaceship->activateBoost();
         }
         if ((keystates[SDL_SCANCODE_SPACE]) &&
             (currentTime - lastRocket > 200)) {
 
-          this->spaceship->weapon->fire();
+          this->p1->spaceship->weapon->fire();
           this->soundManager->playPauseShootSound();
           lastRocket = currentTime;
         }
         if (keystates[SDL_SCANCODE_X]) {
-          this->spaceship->weapon->fireSpecial();
+          this->p1->spaceship->weapon->fireSpecial();
         }
 
-        for (int inter : this->spaceship->weapon->collided(this->asteroids)) {
+        for (int inter : this->p1->spaceship->weapon->collided(this->asteroids)) {
           glm::vec2 aster_pos = this->asteroids[inter]->center;
           int ar = this->asteroids[inter]->averageray;
           int nr = this->asteroids[inter]->nrays;
@@ -254,19 +253,19 @@ void GameWindow::mainLoop(void) {
           }
         }
 
-        if (this->spaceship->intersectsAsteroid(this->asteroids)) {
+        if (this->p1->spaceship->intersectsAsteroid(this->asteroids)) {
           this->endGame();
         }
 
-        this->spaceship->update(deltaRotation, this->width, this->height);
+        this->p1->spaceship->update(deltaRotation, this->width, this->height);
         this->updateAsteroids();
         this->particleManager->updateParticles();
         this->draw();
 
         deltaRotation = 0.0f;
-        this->spaceship->deactivateBoost();
+        this->p1->spaceship->deactivateBoost();
         lastTime = currentTime;
-        this->spaceship->weapon->updateCooldown(deltaTime);
+        this->p1->spaceship->weapon->updateCooldown(deltaTime);
       }
     } else if (this->state == MENU) {
       this->draw();
@@ -277,9 +276,6 @@ void GameWindow::mainLoop(void) {
 GameWindow::~GameWindow(void) {
   SDL_DestroyWindow(this->window);
   SDL_DestroyRenderer(this->renderer);
-  // if (this->spaceship)
-  //   delete this->spaceship;
   delete this->menu;
   delete this->font;
-  delete this->p1;
 }

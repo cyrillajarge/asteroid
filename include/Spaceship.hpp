@@ -4,7 +4,6 @@
 #include "Asteroid.hpp"
 #include "Particles/LifeParticle.hpp"
 #include "Particles/ParticlesManager.hpp"
-#include "Player.hpp"
 #include "Rocket.hpp"
 #include "SDL2/SDL.h"
 #include "Weapon.hpp"
@@ -19,7 +18,6 @@
 
 class Spaceship {
 public:
-  Player *player;
   glm::vec2 position;
   double direction_angle;
   glm::vec2 velocity;
@@ -29,7 +27,7 @@ public:
   std::unique_ptr<Weapon> weapon;
 
 public:
-  Spaceship(Player *p, glm::vec2 position, int size);
+  Spaceship(glm::vec2 position, int size);
   ~Spaceship();
   void activateBoost();
   void deactivateBoost();

@@ -6,9 +6,8 @@
 
 #define SPEC_CD 5
 
-Spaceship::Spaceship(Player *p, glm::vec2 position, int size) {
+Spaceship::Spaceship(glm::vec2 position, int size) {
   this->position = position;
-  this->player = p;
   this->size = size;
   this->direction_angle = 0.0f;
   this->velocity = glm::vec2(0.0f, 0.0f);

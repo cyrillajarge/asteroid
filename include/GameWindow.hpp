@@ -6,7 +6,6 @@
 #include "Particles/ParticlesManager.hpp"
 #include "Player.hpp"
 #include "Sound/SoundManager.hpp"
-#include "Spaceship.hpp"
 #include "UI/UIComponent.hpp"
 #include <memory>
 #include <vector>
@@ -19,13 +18,12 @@ class GameWindow {
 public:
   SDL_Window *window;
   SDL_Renderer *renderer;
-  std::unique_ptr<Spaceship> spaceship;
   ParticlesManager *particleManager;
   Font *font;
   Menu *menu;
   SoundManager *soundManager;
   std::vector<Asteroid *> asteroids;
-  Player *p1;
+  std::unique_ptr<Player> p1;
   int width;
   int height;
   GAME_STATE state;
