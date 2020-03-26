@@ -12,6 +12,7 @@ class ParticlesManager{
     std::vector<Particle*> particles;
 
     ParticlesManager(){}
+    ~ParticlesManager();
     void addParticle(Particle* p);
     void updateParticles();
     void drawParticles(SDL_Renderer* renderer);

@@ -25,3 +25,7 @@ void ParticlesManager::drawParticles(SDL_Renderer* renderer){
     (*i)->draw(renderer);
   }
 }
+
+ParticlesManager::~ParticlesManager() {
+  this->particles.clear();
+}

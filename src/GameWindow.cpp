@@ -247,7 +247,6 @@ void GameWindow::mainLoop(void) {
 GameWindow::~GameWindow(void) {
   SDL_DestroyWindow(this->window);
   SDL_DestroyRenderer(this->renderer);
-  this->particleManager->particles.clear();
   this->asteroids.clear();
   delete this->menu;
   delete this->font;

@@ -19,19 +19,53 @@ struct keymap {
 
 class InputManager {
   public:
+    /**
+     * @brief Delta angle then the spaceship rotates
+     * 
+     */
     double deltaRotation = 0.;
+
+    /**
+     * @brief Keyboard mappings
+     * 
+     */
     struct keymap mapper;
+
+    /**
+     * @brief Timestamp when last shot was fired
+     * 
+     */
     int last_shot = 0;
   
   private:
+    /**
+     * @brief Points to the spaceship instance it handles
+     * 
+     */
     std::weak_ptr<Spaceship> spaceship;
 
   public:
     InputManager(input_mapping_t kind);
     ~InputManager();
+    /**
+     * @brief Process user inputs
+     * 
+     * @param current_time 
+     */
     void process(int current_time);
+
+    /**
+     * @brief Attach a spaceship to this object
+     * 
+     * @param s 
+     */
     void attach(std::shared_ptr<Spaceship> s);
     
   private: 
+  /**
+   * @brief Initialize mappings
+   * 
+   * @param kind 
+   */
     void initMapper(input_mapping_t kind);
 };
