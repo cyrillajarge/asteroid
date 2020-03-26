@@ -205,9 +205,19 @@ void GameWindow::mainLoop(void) {
         this->state = STOPPED;
         break;
       case SDL_MOUSEBUTTONDOWN:
-        if(this->state == MENU || this->state == END_MENU){
+        if(this->state == MENU){
           for (std::pair<std::string, UIComponent *> _comp :
               this->menu->components) {
+            if (Clickable *comp = dynamic_cast<Clickable *>(_comp.second)) {
+              if (comp->isIn(windowEvent.button.x, windowEvent.button.y)) {
+                comp->handler();
+              }
+            }
+          }
+        }
+        else if(this->state == END_MENU){
+          for (std::pair<std::string, UIComponent *> _comp :
+              this->end_menu->components) {
             if (Clickable *comp = dynamic_cast<Clickable *>(_comp.second)) {
               if (comp->isIn(windowEvent.button.x, windowEvent.button.y)) {
                 comp->handler();
