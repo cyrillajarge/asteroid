@@ -50,22 +50,21 @@ GameWindow::GameWindow(const char *name, int width, int height) {
 
   // this->initAsteroids(1);
   this->state = MENU;
-  dynamic_cast<Clickable *>(this->menu->components["play"])->handler =
-      [this](){ 
-        this->players[0]->name = dynamic_cast<TextInput *>(this->menu->components["gamertag"])->input;
-        this->end_menu->components["message"]->label = "LMAO u ded " + this->players[0]->name + "!!";
-        this->end_menu->components["message"]->centerHorizontally(this->width);
-        this->initGame();
-      };
+  dynamic_cast<Clickable *>(this->menu->components["play"])
+      ->handler = [this]() {
+    this->players[0]->name =
+        dynamic_cast<TextInput *>(this->menu->components["gamertag"])->input;
+    this->end_menu->components["message"]->label =
+        "LMAO u ded " + this->players[0]->name + "!!";
+    this->end_menu->components["message"]->centerHorizontally(this->width);
+    this->initGame();
+  };
 
   dynamic_cast<Clickable *>(this->end_menu->components["playa"])->handler =
-      [this](){ 
-        this->initGame();
-      };
-
+      [this]() { this->initGame(); };
 }
 
-void GameWindow::initMenu(){
+void GameWindow::initMenu() {
   this->menu->addPlainText("title", "ASTEROID", {200, 200});
   this->menu->components["title"]->center(width, height);
   this->menu->components["title"]->moveY(-200);
@@ -80,21 +79,22 @@ void GameWindow::initMenu(){
   this->menu->components["score"]->center(width, height);
   this->menu->components["score"]->moveY(100);
 
-  this->menu->addTextInput("gamertag", "Enter Gamertag: ",{400, 400});
+  this->menu->addTextInput("gamertag", "Enter Gamertag: ", {400, 400});
   this->menu->components["gamertag"]->center(width, height);
   this->menu->components["gamertag"]->moveY(150);
-
 }
 
-void GameWindow::initEndMenu(){
-  this->end_menu->addPlainText("message", "LMAO u ded!!", {200,200});
+void GameWindow::initEndMenu() {
+  this->end_menu->addPlainText("message", "LMAO u ded!!", {200, 200});
   this->end_menu->components["message"]->center(width, height);
   this->end_menu->components["message"]->moveY(-200);
 
-  this->end_menu->addPlainText("score", "Your score : " + std::to_string(this->players[0]->score), {400, 400});
+  this->end_menu->addPlainText(
+      "score", "Your score : " + std::to_string(this->players[0]->score),
+      {400, 400});
   this->end_menu->components["score"]->center(width, height);
 
-  this->end_menu->addButton("playa", "Play Again", {200,200});
+  this->end_menu->addButton("playa", "Play Again", {200, 200});
   this->end_menu->components["playa"]->center(width, height);
   this->end_menu->components["playa"]->moveY(200);
   this->end_menu->components["playa"]->border = true;
@@ -133,9 +133,11 @@ void GameWindow::initGame() {
 }
 
 void GameWindow::endGame() {
-  this->end_menu->components["message"]->label = "LMAO u ded " + this->players[0]->name + "!!";
+  this->end_menu->components["message"]->label =
+      "LMAO u ded " + this->players[0]->name + "!!";
   this->end_menu->components["message"]->centerHorizontally(width);
-  this->end_menu->components["score"]->label = "Your score : " + std::to_string(this->players[0]->score);
+  this->end_menu->components["score"]->label =
+      "Your score : " + std::to_string(this->players[0]->score);
   this->end_menu->components["score"]->centerHorizontally(width);
   this->players[0]->spaceship->invincible = true;
   this->state = END_MENU;
@@ -184,7 +186,7 @@ void GameWindow::draw() {
 
   if (this->state == MENU) {
     this->menu->draw(this->renderer);
-  } else if (this->state == END_MENU){
+  } else if (this->state == END_MENU) {
     this->end_menu->draw(this->renderer);
   } else {
     int eos;
@@ -194,21 +196,24 @@ void GameWindow::draw() {
     this->font->drawText(this->renderer, score, eos + 20, 50);
 
     // Draw Gamertag
-    this->font->color = {0,255,0,255};
+    this->font->color = {0, 255, 0, 255};
     int gamertag_length = this->font->getWidth(this->players[0]->name);
     int offset = 100;
-    this->font->drawText(this->renderer, this->players[0]->name, this->width/2 - gamertag_length/2 - offset ,50);
+    this->font->drawText(this->renderer, this->players[0]->name,
+                         this->width / 2 - gamertag_length / 2 - offset, 50);
 
-    this->font->color = {255,255,255,255};
+    this->font->color = {255, 255, 255, 255};
     // Draw special cooldown
 
     eos = this->font->drawText(this->renderer, "Special CD :", 700, 50);
 
-    this->font->drawText(this->renderer, this->players[0]->spaceship->weapon->getCDStr(),
+    this->font->drawText(this->renderer,
+                         this->players[0]->spaceship->weapon->getCDStr(),
                          eos + 20, 50);
 
-    for (auto const& p : this->players) {
-      if (!p) continue;
+    for (auto const &p : this->players) {
+      if (!p)
+        continue;
       p->spaceship->draw(this->renderer);
     }
 
@@ -239,9 +244,8 @@ void GameWindow::computeAsteroids(std::vector<int> collided) {
     for (int i = 0; i < 10; i++) {
       float speedx = gen_float();
       float speedy = gen_float();
-      this->particleManager->addParticle(
-          new LifeParticle(glm::vec4(0, 255, 0, 255), aster_pos,
-                            glm::vec2(speedx, speedy), 50));
+      this->particleManager->addParticle(new LifeParticle(
+          glm::vec4(0, 255, 0, 255), aster_pos, glm::vec2(speedx, speedy), 50));
     }
     if (lev > 0) {
       for (int i = 0; i < 2; i++) {
@@ -254,7 +258,6 @@ void GameWindow::computeAsteroids(std::vector<int> collided) {
   }
 }
 
-
 void GameWindow::mainLoop(void) {
   int deltaTime = 0, lastTime = 0, currentTime = 0, invincibleTime = 0;
   SDL_Event windowEvent;
@@ -265,19 +268,18 @@ void GameWindow::mainLoop(void) {
         this->state = STOPPED;
         break;
       case SDL_MOUSEBUTTONDOWN:
-        if(this->state == MENU){
+        if (this->state == MENU) {
           for (std::pair<std::string, UIComponent *> _comp :
-              this->menu->components) {
+               this->menu->components) {
             if (Clickable *comp = dynamic_cast<Clickable *>(_comp.second)) {
               if (comp->isIn(windowEvent.button.x, windowEvent.button.y)) {
                 comp->handler();
               }
             }
           }
-        }
-        else if(this->state == END_MENU){
+        } else if (this->state == END_MENU) {
           for (std::pair<std::string, UIComponent *> _comp :
-              this->end_menu->components) {
+               this->end_menu->components) {
             if (Clickable *comp = dynamic_cast<Clickable *>(_comp.second)) {
               if (comp->isIn(windowEvent.button.x, windowEvent.button.y)) {
                 comp->handler();
@@ -286,25 +288,30 @@ void GameWindow::mainLoop(void) {
           }
         }
       case SDL_TEXTINPUT:
-        if(this->state == MENU){
-				  dynamic_cast<TextInput *>(this->menu->components["gamertag"])->addLetter(windowEvent);
+        if (this->state == MENU) {
+          dynamic_cast<TextInput *>(this->menu->components["gamertag"])
+              ->addLetter(windowEvent);
           this->menu->components["gamertag"]->centerHorizontally(width);
         }
-				break;
-			case SDL_KEYDOWN:
-        if(this->state == MENU){
-          if(windowEvent.key.keysym.sym == SDLK_BACKSPACE){
-				    dynamic_cast<TextInput *>(this->menu->components["gamertag"])->removeLetter(windowEvent);
+        break;
+      case SDL_KEYDOWN:
+        if (this->state == MENU) {
+          if (windowEvent.key.keysym.sym == SDLK_BACKSPACE) {
+            dynamic_cast<TextInput *>(this->menu->components["gamertag"])
+                ->removeLetter(windowEvent);
             this->menu->components["gamertag"]->centerHorizontally(width);
           }
-          if(windowEvent.key.keysym.sym == SDLK_RETURN){
-            this->players[0]->name = dynamic_cast<TextInput *>(this->menu->components["gamertag"])->input;
-            this->end_menu->components["message"]->label = "LMAO u ded" + this->players[0]->name + "!!";
+          if (windowEvent.key.keysym.sym == SDLK_RETURN) {
+            this->players[0]->name =
+                dynamic_cast<TextInput *>(this->menu->components["gamertag"])
+                    ->input;
+            this->end_menu->components["message"]->label =
+                "LMAO u ded" + this->players[0]->name + "!!";
             this->end_menu->components["message"]->centerHorizontally(width);
             this->initGame();
           }
         }
-				break;
+        break;
       default:
         break;
       }
@@ -313,29 +320,32 @@ void GameWindow::mainLoop(void) {
       currentTime = SDL_GetTicks();
       deltaTime = currentTime - lastTime;
       invincibleTime += currentTime - lastTime;
-      if(invincibleTime>2000000) this->players[0]->spaceship->invincible = false;
+      if (invincibleTime > 2000000)
+        this->players[0]->spaceship->invincible = false;
       if (deltaTime > 30) /* Si 30 ms se sont écoulées */
       {
-        for (auto const& p : this->players) {
+        for (auto const &p : this->players) {
           if (!p) {
             continue;
           }
           p->input_manager->process(currentTime);
-          this->computeAsteroids(p->spaceship->weapon->collided(this->asteroids));
+          this->computeAsteroids(
+              p->spaceship->weapon->collided(this->asteroids));
 
-          if (!p->spaceship->invincible && p->spaceship->intersectsAsteroid(this->asteroids)) {
+          if (!p->spaceship->invincible &&
+              p->spaceship->intersectsAsteroid(this->asteroids)) {
             this->endGame();
           }
 
           p->spaceship->update(p->getDelta(), this->width, this->height);
-
         }
         this->updateAsteroids();
         this->particleManager->updateParticles();
         this->draw();
 
-        for (auto const& p : this->players) {
-          if (!p) continue;
+        for (auto const &p : this->players) {
+          if (!p)
+            continue;
           p->resetDelta();
           p->spaceship->deactivateBoost();
           p->spaceship->weapon->updateCooldown(deltaTime);

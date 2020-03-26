@@ -5,27 +5,27 @@
 #include "UI/TextInput.hpp"
 #include <utility>
 
-Menu::Menu(Font *font) {
-  this->font = font;
-}
+Menu::Menu(Font *font) { this->font = font; }
 
-void Menu::addButton(std::string tag, std::string label, glm::vec2 position){
-  Button* b = new Button(label, position);
+void Menu::addButton(std::string tag, std::string label, glm::vec2 position) {
+  Button *b = new Button(label, position);
   this->components.insert({tag, b});
 }
 
-void Menu::addCheckbox(std::string tag, std::string label, glm::vec2 position){
-  Checkbox* cb = new Checkbox(label, position);
+void Menu::addCheckbox(std::string tag, std::string label, glm::vec2 position) {
+  Checkbox *cb = new Checkbox(label, position);
   this->components.insert({tag, cb});
 }
 
-void Menu::addPlainText(std::string tag, std::string label, glm::vec2 position){
-  PlainText* pt = new PlainText(label, position);
+void Menu::addPlainText(std::string tag, std::string label,
+                        glm::vec2 position) {
+  PlainText *pt = new PlainText(label, position);
   this->components.insert({tag, pt});
 }
 
-void Menu::addTextInput(std::string tag, std::string label, glm::vec2 position){
-  TextInput* ti = new TextInput(label, position);
+void Menu::addTextInput(std::string tag, std::string label,
+                        glm::vec2 position) {
+  TextInput *ti = new TextInput(label, position);
   this->components.insert({tag, ti});
 }
 

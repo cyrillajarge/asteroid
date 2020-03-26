@@ -4,10 +4,7 @@
 
 #define DELTA_ANGLE 0.15
 
-typedef enum input_mapping_e {
-  MAPPING_P1,
-  MAPPING_P2
-} input_mapping_t;
+typedef enum input_mapping_e { MAPPING_P1, MAPPING_P2 } input_mapping_t;
 
 struct keymap {
   SDL_Scancode left;
@@ -18,54 +15,54 @@ struct keymap {
 };
 
 class InputManager {
-  public:
-    /**
-     * @brief Delta angle then the spaceship rotates
-     * 
-     */
-    double deltaRotation = 0.;
+public:
+  /**
+   * @brief Delta angle then the spaceship rotates
+   *
+   */
+  double deltaRotation = 0.;
 
-    /**
-     * @brief Keyboard mappings
-     * 
-     */
-    struct keymap mapper;
+  /**
+   * @brief Keyboard mappings
+   *
+   */
+  struct keymap mapper;
 
-    /**
-     * @brief Timestamp when last shot was fired
-     * 
-     */
-    int last_shot = 0;
-  
-  private:
-    /**
-     * @brief Points to the spaceship instance it handles
-     * 
-     */
-    std::weak_ptr<Spaceship> spaceship;
+  /**
+   * @brief Timestamp when last shot was fired
+   *
+   */
+  int last_shot = 0;
 
-  public:
-    InputManager(input_mapping_t kind);
-    ~InputManager();
-    /**
-     * @brief Process user inputs
-     * 
-     * @param current_time 
-     */
-    void process(int current_time);
+private:
+  /**
+   * @brief Points to the spaceship instance it handles
+   *
+   */
+  std::weak_ptr<Spaceship> spaceship;
 
-    /**
-     * @brief Attach a spaceship to this object
-     * 
-     * @param s 
-     */
-    void attach(std::shared_ptr<Spaceship> s);
-    
-  private: 
+public:
+  InputManager(input_mapping_t kind);
+  ~InputManager();
+  /**
+   * @brief Process user inputs
+   *
+   * @param current_time
+   */
+  void process(int current_time);
+
+  /**
+   * @brief Attach a spaceship to this object
+   *
+   * @param s
+   */
+  void attach(std::shared_ptr<Spaceship> s);
+
+private:
   /**
    * @brief Initialize mappings
-   * 
-   * @param kind 
+   *
+   * @param kind
    */
-    void initMapper(input_mapping_t kind);
+  void initMapper(input_mapping_t kind);
 };

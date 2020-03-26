@@ -140,7 +140,7 @@ void Spaceship::draw(SDL_Renderer *renderer) {
 
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
-  if(this->invincible){
+  if (this->invincible) {
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 120);
   }
 

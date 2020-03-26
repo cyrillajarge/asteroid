@@ -1,8 +1,8 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "Spaceship.hpp"
 #include "InputManager.hpp"
+#include "Spaceship.hpp"
 #include "glm/vec2.hpp"
 #include <iostream>
 #include <memory>
@@ -22,13 +22,13 @@ public:
 
   /**
    * @brief Spaceship
-   * 
+   *
    */
   std::shared_ptr<Spaceship> spaceship;
 
   /**
    * @brief Input Manager that parses user inputs during game
-   * 
+   *
    */
   std::unique_ptr<InputManager> input_manager;
 
@@ -38,22 +38,22 @@ public:
   ~Player();
   /**
    * @brief Instanciates a spaceship and attaches it to the input manager
-   * 
-   * @param position 
-   * @param size 
+   *
+   * @param position
+   * @param size
    */
   void initShip(glm::vec2 position, int size);
 
   /**
    * @brief returns the delta rotation stored in the input manager
-   * 
-   * @return double 
+   *
+   * @return double
    */
   double getDelta();
 
   /**
    * @brief resets the delta rotation
-   * 
+   *
    */
   void resetDelta();
 };
