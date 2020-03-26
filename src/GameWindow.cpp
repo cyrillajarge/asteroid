@@ -329,13 +329,17 @@ void GameWindow::mainLoop(void) {
 
           p->spaceship->update(p->getDelta(), this->width, this->height);
 
-          p->resetDelta();
-          p->spaceship->deactivateBoost();
-          p->spaceship->weapon->updateCooldown(deltaTime);
         }
         this->updateAsteroids();
         this->particleManager->updateParticles();
         this->draw();
+
+        for (auto const& p : this->players) {
+          if (!p) continue;
+          p->resetDelta();
+          p->spaceship->deactivateBoost();
+          p->spaceship->weapon->updateCooldown(deltaTime);
+        }
         lastTime = currentTime;
       }
     } else if (this->state == MENU || this->state == END_MENU) {
