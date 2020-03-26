@@ -192,11 +192,39 @@ void GameWindow::draw() {
   SDL_RenderPresent(renderer);
 }
 
+void GameWindow::computeAsteroids(std::vector<int> collided) {
+  static auto gen_float = alea_generator(-1.0f, 1.0f);
+
+  for (int inter : collided) {
+    glm::vec2 aster_pos = this->asteroids[inter]->center;
+    int ar = this->asteroids[inter]->averageray;
+    int nr = this->asteroids[inter]->nrays;
+    int lev = this->asteroids[inter]->level;
+
+    this->updateScore(lev);
+
+    this->asteroids.erase(this->asteroids.begin() + inter);
+    for (int i = 0; i < 10; i++) {
+      float speedx = gen_float();
+      float speedy = gen_float();
+      this->particleManager->addParticle(
+          new LifeParticle(glm::vec4(0, 255, 0, 255), aster_pos,
+                            glm::vec2(speedx, speedy), 50));
+    }
+    if (lev > 0) {
+      for (int i = 0; i < 2; i++) {
+        double angle = ((rand() % 360) / 180.0f) * M_PI;
+        glm::vec2 dir = glm::vec2(cos(angle), sin(angle));
+        this->asteroids.push_back(
+            new Asteroid(aster_pos, dir, ar / 2, nr, lev - 1));
+      }
+    }
+  }
+}
+
+
 void GameWindow::mainLoop(void) {
   int deltaTime = 0, lastTime = 0, currentTime = 0;
-
-  auto gen_float = alea_generator(-1.0f, 1.0f);
-
   SDL_Event windowEvent;
   while (this->state != STOPPED) {
     if (SDL_PollEvent(&windowEvent)) {
@@ -251,32 +279,7 @@ void GameWindow::mainLoop(void) {
       if (deltaTime > 30) /* Si 30 ms s@e sont écoulées */
       {
         this->p1->input_manager->process(currentTime);
-
-        for (int inter : this->p1->spaceship->weapon->collided(this->asteroids)) {
-          glm::vec2 aster_pos = this->asteroids[inter]->center;
-          int ar = this->asteroids[inter]->averageray;
-          int nr = this->asteroids[inter]->nrays;
-          int lev = this->asteroids[inter]->level;
-
-          this->updateScore(lev);
-
-          this->asteroids.erase(this->asteroids.begin() + inter);
-          for (int i = 0; i < 10; i++) {
-            float speedx = gen_float();
-            float speedy = gen_float();
-            this->particleManager->addParticle(
-                new LifeParticle(glm::vec4(0, 255, 0, 255), aster_pos,
-                                 glm::vec2(speedx, speedy), 50));
-          }
-          if (lev > 0) {
-            for (int i = 0; i < 2; i++) {
-              double angle = ((rand() % 360) / 180.0f) * M_PI;
-              glm::vec2 dir = glm::vec2(cos(angle), sin(angle));
-              this->asteroids.push_back(
-                  new Asteroid(aster_pos, dir, ar / 2, nr, lev - 1));
-            }
-          }
-        }
+        this->computeAsteroids(this->p1->spaceship->weapon->collided(this->asteroids));
 
         if (this->p1->spaceship->intersectsAsteroid(this->asteroids)) {
           this->endGame();

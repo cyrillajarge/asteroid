@@ -21,6 +21,8 @@ public:
   Menu *end_menu;
   std::vector<Asteroid *> asteroids;
   std::unique_ptr<Player> p1;
+  std::unique_ptr<Player> p2;
+  std::unique_ptr<Player> players[2];
   int width;
   int height;
   GAME_STATE state;
@@ -35,6 +37,7 @@ public:
   void updateScore(int level);
   void draw();
   void mainLoop();
+  void computeAsteroids(std::vector<int> collided);
 };
 
 #endif
