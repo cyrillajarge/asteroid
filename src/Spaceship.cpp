@@ -9,6 +9,7 @@
 Spaceship::Spaceship(glm::vec2 position, int size) {
   this->position = position;
   this->size = size;
+  this->invincible = true;
   this->direction_angle = 0.0f;
   this->velocity = glm::vec2(0.0f, 0.0f);
   this->boostActive = false;
@@ -138,6 +139,10 @@ void Spaceship::draw(SDL_Renderer *renderer) {
   this->pmship->drawParticles(renderer);
 
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+
+  if(this->invincible){
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 120);
+  }
 
   SDL_RenderDrawLine(renderer, lower_right.x, lower_right.y, tip.x, tip.y);
   SDL_RenderDrawLine(renderer, lower_right.x, lower_right.y, lower_left.x,
