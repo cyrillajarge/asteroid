@@ -6,7 +6,7 @@
 
 class TextInput : public UIComponent{
   public:
-    std::string input = " ";
+    std::string input = "";
 
   public:
     TextInput(std::string label, glm::vec2 position);

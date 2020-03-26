@@ -19,7 +19,9 @@ void TextInput::removeLetter(SDL_Event e){
 }
 
 void TextInput::computeBox(){
-  int end = this->font->getEndPos(this->label, this->position.x);
+  int end1 = this->font->getEndPos(this->label, this->position.x);
+  int end2 = this->font->getWidth(this->input);
+  int end = end1 + end2;
   this->xbox = this->position.x - this->padding.left;
   this->wbox = end - this->position.x + this->padding.right + this->padding.left;
   this->ybox = this->position.y - TEXT_HEIGHT - this->padding.top;
@@ -29,7 +31,7 @@ void TextInput::computeBox(){
 void TextInput::draw(SDL_Renderer *renderer){
   SDL_Rect r = { this->xbox, this->ybox, this->wbox, this->hbox };
 
-  this->font->drawText(renderer, this->label + " " + this->input, this->position.x, this->position.y);
+  this->font->drawText(renderer, this->label + this->input, this->position.x, this->position.y);
   SDL_SetRenderDrawColor(renderer, this->border_color.x, this->border_color.y, this->border_color.z, this->border ? 255 : 0);
   SDL_RenderDrawRect(renderer, &r);
 }

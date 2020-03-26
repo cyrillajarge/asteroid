@@ -17,8 +17,8 @@ public:
   SDL_Renderer *renderer;
   std::unique_ptr<ParticlesManager> particleManager;
   Font *font;
-  Menu *menu;
-  Menu *end_menu;
+  std::unique_ptr<Menu> menu;
+  std::unique_ptr<Menu> end_menu;
   std::vector<Asteroid *> asteroids;
   std::unique_ptr<Player> p1;
   int width;
@@ -28,6 +28,8 @@ public:
 public:
   GameWindow(const char *name, int width, int height);
   ~GameWindow();
+  void initMenu();
+  void initEndMenu();
   void initAsteroids(int number);
   void initGame();
   void endGame(); // RIP TONY STARK

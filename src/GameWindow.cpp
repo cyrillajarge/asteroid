@@ -41,7 +41,30 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   // Setting up UI
   this->font = new Font({255, 255, 255, 255});
   UIComponent::font = this->font;
-  this->menu = new Menu(this->font);
+  this->menu = std::make_unique<Menu>(this->font);
+  this->initMenu();
+
+  this->end_menu = std::make_unique<Menu>(this->font);
+  this->initEndMenu();
+
+  // this->initAsteroids(1);
+  this->state = MENU;
+  dynamic_cast<Clickable *>(this->menu->components["play"])->handler =
+      [this](){ 
+        this->p1->name = dynamic_cast<TextInput *>(this->menu->components["gamertag"])->input;
+        this->end_menu->components["message"]->label = "LMAO u ded " + this->p1->name + "!!";
+        this->end_menu->components["message"]->centerHorizontally(this->width);
+        this->initGame();
+      };
+
+  dynamic_cast<Clickable *>(this->end_menu->components["playa"])->handler =
+      [this](){ 
+        this->initGame();
+      };
+
+}
+
+void GameWindow::initMenu(){
   this->menu->addPlainText("title", "ASTEROID", {200, 200});
   this->menu->components["title"]->center(width, height);
   this->menu->components["title"]->moveY(-200);
@@ -56,11 +79,13 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   this->menu->components["score"]->center(width, height);
   this->menu->components["score"]->moveY(100);
 
-  this->menu->addTextInput("gamertag", "Enter Gamertag:",{400, 400});
+  this->menu->addTextInput("gamertag", "Enter Gamertag: ",{400, 400});
   this->menu->components["gamertag"]->center(width, height);
   this->menu->components["gamertag"]->moveY(150);
 
-  this->end_menu = new Menu(this->font);
+}
+
+void GameWindow::initEndMenu(){
   this->end_menu->addPlainText("message", "LMAO u ded!!", {200,200});
   this->end_menu->components["message"]->center(width, height);
   this->end_menu->components["message"]->moveY(-200);
@@ -73,21 +98,6 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   this->end_menu->components["playa"]->moveY(200);
   this->end_menu->components["playa"]->border = true;
   this->end_menu->components["playa"]->border_color = {0, 255, 0, 255};
-
-  // this->initAsteroids(1);
-  this->state = MENU;
-  dynamic_cast<Clickable *>(this->menu->components["play"])->handler =
-      [this](){ 
-        this->p1->name = dynamic_cast<TextInput *>(this->menu->components["gamertag"])->input;
-        this->initGame();
-      };
-
-  dynamic_cast<Clickable *>(this->end_menu->components["playa"])->handler =
-      [this](){ 
-        this->p1->score = 0;
-        this->initGame();
-      };
-
 }
 
 void GameWindow::initAsteroids(int number) {
@@ -109,6 +119,7 @@ void GameWindow::initAsteroids(int number) {
 void GameWindow::initGame() {
   if (this->state != GAME) {
     this->state = GAME;
+    this->p1->score = 0;
     glm::vec2 position = glm::vec2(this->width / 2.0f, this->height / 2.0f);
     this->p1->initShip(position, 20);
     this->initAsteroids(6);
@@ -116,6 +127,10 @@ void GameWindow::initGame() {
 }
 
 void GameWindow::endGame() {
+  this->end_menu->components["message"]->label = "LMAO u ded " + this->p1->name + "!!";
+  this->end_menu->components["message"]->centerHorizontally(width);
+  this->end_menu->components["score"]->label = "Your score : " + std::to_string(this->p1->score);
+  this->end_menu->components["score"]->centerHorizontally(width);
   this->state = END_MENU;
   this->asteroids.clear();
 }
@@ -171,6 +186,13 @@ void GameWindow::draw() {
     std::string score = std::to_string(this->p1->score);
     this->font->drawText(this->renderer, score, eos + 20, 50);
 
+    // Draw Gamertag
+    this->font->color = {0,255,0,255};
+    int gamertag_length = this->font->getWidth(this->p1->name);
+    int offset = 100;
+    this->font->drawText(this->renderer, this->p1->name, this->width/2 - gamertag_length/2 - offset ,50);
+
+    this->font->color = {255,255,255,255};
     // Draw special cooldown
 
     eos = this->font->drawText(this->renderer, "Special CD :", 700, 50);
@@ -228,15 +250,19 @@ void GameWindow::mainLoop(void) {
       case SDL_TEXTINPUT:
         if(this->state == MENU){
 				  dynamic_cast<TextInput *>(this->menu->components["gamertag"])->addLetter(windowEvent);
+          this->menu->components["gamertag"]->centerHorizontally(width);
         }
 				break;
 			case SDL_KEYDOWN:
         if(this->state == MENU){
           if(windowEvent.key.keysym.sym == SDLK_BACKSPACE){
 				    dynamic_cast<TextInput *>(this->menu->components["gamertag"])->removeLetter(windowEvent);
+            this->menu->components["gamertag"]->centerHorizontally(width);
           }
           if(windowEvent.key.keysym.sym == SDLK_RETURN){
             this->p1->name = dynamic_cast<TextInput *>(this->menu->components["gamertag"])->input;
+            this->end_menu->components["message"]->label = "LMAO u ded" + this->p1->name + "!!";
+            this->end_menu->components["message"]->centerHorizontally(width);
             this->initGame();
           }
         }
@@ -302,6 +328,5 @@ GameWindow::~GameWindow(void) {
   SDL_DestroyWindow(this->window);
   SDL_DestroyRenderer(this->renderer);
   this->asteroids.clear();
-  delete this->menu;
   delete this->font;
 }

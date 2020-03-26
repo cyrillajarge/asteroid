@@ -70,3 +70,11 @@ int Font::getEndPos(std::string text, int x) {
   }
   return xcur - this->spacing;
 }
+
+int Font::getWidth(std::string text){
+  int length = 0;
+  for(char const c : text){
+    length += this->getLetterWidth(c);
+  }
+  return length;
+}
