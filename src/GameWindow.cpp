@@ -137,6 +137,7 @@ void GameWindow::endGame() {
   this->end_menu->components["message"]->centerHorizontally(width);
   this->end_menu->components["score"]->label = "Your score : " + std::to_string(this->players[0]->score);
   this->end_menu->components["score"]->centerHorizontally(width);
+  this->players[0]->spaceship->invincible = true;
   this->state = END_MENU;
   this->asteroids.clear();
 }
@@ -255,7 +256,7 @@ void GameWindow::computeAsteroids(std::vector<int> collided) {
 
 
 void GameWindow::mainLoop(void) {
-  int deltaTime = 0, lastTime = 0, currentTime = 0;
+  int deltaTime = 0, lastTime = 0, currentTime = 0, invincibleTime = 0;
   SDL_Event windowEvent;
   while (this->state != STOPPED) {
     if (SDL_PollEvent(&windowEvent)) {
@@ -311,7 +312,9 @@ void GameWindow::mainLoop(void) {
     if (this->state == GAME) {
       currentTime = SDL_GetTicks();
       deltaTime = currentTime - lastTime;
-      if (deltaTime > 30) /* Si 30 ms s@e sont écoulées */
+      invincibleTime += currentTime - lastTime;
+      if(invincibleTime>2000000) this->players[0]->spaceship->invincible = false;
+      if (deltaTime > 30) /* Si 30 ms se sont écoulées */
       {
         for (auto const& p : this->players) {
           if (!p) {
@@ -320,7 +323,7 @@ void GameWindow::mainLoop(void) {
           p->input_manager->process(currentTime);
           this->computeAsteroids(p->spaceship->weapon->collided(this->asteroids));
 
-          if (p->spaceship->intersectsAsteroid(this->asteroids)) {
+          if (!p->spaceship->invincible && p->spaceship->intersectsAsteroid(this->asteroids)) {
             this->endGame();
           }
 
@@ -335,7 +338,8 @@ void GameWindow::mainLoop(void) {
         this->draw();
         lastTime = currentTime;
       }
-    } else if (this->state == MENU) {
+    } else if (this->state == MENU || this->state == END_MENU) {
+      invincibleTime = 0;
       this->draw();
     }
   }

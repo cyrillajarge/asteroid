@@ -25,6 +25,7 @@ public:
   std::unique_ptr<ParticlesManager> pmship;
   int size;
   std::unique_ptr<Weapon> weapon;
+  bool invincible;
 
 public:
   Spaceship(glm::vec2 position, int size);
