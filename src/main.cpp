@@ -21,9 +21,6 @@ int main() {
 
   GameWindow *window = new GameWindow("Hemoroids", WIDTH, HEIGHT);
 
-  // vec2 rocket_pos = vec2(40.0f,40.0f);
-  // Rocket* rocket = new Rocket(rocket_pos);
-  // rocket->draw(renderer);
   window->mainLoop();
 
   delete window;

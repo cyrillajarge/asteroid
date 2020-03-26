@@ -15,7 +15,7 @@ class GameWindow {
 public:
   SDL_Window *window;
   SDL_Renderer *renderer;
-  ParticlesManager *particleManager;
+  std::unique_ptr<ParticlesManager> particleManager;
   Font *font;
   Menu *menu;
   std::vector<Asteroid *> asteroids;

@@ -23,7 +23,7 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   this->height = height;
 
   // Particle Manager
-  this->particleManager = new ParticlesManager();
+  this->particleManager = std::make_unique<ParticlesManager>();
 
   // Create renderer
   this->renderer =
@@ -247,6 +247,8 @@ void GameWindow::mainLoop(void) {
 GameWindow::~GameWindow(void) {
   SDL_DestroyWindow(this->window);
   SDL_DestroyRenderer(this->renderer);
+  this->particleManager->particles.clear();
+  this->asteroids.clear();
   delete this->menu;
   delete this->font;
 }
