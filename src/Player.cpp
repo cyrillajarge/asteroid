@@ -1,10 +1,13 @@
 #include "Player.hpp"
+#include <iostream>
 
-Player::Player() {
+Player::Player(input_mapping_t m) {
   this->score = 0;
   this->name = "anonymous";
   this->spaceship = nullptr;
-  this->input_manager = std::make_unique<InputManager>(MAPPING_P1);
+  this->input_manager = std::make_unique<InputManager>(m);
+  std::cout << "Player created" << std::endl;
+
 }
 
 Player::Player(std::string name) {

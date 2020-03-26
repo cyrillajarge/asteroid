@@ -20,8 +20,6 @@ public:
   std::unique_ptr<Menu> menu;
   std::unique_ptr<Menu> end_menu;
   std::vector<Asteroid *> asteroids;
-  std::unique_ptr<Player> p1;
-  std::unique_ptr<Player> p2;
   std::unique_ptr<Player> players[2];
   int width;
   int height;

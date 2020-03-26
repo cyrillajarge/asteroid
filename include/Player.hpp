@@ -33,7 +33,7 @@ public:
   std::unique_ptr<InputManager> input_manager;
 
 public:
-  Player();
+  Player(input_mapping_t m);
   Player(std::string name);
   ~Player();
   /**

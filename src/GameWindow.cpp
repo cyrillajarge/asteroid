@@ -36,7 +36,8 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
   // Setting up game entities
-  this->p1 = std::make_unique<Player>();
+  this->players[0] = std::make_unique<Player>(MAPPING_P1);
+  // this->players[1] = std::make_unique<Player>(MAPPING_P2);
 
   // Setting up UI
   this->font = new Font({255, 255, 255, 255});
@@ -51,8 +52,8 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   this->state = MENU;
   dynamic_cast<Clickable *>(this->menu->components["play"])->handler =
       [this](){ 
-        this->p1->name = dynamic_cast<TextInput *>(this->menu->components["gamertag"])->input;
-        this->end_menu->components["message"]->label = "LMAO u ded " + this->p1->name + "!!";
+        this->players[0]->name = dynamic_cast<TextInput *>(this->menu->components["gamertag"])->input;
+        this->end_menu->components["message"]->label = "LMAO u ded " + this->players[0]->name + "!!";
         this->end_menu->components["message"]->centerHorizontally(this->width);
         this->initGame();
       };
@@ -90,7 +91,7 @@ void GameWindow::initEndMenu(){
   this->end_menu->components["message"]->center(width, height);
   this->end_menu->components["message"]->moveY(-200);
 
-  this->end_menu->addPlainText("score", "Your score : " + std::to_string(this->p1->score), {400, 400});
+  this->end_menu->addPlainText("score", "Your score : " + std::to_string(this->players[0]->score), {400, 400});
   this->end_menu->components["score"]->center(width, height);
 
   this->end_menu->addButton("playa", "Play Again", {200,200});
@@ -119,17 +120,22 @@ void GameWindow::initAsteroids(int number) {
 void GameWindow::initGame() {
   if (this->state != GAME) {
     this->state = GAME;
-    this->p1->score = 0;
+    this->players[0]->score = 0;
     glm::vec2 position = glm::vec2(this->width / 2.0f, this->height / 2.0f);
-    this->p1->initShip(position, 20);
+    this->players[0]->initShip(position, 20);
+    if (this->players[1]) {
+      position = glm::vec2(this->width / 2.0f, this->height / 2.0f);
+      this->players[1]->score = 0;
+      this->players[1]->initShip(position, 20);
+    }
     this->initAsteroids(6);
   }
 }
 
 void GameWindow::endGame() {
-  this->end_menu->components["message"]->label = "LMAO u ded " + this->p1->name + "!!";
+  this->end_menu->components["message"]->label = "LMAO u ded " + this->players[0]->name + "!!";
   this->end_menu->components["message"]->centerHorizontally(width);
-  this->end_menu->components["score"]->label = "Your score : " + std::to_string(this->p1->score);
+  this->end_menu->components["score"]->label = "Your score : " + std::to_string(this->players[0]->score);
   this->end_menu->components["score"]->centerHorizontally(width);
   this->state = END_MENU;
   this->asteroids.clear();
@@ -157,13 +163,13 @@ void GameWindow::updateAsteroids() {
 void GameWindow::updateScore(int level) {
   switch (level) {
   case 2:
-    this->p1->score += 20;
+    this->players[0]->score += 20;
     break;
   case 1:
-    this->p1->score += 50;
+    this->players[0]->score += 50;
     break;
   case 0:
-    this->p1->score += 100;
+    this->players[0]->score += 100;
     break;
   }
 }
@@ -183,24 +189,27 @@ void GameWindow::draw() {
     int eos;
     // Draw score
     eos = this->font->drawText(this->renderer, "Score :", 50, 50);
-    std::string score = std::to_string(this->p1->score);
+    std::string score = std::to_string(this->players[0]->score);
     this->font->drawText(this->renderer, score, eos + 20, 50);
 
     // Draw Gamertag
     this->font->color = {0,255,0,255};
-    int gamertag_length = this->font->getWidth(this->p1->name);
+    int gamertag_length = this->font->getWidth(this->players[0]->name);
     int offset = 100;
-    this->font->drawText(this->renderer, this->p1->name, this->width/2 - gamertag_length/2 - offset ,50);
+    this->font->drawText(this->renderer, this->players[0]->name, this->width/2 - gamertag_length/2 - offset ,50);
 
     this->font->color = {255,255,255,255};
     // Draw special cooldown
 
     eos = this->font->drawText(this->renderer, "Special CD :", 700, 50);
 
-    this->font->drawText(this->renderer, this->p1->spaceship->weapon->getCDStr(),
+    this->font->drawText(this->renderer, this->players[0]->spaceship->weapon->getCDStr(),
                          eos + 20, 50);
 
-    this->p1->spaceship->draw(this->renderer);
+    for (auto const& p : this->players) {
+      if (!p) continue;
+      p->spaceship->draw(this->renderer);
+    }
 
     SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, 255);
 
@@ -288,8 +297,8 @@ void GameWindow::mainLoop(void) {
             this->menu->components["gamertag"]->centerHorizontally(width);
           }
           if(windowEvent.key.keysym.sym == SDLK_RETURN){
-            this->p1->name = dynamic_cast<TextInput *>(this->menu->components["gamertag"])->input;
-            this->end_menu->components["message"]->label = "LMAO u ded" + this->p1->name + "!!";
+            this->players[0]->name = dynamic_cast<TextInput *>(this->menu->components["gamertag"])->input;
+            this->end_menu->components["message"]->label = "LMAO u ded" + this->players[0]->name + "!!";
             this->end_menu->components["message"]->centerHorizontally(width);
             this->initGame();
           }
@@ -304,22 +313,27 @@ void GameWindow::mainLoop(void) {
       deltaTime = currentTime - lastTime;
       if (deltaTime > 30) /* Si 30 ms s@e sont écoulées */
       {
-        this->p1->input_manager->process(currentTime);
-        this->computeAsteroids(this->p1->spaceship->weapon->collided(this->asteroids));
+        for (auto const& p : this->players) {
+          if (!p) {
+            continue;
+          }
+          p->input_manager->process(currentTime);
+          this->computeAsteroids(p->spaceship->weapon->collided(this->asteroids));
 
-        if (this->p1->spaceship->intersectsAsteroid(this->asteroids)) {
-          this->endGame();
+          if (p->spaceship->intersectsAsteroid(this->asteroids)) {
+            this->endGame();
+          }
+
+          p->spaceship->update(p->getDelta(), this->width, this->height);
+
+          p->resetDelta();
+          p->spaceship->deactivateBoost();
+          p->spaceship->weapon->updateCooldown(deltaTime);
         }
-
-        this->p1->spaceship->update(this->p1->getDelta(), this->width, this->height);
         this->updateAsteroids();
         this->particleManager->updateParticles();
         this->draw();
-
-        this->p1->resetDelta();
-        this->p1->spaceship->deactivateBoost();
         lastTime = currentTime;
-        this->p1->spaceship->weapon->updateCooldown(deltaTime);
       }
     } else if (this->state == MENU) {
       this->draw();
