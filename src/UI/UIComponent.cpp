@@ -27,16 +27,26 @@ void UIComponent::setY(int y){
   this->computeBox();
 }
 
+void UIComponent::moveX(int x){
+  this->position.x += x;
+  this->computeBox();
+}
+
+void UIComponent::moveY(int y){
+  this->position.y += y;
+  this->computeBox();
+}
+
 void UIComponent::setPosition(int x, int y){
   this->position = {x,y};
   this->computeBox();
 }
 
 void UIComponent::centerVertically(int height) {
-    int buttonmiddley = this->hbox/2;
-    int windmiddley = height/2;
-    this->position.y = windmiddley + buttonmiddley;
-    this->computeBox();
+  int buttonmiddley = this->hbox/2;
+  int windmiddley = height/2;
+  this->position.y = windmiddley + buttonmiddley;
+  this->computeBox();
 }
 
 void UIComponent::centerHorizontally(int width) {
@@ -49,4 +59,5 @@ void UIComponent::centerHorizontally(int width) {
 void UIComponent::center(int width, int height) {
   this->centerVertically(height);
   this->centerHorizontally(width);
+  this->computeBox();
 }

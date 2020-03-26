@@ -24,7 +24,11 @@ public:
 public:
   Menu(Font *font);
   ~Menu();
-  void draw(SDL_Renderer *renderer, int width, int height);
+  void addButton(std::string tag, std::string label, glm::vec2 position);
+  void addCheckbox(std::string tag, std::string label, glm::vec2 position);
+  void addPlainText(std::string tag, std::string label, glm::vec2 position);
+  void addTextInput(std::string tag, std::string label, glm::vec2 position);
+  void draw(SDL_Renderer *renderer);
 };
 
 #endif

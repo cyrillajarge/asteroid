@@ -3,6 +3,7 @@
 #include "Random/Alea.hpp"
 #include "UI/Checkbox.hpp"
 #include "UI/Clickable.hpp"
+#include "UI/TextInput.hpp"
 #include <iostream>
 #include <random>
 #include <string>
@@ -34,30 +35,59 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   }
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
+  // Setting up game entities
+  this->p1 = std::make_unique<Player>();
+
   // Setting up UI
   this->font = new Font({255, 255, 255, 255});
   UIComponent::font = this->font;
   this->menu = new Menu(this->font);
+  this->menu->addPlainText("title", "ASTEROID", {200, 200});
+  this->menu->components["title"]->center(width, height);
+  this->menu->components["title"]->moveY(-200);
 
-  // Setting up game entities
-  this->p1 = std::make_unique<Player>();
+  this->menu->addButton("play", "PLAY", {200, 200});
+  this->menu->components["play"]->border = true;
+  this->menu->components["play"]->border_color = {0, 255, 0, 255};
+  this->menu->components["play"]->center(width, height);
+
+  this->menu->addPlainText("score", "No score yet", {400, 400});
+  this->menu->components["score"]->enabled = false;
+  this->menu->components["score"]->center(width, height);
+  this->menu->components["score"]->moveY(100);
+
+  this->menu->addTextInput("gamertag", "Enter Gamertag:",{400, 400});
+  this->menu->components["gamertag"]->center(width, height);
+  this->menu->components["gamertag"]->moveY(150);
+
+  this->end_menu = new Menu(this->font);
+  this->end_menu->addPlainText("message", "LMAO u ded!!", {200,200});
+  this->end_menu->components["message"]->center(width, height);
+  this->end_menu->components["message"]->moveY(-200);
+
+  this->end_menu->addPlainText("score", "Your score : " + std::to_string(this->p1->score), {400, 400});
+  this->end_menu->components["score"]->center(width, height);
+
+  this->end_menu->addButton("playa", "Play Again", {200,200});
+  this->end_menu->components["playa"]->center(width, height);
+  this->end_menu->components["playa"]->moveY(200);
+  this->end_menu->components["playa"]->border = true;
+  this->end_menu->components["playa"]->border_color = {0, 255, 0, 255};
 
   // this->initAsteroids(1);
   this->state = MENU;
-  dynamic_cast<Clickable *>(this->menu->components["music"])->handler =
-      [this]() {
-        dynamic_cast<Checkbox *>(this->menu->components["music"])->checked =
-            !dynamic_cast<Checkbox *>(this->menu->components["music"])->checked;
+  dynamic_cast<Clickable *>(this->menu->components["play"])->handler =
+      [this](){ 
+        this->p1->name = dynamic_cast<TextInput *>(this->menu->components["gamertag"])->input;
+        this->initGame();
       };
 
-  dynamic_cast<Clickable *>(this->menu->components["sounds"])
-      ->handler = [this]() {
-    dynamic_cast<Checkbox *>(this->menu->components["sounds"])->checked =
-        !dynamic_cast<Checkbox *>(this->menu->components["sounds"])->checked;
-  };
+  dynamic_cast<Clickable *>(this->end_menu->components["playa"])->handler =
+      [this](){ 
+        this->p1->score = 0;
+        this->initGame();
+      };
 
-  dynamic_cast<Clickable *>(this->menu->components["play"])->handler =
-      [this]() { this->initGame(); };
 }
 
 void GameWindow::initAsteroids(int number) {
@@ -86,14 +116,8 @@ void GameWindow::initGame() {
 }
 
 void GameWindow::endGame() {
+  this->state = END_MENU;
   this->asteroids.clear();
-  this->menu->components["score"]->enabled = true;
-  this->menu->components["score"]->label =
-      "Your score : " + std::to_string(this->p1->score);
-  this->menu->components["title"]->label = "LMAO u ded";
-  this->menu->components["play"]->label = "Play Again";
-  this->p1->score = 0;
-  this->state = MENU;
 }
 
 void GameWindow::updateAsteroids() {
@@ -137,8 +161,10 @@ void GameWindow::draw() {
   SDL_RenderClear(this->renderer);
 
   if (this->state == MENU) {
-    this->menu->draw(this->renderer, this->width, this->height);
-  } else if (this->state == GAME) {
+    this->menu->draw(this->renderer);
+  } else if (this->state == END_MENU){
+    this->end_menu->draw(this->renderer);
+  } else {
     int eos;
     // Draw score
     eos = this->font->drawText(this->renderer, "Score :", 50, 50);
@@ -179,14 +205,32 @@ void GameWindow::mainLoop(void) {
         this->state = STOPPED;
         break;
       case SDL_MOUSEBUTTONDOWN:
-        for (std::pair<std::string, UIComponent *> _comp :
-             this->menu->components) {
-          if (Clickable *comp = dynamic_cast<Clickable *>(_comp.second)) {
-            if (comp->isIn(windowEvent.button.x, windowEvent.button.y)) {
-              comp->handler();
+        if(this->state == MENU || this->state == END_MENU){
+          for (std::pair<std::string, UIComponent *> _comp :
+              this->menu->components) {
+            if (Clickable *comp = dynamic_cast<Clickable *>(_comp.second)) {
+              if (comp->isIn(windowEvent.button.x, windowEvent.button.y)) {
+                comp->handler();
+              }
             }
           }
         }
+      case SDL_TEXTINPUT:
+        if(this->state == MENU){
+				  dynamic_cast<TextInput *>(this->menu->components["gamertag"])->addLetter(windowEvent);
+        }
+				break;
+			case SDL_KEYDOWN:
+        if(this->state == MENU){
+          if(windowEvent.key.keysym.sym == SDLK_BACKSPACE){
+				    dynamic_cast<TextInput *>(this->menu->components["gamertag"])->removeLetter(windowEvent);
+          }
+          if(windowEvent.key.keysym.sym == SDLK_RETURN){
+            this->p1->name = dynamic_cast<TextInput *>(this->menu->components["gamertag"])->input;
+            this->initGame();
+          }
+        }
+				break;
       default:
         break;
       }

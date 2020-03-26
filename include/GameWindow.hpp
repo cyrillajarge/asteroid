@@ -9,7 +9,7 @@
 #include <memory>
 #include <vector>
 
-enum GAME_STATE { STOPPED, MENU, GAME };
+enum GAME_STATE { STOPPED, MENU, GAME, END_MENU };
 
 class GameWindow {
 public:
@@ -18,6 +18,7 @@ public:
   std::unique_ptr<ParticlesManager> particleManager;
   Font *font;
   Menu *menu;
+  Menu *end_menu;
   std::vector<Asteroid *> asteroids;
   std::unique_ptr<Player> p1;
   int width;
