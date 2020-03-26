@@ -69,6 +69,8 @@ public:
    * @return int
    */
   int getEndPos(std::string text, int x);
+
+  int getWidth(std::string text);
 };
 
 #endif
