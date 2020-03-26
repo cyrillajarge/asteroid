@@ -16,7 +16,7 @@ public:
   int cooldown;
 
   /**
-   * @brief Delay between two shots in milliseconds
+   * @brief Shots per second
    *
    */
   int fire_rate;

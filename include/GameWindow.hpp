@@ -9,8 +9,6 @@
 #include <memory>
 #include <vector>
 
-#define DELTA_ANGLE 0.15f
-
 enum GAME_STATE { STOPPED, MENU, GAME };
 
 class GameWindow {
@@ -29,7 +27,6 @@ public:
 public:
   GameWindow(const char *name, int width, int height);
   ~GameWindow();
-  void initShip(glm::vec2 position, int size);
   void initAsteroids(int number);
   void initGame();
   void endGame(); // RIP TONY STARK

@@ -11,7 +11,6 @@
 
 #define WIDTH 1080
 #define HEIGHT 720
-#define DELTA_ANGLE 0.15f
 
 int main() {
   if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {

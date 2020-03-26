@@ -60,10 +60,6 @@ GameWindow::GameWindow(const char *name, int width, int height) {
       [this]() { this->initGame(); };
 }
 
-void GameWindow::initShip(glm::vec2 position, int size) {
-  this->p1->spaceship = std::make_unique<Spaceship>(position, size);
-}
-
 void GameWindow::initAsteroids(int number) {
 
   for (int i = 0; i < number; i++) {
@@ -84,7 +80,7 @@ void GameWindow::initGame() {
   if (this->state != GAME) {
     this->state = GAME;
     glm::vec2 position = glm::vec2(this->width / 2.0f, this->height / 2.0f);
-    this->initShip(position, 20);
+    this->p1->initShip(position, 20);
     this->initAsteroids(6);
   }
 }
@@ -171,8 +167,7 @@ void GameWindow::draw() {
 }
 
 void GameWindow::mainLoop(void) {
-  int deltaTime = 0, lastTime = 0, currentTime = 0, lastRocket = 0;
-  double deltaRotation = 0.0f;
+  int deltaTime = 0, lastTime = 0, currentTime = 0;
 
   auto gen_float = alea_generator(-1.0f, 1.0f);
 
@@ -201,25 +196,7 @@ void GameWindow::mainLoop(void) {
       deltaTime = currentTime - lastTime;
       if (deltaTime > 30) /* Si 30 ms s@e sont écoulées */
       {
-        const Uint8 *keystates = SDL_GetKeyboardState(NULL);
-        if (keystates[SDL_SCANCODE_LEFT]) {
-          deltaRotation = -DELTA_ANGLE;
-        }
-        if (keystates[SDL_SCANCODE_RIGHT]) {
-          deltaRotation = DELTA_ANGLE;
-        }
-        if (keystates[SDL_SCANCODE_UP]) {
-          this->p1->spaceship->activateBoost();
-        }
-        if ((keystates[SDL_SCANCODE_SPACE]) &&
-            (currentTime - lastRocket > 200)) {
-
-          this->p1->spaceship->weapon->fire();
-          lastRocket = currentTime;
-        }
-        if (keystates[SDL_SCANCODE_X]) {
-          this->p1->spaceship->weapon->fireSpecial();
-        }
+        this->p1->input_manager->process(currentTime);
 
         for (int inter : this->p1->spaceship->weapon->collided(this->asteroids)) {
           glm::vec2 aster_pos = this->asteroids[inter]->center;
@@ -251,12 +228,12 @@ void GameWindow::mainLoop(void) {
           this->endGame();
         }
 
-        this->p1->spaceship->update(deltaRotation, this->width, this->height);
+        this->p1->spaceship->update(this->p1->getDelta(), this->width, this->height);
         this->updateAsteroids();
         this->particleManager->updateParticles();
         this->draw();
 
-        deltaRotation = 0.0f;
+        this->p1->resetDelta();
         this->p1->spaceship->deactivateBoost();
         lastTime = currentTime;
         this->p1->spaceship->weapon->updateCooldown(deltaTime);
