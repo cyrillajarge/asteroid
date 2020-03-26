@@ -25,9 +25,6 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   // Particle Manager
   this->particleManager = new ParticlesManager();
 
-  // Sound Manager
-  this->soundManager = new SoundManager("media/fire.wav", "media/fire.wav");
-
   // Create renderer
   this->renderer =
       SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
@@ -51,14 +48,12 @@ GameWindow::GameWindow(const char *name, int width, int height) {
       [this]() {
         dynamic_cast<Checkbox *>(this->menu->components["music"])->checked =
             !dynamic_cast<Checkbox *>(this->menu->components["music"])->checked;
-        this->soundManager->playPauseMusic();
       };
 
   dynamic_cast<Clickable *>(this->menu->components["sounds"])
       ->handler = [this]() {
     dynamic_cast<Checkbox *>(this->menu->components["sounds"])->checked =
         !dynamic_cast<Checkbox *>(this->menu->components["sounds"])->checked;
-    this->soundManager->activateSoundFX();
   };
 
   dynamic_cast<Clickable *>(this->menu->components["play"])->handler =
@@ -220,7 +215,6 @@ void GameWindow::mainLoop(void) {
             (currentTime - lastRocket > 200)) {
 
           this->p1->spaceship->weapon->fire();
-          this->soundManager->playPauseShootSound();
           lastRocket = currentTime;
         }
         if (keystates[SDL_SCANCODE_X]) {

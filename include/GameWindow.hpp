@@ -5,7 +5,6 @@
 #include "Menu.hpp"
 #include "Particles/ParticlesManager.hpp"
 #include "Player.hpp"
-#include "Sound/SoundManager.hpp"
 #include "UI/UIComponent.hpp"
 #include <memory>
 #include <vector>
@@ -21,7 +20,6 @@ public:
   ParticlesManager *particleManager;
   Font *font;
   Menu *menu;
-  SoundManager *soundManager;
   std::vector<Asteroid *> asteroids;
   std::unique_ptr<Player> p1;
   int width;
