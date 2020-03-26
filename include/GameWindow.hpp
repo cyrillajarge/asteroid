@@ -12,7 +12,7 @@
 
 #define DELTA_ANGLE 0.15f
 
-enum GAME_STATE { STOPPED, MENU, GAME };
+enum GAME_STATE { STOPPED, MENU, GAME, END_MENU };
 
 class GameWindow {
 public:
@@ -22,6 +22,7 @@ public:
   ParticlesManager *particleManager;
   Font *font;
   Menu *menu;
+  Menu *end_menu;
   std::vector<Asteroid *> asteroids;
   Player *p1;
   int width;

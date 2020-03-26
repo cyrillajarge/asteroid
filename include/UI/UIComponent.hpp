@@ -35,6 +35,8 @@ class UIComponent {
     void setPadding(int val);
     void setX(int x);
     void setY(int y);
+    void moveX(int x);
+    void moveY(int y);
     void setPosition(int x, int y);
     void centerVertically(int height);
     void centerHorizontally(int width);
