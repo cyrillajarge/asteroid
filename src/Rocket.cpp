@@ -34,3 +34,16 @@ void Rocket::draw(SDL_Renderer *renderer) {
 
   SDL_RenderFillRect(renderer, &r);
 }
+
+void Rocket::draw(SDL_Renderer *renderer, SDL_Color c) {
+
+  SDL_Rect r;
+  r.x = this->position.x;
+  r.y = this->position.y;
+  r.w = 5;
+  r.h = 5;
+
+  SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a);
+
+  SDL_RenderFillRect(renderer, &r);
+}

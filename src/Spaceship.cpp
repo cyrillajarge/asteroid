@@ -1,6 +1,7 @@
 #include "Spaceship.hpp"
 #include "Random/Alea.hpp"
 #include "RocketLauncher.hpp"
+#include "Gattling.hpp"
 #include <cmath>
 #include <iostream>
 
@@ -15,7 +16,7 @@ Spaceship::Spaceship(glm::vec2 position, int size) {
   this->boostActive = false;
   this->pmship = std::make_unique<ParticlesManager>();
   this->weapon =
-      std::make_unique<RocketLauncher>(this->direction_angle, this->position);
+      std::make_unique<Gattling>(this->direction_angle, this->position);
 }
 
 glm::vec2 Spaceship::getDirection() {

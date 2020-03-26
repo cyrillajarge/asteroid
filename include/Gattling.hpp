@@ -1,13 +1,13 @@
-#ifndef ROCKETLAUNCHER_H
-#define ROCKETLAUNCHER_H
+#ifndef GATTLING_H
+#define GATTLING_H
 #include "Rocket.hpp"
 #include "Weapon.hpp"
 #include <vector>
 
-#define RL_ROF 3
-#define RL_CD 15
+#define GT_ROF 7
+#define GT_CD 15
 
-class RocketLauncher : public Weapon {
+class Gattling : public Weapon {
 public:
   void fire();
   void fireSpecial();
@@ -22,8 +22,8 @@ public:
   std::vector<Rocket *> rockets;
 
 public:
-  RocketLauncher(double &angle, glm::vec2 &pos);
-  ~RocketLauncher();
+  Gattling(double &angle, glm::vec2 &pos);
+  ~Gattling();
   void debug();
 };
 
