@@ -3,6 +3,7 @@
 
 Player::Player(input_mapping_t m) {
   this->score = 0;
+  this->level = 1;
   this->name = "anonymous";
   this->spaceship = nullptr;
   this->input_manager = std::make_unique<InputManager>(m);
@@ -11,6 +12,7 @@ Player::Player(input_mapping_t m) {
 
 Player::Player(std::string name) {
   this->score = 0;
+  this->level = 1;
   this->name = name;
   this->spaceship = nullptr;
 }

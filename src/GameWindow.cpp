@@ -48,6 +48,10 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   this->end_menu = std::make_unique<Menu>(this->font);
   this->initEndMenu();
 
+  // Setting up level manager
+  this->levels_manager = std::make_unique<LevelsManager>();
+
+
   // this->initAsteroids(1);
   this->state = MENU;
   dynamic_cast<Clickable *>(this->menu->components["play"])
@@ -93,6 +97,13 @@ void GameWindow::initEndMenu() {
       "score", "Your score : " + std::to_string(this->players[0]->score),
       {400, 400});
   this->end_menu->components["score"]->center(width, height);
+  this->end_menu->components["score"]->moveY(-50);
+
+  this->end_menu->addPlainText(
+      "level", "You reached level " + std::to_string(this->players[0]->level) + "!",
+      {400, 400});
+  this->end_menu->components["score"]->center(width, height);
+  this->end_menu->components["score"]->moveY(50);
 
   this->end_menu->addButton("playa", "Play Again", {200, 200});
   this->end_menu->components["playa"]->center(width, height);
@@ -102,7 +113,7 @@ void GameWindow::initEndMenu() {
 }
 
 void GameWindow::initAsteroids(int number) {
-
+  this->asteroids.clear();
   for (int i = 0; i < number; i++) {
     int posx = -10.0f + std::rand() % (this->width + 10);
     int posy = -10.0f + std::rand() % (this->height + 10);
@@ -120,7 +131,9 @@ void GameWindow::initAsteroids(int number) {
 void GameWindow::initGame() {
   if (this->state != GAME) {
     this->state = GAME;
+    this->levels_manager->resetLevels();
     this->players[0]->score = 0;
+    this->players[0]->level = 1;
     glm::vec2 position = glm::vec2(this->width / 2.0f, this->height / 2.0f);
     this->players[0]->initShip(position, 20);
     if (this->players[1]) {
@@ -128,7 +141,7 @@ void GameWindow::initGame() {
       this->players[1]->score = 0;
       this->players[1]->initShip(position, 20);
     }
-    this->initAsteroids(6);
+    this->initAsteroids(this->levels_manager->nb_asteroids);
   }
 }
 
@@ -139,12 +152,25 @@ void GameWindow::endGame() {
   this->end_menu->components["score"]->label =
       "Your score : " + std::to_string(this->players[0]->score);
   this->end_menu->components["score"]->centerHorizontally(width);
+  this->end_menu->components["level"]->label =
+      "You reached level " + std::to_string(this->players[0]->level) + "!";
+  this->end_menu->components["level"]->centerHorizontally(width);
   this->players[0]->spaceship->invincible = true;
   this->state = END_MENU;
   this->asteroids.clear();
 }
 
+void GameWindow::nextLevel(){
+  this->levels_manager->nextLevel();
+  this->players[0]->level++;
+  glm::vec2 position = glm::vec2(this->width / 2.0f, this->height / 2.0f);
+  this->initAsteroids(this->levels_manager->nb_asteroids);
+}
+
 void GameWindow::updateAsteroids() {
+  if(this->asteroids.size()==0){
+    this->nextLevel();
+  }
   for (size_t i = 0; i < this->asteroids.size(); i++) {
     if (this->asteroids[i]->center.x < 0) {
       this->asteroids[i]->center.x = this->width;
@@ -159,7 +185,7 @@ void GameWindow::updateAsteroids() {
       this->asteroids[i]->center.y = 0;
     }
 
-    this->asteroids[i]->center += 2.0f * this->asteroids[i]->direction;
+    this->asteroids[i]->center += this->levels_manager->speed * this->asteroids[i]->direction;
   }
 }
 
@@ -189,6 +215,11 @@ void GameWindow::draw() {
   } else if (this->state == END_MENU) {
     this->end_menu->draw(this->renderer);
   } else {
+    // Draw level message
+    this->font->color = {0,0,255,255};
+    this->levels_manager->drawMessage(renderer, this->height, this->width);
+    this->font->color = {255,255,255,255};
+
     int eos;
     // Draw score
     eos = this->font->drawText(this->renderer, "Score :", 50, 50);
@@ -259,7 +290,8 @@ void GameWindow::computeAsteroids(std::vector<int> collided) {
 }
 
 void GameWindow::mainLoop(void) {
-  int deltaTime = 0, lastTime = 0, currentTime = 0, invincibleTime = 0;
+  int deltaTime = 0, lastTime = 0, currentTime = 0, invincibleTime = 0, levelMessageTime = 0;
+  int currentLevel = this->levels_manager->status;
   SDL_Event windowEvent;
   while (this->state != STOPPED) {
     if (SDL_PollEvent(&windowEvent)) {
@@ -318,10 +350,18 @@ void GameWindow::mainLoop(void) {
     }
     if (this->state == GAME) {
       currentTime = SDL_GetTicks();
+
+      if(currentLevel != this->levels_manager->status){
+        levelMessageTime = 0;
+        invincibleTime = 0;
+        currentLevel = this->levels_manager->status;
+      }
+
       deltaTime = currentTime - lastTime;
       invincibleTime += currentTime - lastTime;
-      if (invincibleTime > 2000000)
-        this->players[0]->spaceship->invincible = false;
+      levelMessageTime += currentTime - lastTime;
+      (invincibleTime < 2000000)? this->players[0]->spaceship->invincible = true : this->players[0]->spaceship->invincible = false;
+      (levelMessageTime < 5000000)? this->levels_manager->message = true: this->levels_manager->message = false;
       if (deltaTime > 30) /* Si 30 ms se sont écoulées */
       {
         for (auto const &p : this->players) {
@@ -354,6 +394,7 @@ void GameWindow::mainLoop(void) {
       }
     } else if (this->state == MENU || this->state == END_MENU) {
       invincibleTime = 0;
+      levelMessageTime = 0;
       this->draw();
     }
   }

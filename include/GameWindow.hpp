@@ -20,6 +20,7 @@ public:
   std::unique_ptr<Menu> menu;
   std::unique_ptr<Menu> end_menu;
   std::vector<Asteroid *> asteroids;
+  std::unique_ptr<LevelsManager> levels_manager;
   std::unique_ptr<Player> players[2];
   int width;
   int height;
@@ -30,6 +31,7 @@ public:
   ~GameWindow();
   void initMenu();
   void initEndMenu();
+  void nextLevel();
   void initAsteroids(int number);
   void initGame();
   void endGame(); // RIP TONY STARK

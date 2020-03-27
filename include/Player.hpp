@@ -4,8 +4,10 @@
 #include "InputManager.hpp"
 #include "Spaceship.hpp"
 #include "glm/vec2.hpp"
+#include "LevelsManager.hpp"
 #include <iostream>
 #include <memory>
+
 class Player {
 public:
   /**
@@ -13,6 +15,12 @@ public:
    *
    */
   int score;
+
+  /**
+   * @brief PLevel that the player reached
+   * 
+   */
+  int level;
 
   /**
    * @brief Player name
