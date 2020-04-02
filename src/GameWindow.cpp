@@ -71,17 +71,19 @@ GameWindow::GameWindow(const char *name, int width, int height) {
 void GameWindow::initMenu() {
   this->menu->addPlainText("title", "ASTEROID", {200, 200});
   this->menu->components["title"]->center(width, height);
-  this->menu->components["title"]->moveY(-200);
+  this->menu->components["title"]->moveY(-150);
 
   this->menu->addButton("play", "PLAY", {200, 200});
   this->menu->components["play"]->border = true;
   this->menu->components["play"]->border_color = {0, 255, 0, 255};
   this->menu->components["play"]->center(width, height);
+  this->menu->components["play"]->moveY(-25);
 
-  this->menu->addPlainText("score", "No score yet", {400, 400});
-  this->menu->components["score"]->enabled = false;
-  this->menu->components["score"]->center(width, height);
-  this->menu->components["score"]->moveY(100);
+  this->menu->addButton("scoreboard", "Show scoreboard",{200,200});
+  this->menu->components["scoreboard"]->border = true;
+  this->menu->components["scoreboard"]->border_color = {0, 0, 255, 255};
+  this->menu->components["scoreboard"]->center(width, height);
+  this->menu->components["scoreboard"]->moveY(25);
 
   this->menu->addTextInput("gamertag", "Enter Gamertag: ", {400, 400});
   this->menu->components["gamertag"]->center(width, height);
@@ -97,13 +99,18 @@ void GameWindow::initEndMenu() {
       "score", "Your score : " + std::to_string(this->players[0]->score),
       {400, 400});
   this->end_menu->components["score"]->center(width, height);
-  this->end_menu->components["score"]->moveY(-50);
+  this->end_menu->components["score"]->moveY(-75);
 
   this->end_menu->addPlainText(
       "level", "You reached level " + std::to_string(this->players[0]->level) + "!",
       {400, 400});
-  this->end_menu->components["score"]->center(width, height);
-  this->end_menu->components["score"]->moveY(50);
+  this->end_menu->components["level"]->center(width, height);
+
+  this->end_menu->addButton("scoreboard", "Show scoreboard",{200,200});
+  this->end_menu->components["scoreboard"]->border = true;
+  this->end_menu->components["scoreboard"]->border_color = {0, 0, 255, 255};
+  this->end_menu->components["scoreboard"]->center(width, height);
+  this->end_menu->components["scoreboard"]->moveY(75);
 
   this->end_menu->addButton("playa", "Play Again", {200, 200});
   this->end_menu->components["playa"]->center(width, height);
@@ -111,6 +118,11 @@ void GameWindow::initEndMenu() {
   this->end_menu->components["playa"]->border = true;
   this->end_menu->components["playa"]->border_color = {0, 255, 0, 255};
 }
+
+void GameWindow::initScoreboardMenu(){
+
+}
+
 
 void GameWindow::initAsteroids(int number) {
   this->asteroids.clear();

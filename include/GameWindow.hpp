@@ -31,6 +31,7 @@ public:
   ~GameWindow();
   void initMenu();
   void initEndMenu();
+  void initScoreboardMenu();
   void nextLevel();
   void initAsteroids(int number);
   void initGame();
