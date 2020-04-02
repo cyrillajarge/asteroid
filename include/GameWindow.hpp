@@ -5,6 +5,7 @@
 #include "Menu.hpp"
 #include "Particles/ParticlesManager.hpp"
 #include "Player.hpp"
+#include "Scoreboard.hpp"
 #include "UI/UIComponent.hpp"
 #include <memory>
 #include <vector>
@@ -23,6 +24,7 @@ public:
   std::vector<Asteroid *> asteroids;
   std::unique_ptr<LevelsManager> levels_manager;
   std::unique_ptr<Player> players[2];
+  std::unique_ptr<Scoreboard> scoreboard;
   int width;
   int height;
   GAME_STATE state;

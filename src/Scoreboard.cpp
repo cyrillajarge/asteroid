@@ -8,9 +8,14 @@ Scoreboard::Scoreboard() {
 }
 
 void Scoreboard::saveScore(std::string name, int score) {
+  if (name.empty()) { return; }
   std::ofstream f(this->path, std::fstream::ios_base::app);
   std::string to_encode = name + ":" + std::to_string(score);
-  f << base64_encode(reinterpret_cast<const unsigned char *>(to_encode.c_str()), to_encode.length()) << std::endl;
+  f << base64_encode(reinterpret_cast<const unsigned char *>(to_encode.c_str()),
+                     to_encode.length())
+    << std::endl;
+  this->scores.push_back(std::make_pair(name, score));
+  this->sort();
 }
 
 void Scoreboard::initScores() {
@@ -30,13 +35,32 @@ void Scoreboard::initScores() {
       continue;
     }
 
-    this->scores[name] = score;
+    this->scores.push_back(std::make_pair(name, score));
   }
+  this->sort();
 }
 
-void Scoreboard::draw() {
-  std::cout << this->scores.size() << std::endl;
-  for (std::pair<std::string, int> p : this->scores) {
-    std::cout << p.first << " - " << p.second << std::endl;
+void Scoreboard::sort() {
+  std::sort(this->scores.begin(), this->scores.end(),
+            [](auto &l, auto &r) { return l.second > r.second; });
+}
+
+void Scoreboard::updateMenu(const std::unique_ptr<Menu> &m, int width) {
+
+  // init scores if not present
+  if (m->components.find("s1") == m->components.end()) {
+    for (int i = 0; i < 5; i++) {
+      std::string key = "s" + std::to_string(i);
+      m->addPlainText(key, "", {0, 200 + i * 100});
+      m->components[key]->enabled = false;
+    }
+  }
+
+  for (size_t i = 0; i < 5 && i < this->scores.size(); i++) {
+    std::string key = "s" + std::to_string(i);
+    m->components[key]->label =
+        this->scores[i].first + " : " + std::to_string(this->scores[i].second);
+    m->components[key]->centerHorizontally(width);
+    m->components[key]->enabled = true;
   }
 }
