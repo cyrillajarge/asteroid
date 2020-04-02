@@ -204,7 +204,6 @@ void GameWindow::endGame() {
 void GameWindow::nextLevel(){
   this->levels_manager->nextLevel();
   this->players[0]->level++;
-  glm::vec2 position = glm::vec2(this->width / 2.0f, this->height / 2.0f);
   this->initAsteroids(this->levels_manager->nb_asteroids);
 }
 
@@ -372,6 +371,7 @@ void GameWindow::mainLoop(void) {
             }
           }
         }
+        break;
       case SDL_TEXTINPUT:
         if (this->state == MENU) {
           dynamic_cast<TextInput *>(this->menu->components["gamertag"])

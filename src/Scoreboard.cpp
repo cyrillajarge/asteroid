@@ -1,5 +1,6 @@
 #include "Scoreboard.hpp"
 #include "utils/base64.hpp"
+#include <algorithm>
 
 Scoreboard::Scoreboard() {
   this->path = getenv("HOME") + std::string("/.hemoroids");
