@@ -9,7 +9,7 @@
 #include <memory>
 #include <vector>
 
-enum GAME_STATE { STOPPED, MENU, GAME, END_MENU };
+enum GAME_STATE { STOPPED, MENU, GAME, END_MENU, SCOREBOARD_MENU };
 
 class GameWindow {
 public:
@@ -19,6 +19,7 @@ public:
   Font *font;
   std::unique_ptr<Menu> menu;
   std::unique_ptr<Menu> end_menu;
+  std::unique_ptr<Menu> scoreboard_menu;
   std::vector<Asteroid *> asteroids;
   std::unique_ptr<LevelsManager> levels_manager;
   std::unique_ptr<Player> players[2];

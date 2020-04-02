@@ -48,6 +48,9 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   this->end_menu = std::make_unique<Menu>(this->font);
   this->initEndMenu();
 
+  this->scoreboard_menu = std::make_unique<Menu>(this->font);
+  this->initScoreboardMenu();
+
   // Setting up level manager
   this->levels_manager = std::make_unique<LevelsManager>();
 
@@ -64,8 +67,16 @@ GameWindow::GameWindow(const char *name, int width, int height) {
     this->initGame();
   };
 
+  dynamic_cast<Clickable *>(this->menu->components["scoreboard"])
+    ->handler = [this]() {
+      this->state = SCOREBOARD_MENU;
+  };
+
   dynamic_cast<Clickable *>(this->end_menu->components["playa"])->handler =
       [this]() { this->initGame(); };
+  
+  dynamic_cast<Clickable *>(this->end_menu->components["scoreboard"])->handler =
+      [this]() { this->state = SCOREBOARD_MENU; };
 }
 
 void GameWindow::initMenu() {
@@ -79,7 +90,7 @@ void GameWindow::initMenu() {
   this->menu->components["play"]->center(width, height);
   this->menu->components["play"]->moveY(-25);
 
-  this->menu->addButton("scoreboard", "Show scoreboard",{200,200});
+  this->menu->addButton("scoreboard", "Show scoreboard", {200,200});
   this->menu->components["scoreboard"]->border = true;
   this->menu->components["scoreboard"]->border_color = {0, 0, 255, 255};
   this->menu->components["scoreboard"]->center(width, height);
@@ -120,7 +131,8 @@ void GameWindow::initEndMenu() {
 }
 
 void GameWindow::initScoreboardMenu(){
-
+  this->scoreboard_menu->addPlainText("title", "SCOREBOARD", {0, 100});
+  this->scoreboard_menu->components["title"]->centerHorizontally(width);
 }
 
 
@@ -226,6 +238,8 @@ void GameWindow::draw() {
     this->menu->draw(this->renderer);
   } else if (this->state == END_MENU) {
     this->end_menu->draw(this->renderer);
+  } else if(this->state == SCOREBOARD_MENU){
+    this->scoreboard_menu->draw(this->renderer);
   } else {
     // Draw level message
     this->font->color = {0,0,255,255};
@@ -404,7 +418,7 @@ void GameWindow::mainLoop(void) {
         }
         lastTime = currentTime;
       }
-    } else if (this->state == MENU || this->state == END_MENU) {
+    } else if (this->state == MENU || this->state == END_MENU || this->state == SCOREBOARD_MENU) {
       invincibleTime = 0;
       levelMessageTime = 0;
       this->draw();
