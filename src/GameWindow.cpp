@@ -51,6 +51,8 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   this->scoreboard_menu = std::make_unique<Menu>(this->font);
   this->initScoreboardMenu();
 
+  this->scoreboard = std::make_unique<Scoreboard>();
+
   // Setting up level manager
   this->levels_manager = std::make_unique<LevelsManager>();
 
@@ -143,7 +145,7 @@ void GameWindow::initScoreboardMenu(){
   this->scoreboard_menu->addPlainText("title", "SCOREBOARD", {0, 100});
   this->scoreboard_menu->components["title"]->centerHorizontally(width);
 
-  this->scoreboard_menu->addButton("return", "RETURN", {10, 35});
+  this->scoreboard_menu->addButton("return", "< RETURN", {10, 35});
   this->scoreboard_menu->components["return"]->border = true;
   this->scoreboard_menu->components["return"]->border_color = {255, 0, 0, 255};
 }
@@ -195,6 +197,8 @@ void GameWindow::endGame() {
   this->players[0]->spaceship->invincible = true;
   this->state = END_MENU;
   this->asteroids.clear();
+  this->scoreboard->saveScore(this->players[0]->name, this->players[0]->score);
+  
 }
 
 void GameWindow::nextLevel(){
@@ -252,6 +256,7 @@ void GameWindow::draw() {
   } else if (this->state == END_MENU) {
     this->end_menu->draw(this->renderer);
   } else if(this->state == SCOREBOARD_MENU){
+    this->scoreboard->updateMenu(this->scoreboard_menu, width);
     this->scoreboard_menu->draw(this->renderer);
   } else {
     // Draw level message
