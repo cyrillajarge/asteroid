@@ -69,6 +69,7 @@ GameWindow::GameWindow(const char *name, int width, int height) {
 
   dynamic_cast<Clickable *>(this->menu->components["scoreboard"])
     ->handler = [this]() {
+      this->previous_state = this->state;
       this->state = SCOREBOARD_MENU;
   };
 
@@ -76,7 +77,15 @@ GameWindow::GameWindow(const char *name, int width, int height) {
       [this]() { this->initGame(); };
   
   dynamic_cast<Clickable *>(this->end_menu->components["scoreboard"])->handler =
-      [this]() { this->state = SCOREBOARD_MENU; };
+      [this]() { 
+        this->previous_state = this->state;
+        this->state = SCOREBOARD_MENU; 
+      };
+  
+  dynamic_cast<Clickable *>(this->scoreboard_menu->components["return"])->handler =
+      [this]() { 
+        this->state = this->previous_state;
+      };
 }
 
 void GameWindow::initMenu() {
@@ -133,6 +142,10 @@ void GameWindow::initEndMenu() {
 void GameWindow::initScoreboardMenu(){
   this->scoreboard_menu->addPlainText("title", "SCOREBOARD", {0, 100});
   this->scoreboard_menu->components["title"]->centerHorizontally(width);
+
+  this->scoreboard_menu->addButton("return", "RETURN", {10, 35});
+  this->scoreboard_menu->components["return"]->border = true;
+  this->scoreboard_menu->components["return"]->border_color = {255, 0, 0, 255};
 }
 
 
@@ -338,6 +351,15 @@ void GameWindow::mainLoop(void) {
         } else if (this->state == END_MENU) {
           for (std::pair<std::string, UIComponent *> _comp :
                this->end_menu->components) {
+            if (Clickable *comp = dynamic_cast<Clickable *>(_comp.second)) {
+              if (comp->isIn(windowEvent.button.x, windowEvent.button.y)) {
+                comp->handler();
+              }
+            }
+          }
+        } else if (this->state == SCOREBOARD_MENU) {
+          for (std::pair<std::string, UIComponent *> _comp :
+               this->scoreboard_menu->components) {
             if (Clickable *comp = dynamic_cast<Clickable *>(_comp.second)) {
               if (comp->isIn(windowEvent.button.x, windowEvent.button.y)) {
                 comp->handler();

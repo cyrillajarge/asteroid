@@ -26,6 +26,7 @@ public:
   int width;
   int height;
   GAME_STATE state;
+  GAME_STATE previous_state;
 
 public:
   GameWindow(const char *name, int width, int height);
