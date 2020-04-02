@@ -49,6 +49,9 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   this->end_menu = std::make_unique<Menu>(this->font);
   this->initEndMenu();
 
+  this->scoreboard_menu = std::make_unique<Menu>(this->font);
+  this->initScoreboardMenu();
+
   // Setting up level manager
   this->levels_manager = std::make_unique<LevelsManager>();
 
@@ -65,24 +68,43 @@ GameWindow::GameWindow(const char *name, int width, int height) {
     this->initGame();
   };
 
+  dynamic_cast<Clickable *>(this->menu->components["scoreboard"])
+    ->handler = [this]() {
+      this->previous_state = this->state;
+      this->state = SCOREBOARD_MENU;
+  };
+
   dynamic_cast<Clickable *>(this->end_menu->components["playa"])->handler =
       [this]() { this->initGame(); };
+  
+  dynamic_cast<Clickable *>(this->end_menu->components["scoreboard"])->handler =
+      [this]() { 
+        this->previous_state = this->state;
+        this->state = SCOREBOARD_MENU; 
+      };
+  
+  dynamic_cast<Clickable *>(this->scoreboard_menu->components["return"])->handler =
+      [this]() { 
+        this->state = this->previous_state;
+      };
 }
 
 void GameWindow::initMenu() {
   this->menu->addPlainText("title", "ASTEROID", {200, 200});
   this->menu->components["title"]->center(width, height);
-  this->menu->components["title"]->moveY(-200);
+  this->menu->components["title"]->moveY(-150);
 
   this->menu->addButton("play", "PLAY", {200, 200});
   this->menu->components["play"]->border = true;
   this->menu->components["play"]->border_color = {0, 255, 0, 255};
   this->menu->components["play"]->center(width, height);
+  this->menu->components["play"]->moveY(-25);
 
-  this->menu->addPlainText("score", "No score yet", {400, 400});
-  this->menu->components["score"]->enabled = false;
-  this->menu->components["score"]->center(width, height);
-  this->menu->components["score"]->moveY(100);
+  this->menu->addButton("scoreboard", "Show scoreboard", {200,200});
+  this->menu->components["scoreboard"]->border = true;
+  this->menu->components["scoreboard"]->border_color = {0, 0, 255, 255};
+  this->menu->components["scoreboard"]->center(width, height);
+  this->menu->components["scoreboard"]->moveY(25);
 
   this->menu->addTextInput("gamertag", "Enter Gamertag: ", {400, 400});
   this->menu->components["gamertag"]->center(width, height);
@@ -98,13 +120,18 @@ void GameWindow::initEndMenu() {
       "score", "Your score : " + std::to_string(this->players[0]->score),
       {400, 400});
   this->end_menu->components["score"]->center(width, height);
-  this->end_menu->components["score"]->moveY(-50);
+  this->end_menu->components["score"]->moveY(-75);
 
   this->end_menu->addPlainText(
       "level", "You reached level " + std::to_string(this->players[0]->level) + "!",
       {400, 400});
-  this->end_menu->components["score"]->center(width, height);
-  this->end_menu->components["score"]->moveY(50);
+  this->end_menu->components["level"]->center(width, height);
+
+  this->end_menu->addButton("scoreboard", "Show scoreboard",{200,200});
+  this->end_menu->components["scoreboard"]->border = true;
+  this->end_menu->components["scoreboard"]->border_color = {0, 0, 255, 255};
+  this->end_menu->components["scoreboard"]->center(width, height);
+  this->end_menu->components["scoreboard"]->moveY(75);
 
   this->end_menu->addButton("playa", "Play Again", {200, 200});
   this->end_menu->components["playa"]->center(width, height);
@@ -112,6 +139,16 @@ void GameWindow::initEndMenu() {
   this->end_menu->components["playa"]->border = true;
   this->end_menu->components["playa"]->border_color = {0, 255, 0, 255};
 }
+
+void GameWindow::initScoreboardMenu(){
+  this->scoreboard_menu->addPlainText("title", "SCOREBOARD", {0, 100});
+  this->scoreboard_menu->components["title"]->centerHorizontally(width);
+
+  this->scoreboard_menu->addButton("return", "RETURN", {10, 35});
+  this->scoreboard_menu->components["return"]->border = true;
+  this->scoreboard_menu->components["return"]->border_color = {255, 0, 0, 255};
+}
+
 
 void GameWindow::initAsteroids(int number) {
   this->asteroids.clear();
@@ -218,6 +255,8 @@ void GameWindow::draw() {
     this->menu->draw(this->renderer);
   } else if (this->state == END_MENU) {
     this->end_menu->draw(this->renderer);
+  } else if(this->state == SCOREBOARD_MENU){
+    this->scoreboard_menu->draw(this->renderer);
   } else {
     // Draw level message
     this->font->color = {0,0,255,255};
@@ -322,6 +361,15 @@ void GameWindow::mainLoop(void) {
               }
             }
           }
+        } else if (this->state == SCOREBOARD_MENU) {
+          for (std::pair<std::string, UIComponent *> _comp :
+               this->scoreboard_menu->components) {
+            if (Clickable *comp = dynamic_cast<Clickable *>(_comp.second)) {
+              if (comp->isIn(windowEvent.button.x, windowEvent.button.y)) {
+                comp->handler();
+              }
+            }
+          }
         }
       case SDL_TEXTINPUT:
         if (this->state == MENU) {
@@ -396,7 +444,7 @@ void GameWindow::mainLoop(void) {
         }
         lastTime = currentTime;
       }
-    } else if (this->state == MENU || this->state == END_MENU) {
+    } else if (this->state == MENU || this->state == END_MENU || this->state == SCOREBOARD_MENU) {
       invincibleTime = 0;
       levelMessageTime = 0;
       this->draw();
