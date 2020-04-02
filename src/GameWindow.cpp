@@ -8,6 +8,7 @@
 #include <random>
 #include <string>
 #include <utility>
+#include "Scoreboard.hpp"
 
 GameWindow::GameWindow(const char *name, int width, int height) {
   // Create window
@@ -158,6 +159,9 @@ void GameWindow::endGame() {
   this->players[0]->spaceship->invincible = true;
   this->state = END_MENU;
   this->asteroids.clear();
+  Scoreboard b = Scoreboard();
+  b.saveScore(this->players[0]->name, this->players[0]->score);
+  
 }
 
 void GameWindow::nextLevel(){
