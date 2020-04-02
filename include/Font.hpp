@@ -70,6 +70,13 @@ public:
    */
   int getEndPos(std::string text, int x);
 
+
+  /**
+   * @brief Returns the width of the text.
+   *
+   * @param text
+   * @return int
+   */
   int getWidth(std::string text);
 };
 

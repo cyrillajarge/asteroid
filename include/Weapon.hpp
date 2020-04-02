@@ -29,7 +29,7 @@ public:
   double &angle;
 
   /**
-   * @brief Position, ust be a reference to the object that holds it (i.e:
+   * @brief Position, must be a reference to the object that holds it (i.e:
    * Spaceship)
    *
    */

@@ -19,10 +19,6 @@ Spaceship::Spaceship(glm::vec2 position, int size) {
       std::make_unique<Gattling>(this->direction_angle, this->position);
 }
 
-glm::vec2 Spaceship::getDirection() {
-  return glm::vec2(cos(this->direction_angle), sin(this->direction_angle));
-}
-
 void Spaceship::activateBoost() { this->boostActive = true; }
 
 void Spaceship::deactivateBoost() { this->boostActive = false; }
@@ -151,6 +147,10 @@ void Spaceship::draw(SDL_Renderer *renderer) {
   SDL_RenderDrawLine(renderer, lower_left.x, lower_left.y, tip.x, tip.y);
 
   this->weapon->draw(renderer);
+}
+
+glm::vec2 Spaceship::getDirection() {
+  return glm::vec2(cos(this->direction_angle), sin(this->direction_angle));
 }
 
 Spaceship::~Spaceship() {}
