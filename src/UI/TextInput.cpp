@@ -9,7 +9,12 @@ TextInput::TextInput(std::string label, glm::vec2 position){
 };
 
 void TextInput::addLetter(SDL_Event e){
-  input += e.text.text;
+  if(strncmp(e.text.text,":",1)){
+    input += e.text.text;
+  }
+  else{
+    std::cout << "Symbol not allowed!" << std::endl;
+  }
 }
 
 void TextInput::removeLetter(SDL_Event e){
