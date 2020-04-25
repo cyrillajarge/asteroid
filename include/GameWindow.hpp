@@ -31,6 +31,9 @@ public:
   GAME_STATE state;
   GAME_STATE previous_state;
 
+private:
+  void processPlayer(int num_player, int current_time);
+
 public:
   GameWindow(const char *name, int width, int height);
   ~GameWindow();
@@ -88,7 +91,7 @@ public:
   * @param player
   * @param level
   */
-  void updateScore(const std::unique_ptr<Player> &p, int level);
+  void updateScore(int player, int level);
 
   /**
   * @brief Main draw, called at a regular time interval
@@ -104,7 +107,7 @@ public:
   * @brief Manages asteroids: checks collisions, debris(particles), asteroids subdivisions
   * @param collided
   */
-  void computeAsteroids(const std::unique_ptr<Player> &p);
+  void computeAsteroids(int player);
 };
 
 #endif

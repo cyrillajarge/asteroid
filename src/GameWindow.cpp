@@ -8,6 +8,7 @@
 #include <random>
 #include <string>
 #include <utility>
+#include <future>
 
 GameWindow::GameWindow(const char *name, int width, int height) {
   // Create window
@@ -256,16 +257,16 @@ void GameWindow::updateAsteroids() {
   }
 }
 
-void GameWindow::updateScore(const std::unique_ptr<Player> &p, int level) {
+void GameWindow::updateScore(int player, int level) {
   switch (level) {
   case 2:
-    p->score += 20;
+    this->players[player]->score += 20;
     break;
   case 1:
-    p->score += 50;
+    this->players[player]->score += 50;
     break;
   case 0:
-    p->score += 100;
+    this->players[player]->score += 100;
     break;
   }
 }
@@ -304,17 +305,17 @@ void GameWindow::draw() {
                          this->width / 2 - gamertag_length / 2 - offset, 50);
 
     this->font->color = {255, 255, 255, 255};
-    // Draw special cooldown
 
-    eos = this->font->drawText(this->renderer, "Special CD :", 700, 50);
-
-    this->font->drawText(this->renderer,
-                         this->players[0]->spaceship->weapon->getCDStr(),
-                         eos + 20, 50);
-
+    int cd_y_offset = 50;
+    
     for (auto const &p : this->players) {
-      if (!p)
+      if (!p || !p->alive)
         continue;
+      eos = this->font->drawText(this->renderer, "Special CD :", 700, cd_y_offset);
+      this->font->drawText(this->renderer,
+                          p->spaceship->weapon->getCDStr(),
+                          eos + 20, cd_y_offset);
+      cd_y_offset += 50;
       p->spaceship->draw(this->renderer);
     }
 
@@ -330,9 +331,9 @@ void GameWindow::draw() {
   SDL_RenderPresent(renderer);
 }
 
-void GameWindow::computeAsteroids(const std::unique_ptr<Player> &p) {
+void GameWindow::computeAsteroids(int player) {
   static auto gen_float = alea_generator(-1.0f, 1.0f);
-  std::vector<int> collided = p->spaceship->weapon->collided(this->asteroids);
+  std::vector<int> collided = this->players[player]->spaceship->weapon->collided(this->asteroids);
 
   for (int inter : collided) {
     glm::vec2 aster_pos = this->asteroids[inter]->center;
@@ -340,7 +341,7 @@ void GameWindow::computeAsteroids(const std::unique_ptr<Player> &p) {
     int nr = this->asteroids[inter]->nrays;
     int lev = this->asteroids[inter]->level;
 
-    this->updateScore(p, lev);
+    this->updateScore(player, lev);
 
     this->asteroids.erase(this->asteroids.begin() + inter);
     for (int i = 0; i < 10; i++) {
@@ -358,6 +359,23 @@ void GameWindow::computeAsteroids(const std::unique_ptr<Player> &p) {
       }
     }
   }
+}
+
+void GameWindow::processPlayer(int num_player, int current_time) {
+  if (num_player > 1 || (num_player == 1 && !this->players[num_player]) || !this->players[num_player]->alive) {
+    return;
+  }
+  // Process inputs
+  this->players[num_player]->input_manager->process(current_time);
+  // Compute weapon collisions
+  this->computeAsteroids(num_player);
+  // Compute spaceship collisions
+  if (!this->players[num_player]->spaceship->invincible &&
+      this->players[num_player]->spaceship->intersectsAsteroid(this->asteroids)) {
+    this->players[num_player]->alive = false;
+  }
+  // Update spaceship position
+  this->players[num_player]->spaceship->update(this->players[num_player]->getDelta(), this->width, this->height);
 }
 
 void GameWindow::mainLoop(void) {
@@ -456,20 +474,17 @@ void GameWindow::mainLoop(void) {
       (levelMessageTime < 5000000)? this->levels_manager->message = true: this->levels_manager->message = false;
       if (deltaTime > 30) /* Si 30 ms se sont écoulées */
       {
-        for (auto const &p : this->players) {
-          if (!p) {
-            continue;
-          }
-          p->input_manager->process(currentTime);
-          this->computeAsteroids(p);
-
-          if (!p->spaceship->invincible &&
-              p->spaceship->intersectsAsteroid(this->asteroids)) {
+        
+        auto f =std::async(&GameWindow::processPlayer, this, 1, currentTime);
+        this->processPlayer(0, currentTime);
+        f.get();
+        
+        if (!this->players[0]->alive) {
+          if (!this->players[1] || !this->players[1]->alive) {
             this->endGame();
           }
-
-          p->spaceship->update(p->getDelta(), this->width, this->height);
         }
+
         this->updateAsteroids();
         this->particleManager->updateParticles();
         this->draw();

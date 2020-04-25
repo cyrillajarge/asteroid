@@ -14,6 +14,7 @@ project(Asteroid)
 
 find_package(SDL2 REQUIRED)
 find_package(glm REQUIRED)
+find_package (Threads REQUIRED)
 
 include_directories(${SDL2_INCLUDE_DIR})
 # include_directories(${GLM_INCLUDE_DIR})
@@ -31,6 +32,7 @@ add_executable(${TARGET} ${sources})
 target_link_libraries(${TARGET} 
   ${SDL2_LIBRARY}
   glm
+  ${CMAKE_THREAD_LIBS_INIT}
 )
 
 # if (APPLE)

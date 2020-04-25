@@ -17,10 +17,16 @@ public:
   int score;
 
   /**
-   * @brief PLevel that the player reached
+   * @brief Level that the player reached
    * 
    */
   int level;
+
+  /**
+   * @brief Player is alive
+   * 
+   */
+  bool alive;
 
   /**
    * @brief Player name
