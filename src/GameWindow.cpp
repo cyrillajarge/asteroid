@@ -262,13 +262,13 @@ void GameWindow::updateAsteroids() {
 void GameWindow::updateScore(int player, int level) {
   switch (level) {
   case 2:
-    this->players[player]->score += 20;
+    this->players[player]->score += (coop_mode) ? 10 : 20;
     break;
   case 1:
-    this->players[player]->score += 50;
+    this->players[player]->score += (coop_mode) ? 25 : 50;
     break;
   case 0:
-    this->players[player]->score += 100;
+    this->players[player]->score += (coop_mode) ? 50 : 100;
     break;
   }
 }
@@ -294,10 +294,6 @@ void GameWindow::draw() {
     this->font->color = {255,255,255,255};
 
     int eos;
-    // Draw score
-    eos = this->font->drawText(this->renderer, "Score :", 50, 50);
-    std::string score = std::to_string(this->players[0]->score);
-    this->font->drawText(this->renderer, score, eos + 20, 50);
 
     // Draw Gamertag
     this->font->color = {0, 255, 0, 255};
@@ -316,6 +312,13 @@ void GameWindow::draw() {
         continue;
       glm::vec4 player_color = p->color;
       this->font->color = {static_cast<Uint8>(player_color[0]), static_cast<Uint8>(player_color[1]), static_cast<Uint8>(player_color[2]), static_cast<Uint8>(player_color[3])};
+
+      // Draw score
+      eos = this->font->drawText(this->renderer, "Score :", 50, cd_y_offset);
+      std::string score = std::to_string(p->score);
+      this->font->drawText(this->renderer, score, eos + 20, cd_y_offset);
+
+      // Draw special cooldown
       eos = this->font->drawText(this->renderer, "Special CD :", 700, cd_y_offset);
       this->font->drawText(this->renderer,
                           p->spaceship->weapon->getCDStr(),
@@ -375,17 +378,25 @@ void GameWindow::processPlayer(int num_player, int current_time) {
   if (num_player > 1 || (num_player == 1 && !this->players[num_player]) || !this->players[num_player]->alive) {
     return;
   }
+
   // Process inputs
   this->players[num_player]->input_manager->process(current_time);
-  // Compute weapon collisions
-  this->computeAsteroids(num_player);
+
   // Compute spaceship collisions
   if (!this->players[num_player]->spaceship->invincible &&
       this->players[num_player]->spaceship->intersectsAsteroid(this->asteroids)) {
     this->players[num_player]->alive = false;
   }
+
   // Update spaceship position
   this->players[num_player]->spaceship->update(this->players[num_player]->getDelta(), this->width, this->height);
+
+  /* Critical section in */
+  this->mutex.lock();
+  // Compute weapon collisions
+  this->computeAsteroids(num_player);
+  this->mutex.unlock();
+  /* Critical section out */
 }
 
 void GameWindow::mainLoop(void) {

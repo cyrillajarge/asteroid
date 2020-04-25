@@ -9,6 +9,7 @@
 #include "UI/UIComponent.hpp"
 #include <memory>
 #include <vector>
+#include <mutex>
 
 enum GAME_STATE { STOPPED, MENU, GAME, END_MENU, SCOREBOARD_MENU };
 
@@ -25,6 +26,7 @@ public:
   std::unique_ptr<LevelsManager> levels_manager;
   std::unique_ptr<Player> players[2];
   std::unique_ptr<Scoreboard> scoreboard;
+  std::mutex mutex;
   bool coop_mode = false;
   int width;
   int height;
