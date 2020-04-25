@@ -191,6 +191,7 @@ void GameWindow::initGame() {
   if (this->state != GAME) {
     this->players[0]->score = 0;
     this->players[0]->level = 1;
+    this->players[0]->alive = true;
     glm::vec2 position = glm::vec2(this->width / 2.0f, this->height / 2.0f);
     this->players[0]->initShip(position, 20);
     if(coop_mode){
@@ -198,6 +199,7 @@ void GameWindow::initGame() {
       this->players[1]->level = 1;
       position = glm::vec2(this->width / 2.0f, this->height / 2.0f);
       this->players[1]->initShip(position, 20); 
+      this->players[1]->alive = true; 
     }
 
     this->state = GAME;
