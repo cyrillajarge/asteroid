@@ -8,6 +8,7 @@
 #include <random>
 #include <string>
 #include <utility>
+#include <future>
 
 GameWindow::GameWindow(const char *name, int width, int height) {
   // Create window
@@ -281,7 +282,7 @@ void GameWindow::draw() {
     int cd_y_offset = 50;
     
     for (auto const &p : this->players) {
-      if (!p)
+      if (!p || !p->alive)
         continue;
       eos = this->font->drawText(this->renderer, "Special CD :", 700, cd_y_offset);
       this->font->drawText(this->renderer,
@@ -330,6 +331,24 @@ void GameWindow::computeAsteroids(std::vector<int> collided) {
       }
     }
   }
+}
+
+void GameWindow::processPlayer(int num_player, int current_time) {
+  if (num_player > 1 || (num_player == 1 && !this->players[num_player]) || !this->players[num_player]->alive) {
+    return;
+  }
+  // Process inputs
+  this->players[num_player]->input_manager->process(current_time);
+  // Compute weapon collisions
+  this->computeAsteroids(
+      this->players[num_player]->spaceship->weapon->collided(this->asteroids));
+  // Compute spaceship collisions
+  if (!this->players[num_player]->spaceship->invincible &&
+      this->players[num_player]->spaceship->intersectsAsteroid(this->asteroids)) {
+    this->players[num_player]->alive = false;
+  }
+  // Update spaceship position
+  this->players[num_player]->spaceship->update(this->players[num_player]->getDelta(), this->width, this->height);
 }
 
 void GameWindow::mainLoop(void) {
@@ -417,21 +436,17 @@ void GameWindow::mainLoop(void) {
       (levelMessageTime < 5000000)? this->levels_manager->message = true: this->levels_manager->message = false;
       if (deltaTime > 30) /* Si 30 ms se sont écoulées */
       {
-        for (auto const &p : this->players) {
-          if (!p) {
-            continue;
-          }
-          p->input_manager->process(currentTime);
-          this->computeAsteroids(
-              p->spaceship->weapon->collided(this->asteroids));
-
-          if (!p->spaceship->invincible &&
-              p->spaceship->intersectsAsteroid(this->asteroids)) {
+        
+        auto f =std::async(&GameWindow::processPlayer, this, 1, currentTime);
+        this->processPlayer(0, currentTime);
+        f.get();
+        
+        if (!this->players[0]->alive) {
+          if (!this->players[1] || !this->players[1]->alive) {
             this->endGame();
           }
-
-          p->spaceship->update(p->getDelta(), this->width, this->height);
         }
+
         this->updateAsteroids();
         this->particleManager->updateParticles();
         this->draw();

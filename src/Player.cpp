@@ -4,6 +4,7 @@
 Player::Player(input_mapping_t m) {
   this->score = 0;
   this->level = 1;
+  this->alive = true;
   this->name = "anonymous";
   this->spaceship = nullptr;
   this->input_manager = std::make_unique<InputManager>(m);

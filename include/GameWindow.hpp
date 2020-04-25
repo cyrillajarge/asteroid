@@ -30,6 +30,9 @@ public:
   GAME_STATE state;
   GAME_STATE previous_state;
 
+private:
+  void processPlayer(int num_player, int current_time);
+
 public:
   GameWindow(const char *name, int width, int height);
   ~GameWindow();
