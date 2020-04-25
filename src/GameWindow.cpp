@@ -204,7 +204,7 @@ void GameWindow::initGame() {
 
     this->state = GAME;
     this->levels_manager->resetLevels();
-    this->initAsteroids(this->levels_manager->nb_asteroids);
+    this->initAsteroids(this->levels_manager->config[this->levels_manager->status].first);
   }
 }
 
@@ -234,7 +234,7 @@ void GameWindow::nextLevel(){
   if(coop_mode){
     this->players[1]->level++;
   }
-  this->initAsteroids(this->levels_manager->nb_asteroids);
+  this->initAsteroids(this->levels_manager->config[this->levels_manager->status].first);
 }
 
 void GameWindow::updateAsteroids() {
@@ -255,7 +255,7 @@ void GameWindow::updateAsteroids() {
       this->asteroids[i]->center.y = 0;
     }
 
-    this->asteroids[i]->center += this->levels_manager->speed * this->asteroids[i]->direction;
+    this->asteroids[i]->center += this->levels_manager->config[this->levels_manager->status].second * this->asteroids[i]->direction;
   }
 }
 

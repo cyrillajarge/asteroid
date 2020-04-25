@@ -3,23 +3,20 @@
 
 LevelsManager::LevelsManager(std::string path){
   this->config = this->readConfigFile(path);
-  this->status = 1;
-  this->nb_asteroids = 6;
-  this->speed = 2.0f;
+  this->status = 0;
   this->message = false;
 }
 
-std::vector<std::pair<int, double>> LevelsManager::readConfigFile(std::string path){
-  std::vector<std::pair<int, double>> levels;
+std::vector<std::pair<int, float>> LevelsManager::readConfigFile(std::string path){
+  std::vector<std::pair<int, float>> levels;
   std::ifstream f(path);
   std::string bs;
-  std::string sep = " ";
+  std::string sep = ":";
   while (std::getline(f, bs)) {
     size_t pos = bs.find_first_of(sep);
     size_t pos2 = bs.find_last_of(sep);
     int naster = std::stoi(bs.substr(pos+1,pos2-1));
-    double speed = std::stod(bs.substr(pos2+1,bs.length()));
-    std::cout << speed << std::endl;
+    float speed = std::stoi(bs.substr(pos2+1,bs.length()))/10.0;
     levels.push_back(std::make_pair(naster, speed));
   }
   return levels;
@@ -27,14 +24,10 @@ std::vector<std::pair<int, double>> LevelsManager::readConfigFile(std::string pa
 
 void LevelsManager::nextLevel(){
   this->status++;
-  this->nb_asteroids += 2;
-  this->speed += 0.5f;
 }
 
 void LevelsManager::resetLevels(){
-  this->status = 1;
-  this->nb_asteroids = 6;
-  this->speed = 2.0f;
+  this->status = 0;
   this->message = false;
 }
 
