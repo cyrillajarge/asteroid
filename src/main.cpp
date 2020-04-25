@@ -5,7 +5,6 @@
 #include <cmath>
 
 #include "GameWindow.hpp"
-#include "Rocket.hpp"
 #include "SDL2/SDL.h"
 #include "Spaceship.hpp"
 

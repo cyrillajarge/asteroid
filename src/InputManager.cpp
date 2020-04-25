@@ -1,4 +1,6 @@
 #include "InputManager.hpp"
+#include "Gattling.hpp"
+#include "RocketLauncher.hpp"
 #include <iostream>
 
 InputManager::InputManager(input_mapping_t kind) { this->initMapper(kind); }

@@ -1,5 +1,6 @@
 #include "Spaceship.hpp"
 #include "Random/Alea.hpp"
+#include "Gattling.hpp"
 #include <cmath>
 #include <iostream>
 
