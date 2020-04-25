@@ -24,6 +24,9 @@ std::vector<std::pair<int, float>> LevelsManager::readConfigFile(std::string pat
 
 void LevelsManager::nextLevel(){
   this->status++;
+  if(this->status>4){
+    config.push_back(std::make_pair(config[this->status-1].first+1, config[this->status-1].second+0.5));
+  }
 }
 
 void LevelsManager::resetLevels(){
