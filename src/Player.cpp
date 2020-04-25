@@ -1,13 +1,14 @@
 #include "Player.hpp"
 #include <iostream>
 
-Player::Player(input_mapping_t m) {
+Player::Player(input_mapping_t m, glm::vec4 color) {
   this->score = 0;
   this->level = 1;
   this->alive = true;
   this->name = "anonymous";
   this->spaceship = nullptr;
   this->input_manager = std::make_unique<InputManager>(m);
+  this->color = color;
   std::cout << "Player created" << std::endl;
 }
 

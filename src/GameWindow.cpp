@@ -183,8 +183,8 @@ void GameWindow::initAsteroids(int number) {
 
 void GameWindow::initPlayers(){
   // Setting up game entities
-  this->players[0] = std::make_unique<Player>(MAPPING_P1);
-  if(coop_mode) this->players[1] = std::make_unique<Player>(MAPPING_P2);
+  this->players[0] = std::make_unique<Player>(MAPPING_P1, glm::vec4(255,0,255,255));
+  if(coop_mode) this->players[1] = std::make_unique<Player>(MAPPING_P2, glm::vec4(0,255,255,255));
 }
 
 void GameWindow::initGame() {
@@ -309,17 +309,24 @@ void GameWindow::draw() {
     this->font->color = {255, 255, 255, 255};
 
     int cd_y_offset = 50;
+    int wp_y_offset = -50;
     
     for (auto const &p : this->players) {
       if (!p || !p->alive)
         continue;
+      glm::vec4 player_color = p->color;
+      this->font->color = {static_cast<Uint8>(player_color[0]), static_cast<Uint8>(player_color[1]), static_cast<Uint8>(player_color[2]), static_cast<Uint8>(player_color[3])};
       eos = this->font->drawText(this->renderer, "Special CD :", 700, cd_y_offset);
       this->font->drawText(this->renderer,
                           p->spaceship->weapon->getCDStr(),
                           eos + 20, cd_y_offset);
       cd_y_offset += 50;
-      p->spaceship->draw(this->renderer);
+      std::string weapon_name = "Weapon: " + p->spaceship->weapon->name;
+      this->font->drawText(this->renderer, weapon_name, 700, this->height+wp_y_offset);
+      wp_y_offset -= 50;
+      p->spaceship->draw(this->renderer, player_color);
     }
+    this->font->color = {255,255,255,255};
 
     SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, 255);
 

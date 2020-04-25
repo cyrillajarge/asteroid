@@ -111,7 +111,7 @@ public:
    * 
    * @param renderer
    */
-  void draw(SDL_Renderer *renderer);
+  void draw(SDL_Renderer *renderer, glm::vec4 color);
 
   /**
    * @brief Computes the direction vector.

@@ -7,6 +7,7 @@ Gattling::Gattling(double &angle, glm::vec2 &pos)
   this->fire_rate = GT_ROF;
   this->cooldown = GT_CD * 1000;
   this->rockets.reserve(40);
+  this->name = "Gattling";
 }
 
 void Gattling::fire() {

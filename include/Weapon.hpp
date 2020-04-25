@@ -10,6 +10,12 @@
 class Weapon {
 public:
   /**
+   * @brief Weapon name
+   * 
+   */
+  std::string name;
+
+  /**
    * @brief Special action cooldown in milliseconds
    *
    */
