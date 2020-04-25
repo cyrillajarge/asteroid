@@ -37,7 +37,7 @@ GameWindow::GameWindow(const char *name, int width, int height) {
 
   // Setting up game entities
   this->players[0] = std::make_unique<Player>(MAPPING_P1);
-  // this->players[1] = std::make_unique<Player>(MAPPING_P2);
+  this->players[1] = std::make_unique<Player>(MAPPING_P2);
 
   // Setting up UI
   this->font = new Font({255, 255, 255, 255});
@@ -277,17 +277,17 @@ void GameWindow::draw() {
                          this->width / 2 - gamertag_length / 2 - offset, 50);
 
     this->font->color = {255, 255, 255, 255};
-    // Draw special cooldown
 
-    eos = this->font->drawText(this->renderer, "Special CD :", 700, 50);
-
-    this->font->drawText(this->renderer,
-                         this->players[0]->spaceship->weapon->getCDStr(),
-                         eos + 20, 50);
-
+    int cd_y_offset = 50;
+    
     for (auto const &p : this->players) {
       if (!p)
         continue;
+      eos = this->font->drawText(this->renderer, "Special CD :", 700, cd_y_offset);
+      this->font->drawText(this->renderer,
+                          p->spaceship->weapon->getCDStr(),
+                          eos + 20, cd_y_offset);
+      cd_y_offset += 50;
       p->spaceship->draw(this->renderer);
     }
 
