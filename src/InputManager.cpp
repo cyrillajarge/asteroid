@@ -52,7 +52,7 @@ void InputManager::initMapper(input_mapping_t kind) {
     this->mapper.left = SDL_SCANCODE_LEFT;
     this->mapper.right = SDL_SCANCODE_RIGHT;
     this->mapper.fire = SDL_SCANCODE_SPACE;
-    this->mapper.spec = SDL_SCANCODE_X;
+    this->mapper.spec = SDL_SCANCODE_N;
     this->mapper.weapon_switch = SDL_SCANCODE_RSHIFT;
     break;
   case MAPPING_P2:
