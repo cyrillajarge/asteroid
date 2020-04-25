@@ -7,6 +7,7 @@ RocketLauncher::RocketLauncher(double &angle, glm::vec2 &pos)
   this->fire_rate = RL_ROF;
   this->cooldown = RL_CD * 1000;
   this->rockets.reserve(20);
+  this->name = "Rocket Launcher";
 }
 
 void RocketLauncher::fire() {

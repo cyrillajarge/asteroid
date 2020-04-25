@@ -12,6 +12,7 @@ struct keymap {
   SDL_Scancode prop;
   SDL_Scancode spec;
   SDL_Scancode fire;
+  SDL_Scancode weapon_switch;
 };
 
 class InputManager {
@@ -33,6 +34,12 @@ public:
    *
    */
   int last_shot = 0;
+
+  /**
+   * @brief Timestalp--mp when last weapon was changed
+   * 
+   */
+  int last_weapon_switch = 0;
 
 private:
   /**

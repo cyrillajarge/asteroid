@@ -1,7 +1,5 @@
 #include "Spaceship.hpp"
 #include "Random/Alea.hpp"
-#include "RocketLauncher.hpp"
-#include "Gattling.hpp"
 #include <cmath>
 #include <iostream>
 
@@ -88,7 +86,7 @@ bool Spaceship::intersectsAsteroid(std::vector<Asteroid *> asteroids) {
   return false;
 }
 
-void Spaceship::draw(SDL_Renderer *renderer) {
+void Spaceship::draw(SDL_Renderer *renderer, glm::vec4 color) {
 
   int d = this->size;
   glm::vec2 lower_left = glm::vec2(
@@ -135,10 +133,10 @@ void Spaceship::draw(SDL_Renderer *renderer) {
   this->pmship->updateParticles();
   this->pmship->drawParticles(renderer);
 
-  SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+  SDL_SetRenderDrawColor(renderer, color[0], color[1], color[2], color[3]);
 
   if (this->invincible) {
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 120);
+    SDL_SetRenderDrawColor(renderer, color[0], color[1], color[2], 120);
   }
 
   SDL_RenderDrawLine(renderer, lower_right.x, lower_right.y, tip.x, tip.y);
