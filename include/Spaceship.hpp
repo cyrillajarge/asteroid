@@ -4,6 +4,8 @@
 #include "Asteroid.hpp"
 #include "Particles/LifeParticle.hpp"
 #include "Particles/ParticlesManager.hpp"
+#include "RocketLauncher.hpp"
+#include "Gattling.hpp"
 #include "Rocket.hpp"
 #include "SDL2/SDL.h"
 #include "Weapon.hpp"

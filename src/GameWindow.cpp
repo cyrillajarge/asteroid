@@ -321,8 +321,9 @@ void GameWindow::draw() {
                           p->spaceship->weapon->getCDStr(),
                           eos + 20, cd_y_offset);
       cd_y_offset += 50;
+      int length = this->font->getWidth(p->spaceship->weapon->name);
       std::string weapon_name = "Weapon: " + p->spaceship->weapon->name;
-      this->font->drawText(this->renderer, weapon_name, 700, this->height+wp_y_offset);
+      this->font->drawText(this->renderer, weapon_name, this->width - length - 250, this->height+wp_y_offset);
       wp_y_offset -= 50;
       p->spaceship->draw(this->renderer, player_color);
     }

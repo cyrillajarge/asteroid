@@ -1,7 +1,5 @@
 #include "Spaceship.hpp"
 #include "Random/Alea.hpp"
-#include "RocketLauncher.hpp"
-#include "Gattling.hpp"
 #include <cmath>
 #include <iostream>
 

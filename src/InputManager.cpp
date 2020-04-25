@@ -32,6 +32,17 @@ void InputManager::process(int current_time) {
   if (keystates[this->mapper.spec]) {
     ship->weapon->fireSpecial();
   }
+  if (keystates[this->mapper.weapon_switch]) {
+    if(current_time-this->last_weapon_switch>100){
+      if(ship->weapon->name == "Gattling"){
+        ship->weapon = std::make_unique<RocketLauncher>(ship->direction_angle, ship->position);
+      }
+      else{
+        ship->weapon = std::make_unique<Gattling>(ship->direction_angle, ship->position);
+      }
+      this->last_weapon_switch = current_time;
+    }
+  }
 }
 
 void InputManager::initMapper(input_mapping_t kind) {
@@ -42,6 +53,7 @@ void InputManager::initMapper(input_mapping_t kind) {
     this->mapper.right = SDL_SCANCODE_RIGHT;
     this->mapper.fire = SDL_SCANCODE_SPACE;
     this->mapper.spec = SDL_SCANCODE_X;
+    this->mapper.weapon_switch = SDL_SCANCODE_RSHIFT;
     break;
   case MAPPING_P2:
     this->mapper.prop = SDL_SCANCODE_W;
@@ -49,6 +61,7 @@ void InputManager::initMapper(input_mapping_t kind) {
     this->mapper.right = SDL_SCANCODE_D;
     this->mapper.fire = SDL_SCANCODE_LSHIFT;
     this->mapper.spec = SDL_SCANCODE_LCTRL;
+    this->mapper.weapon_switch = SDL_SCANCODE_TAB;
     break;
   default:
     break;
