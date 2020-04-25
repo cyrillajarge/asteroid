@@ -5,7 +5,6 @@ void ParticlesManager::addParticle(Particle* p){
 }
 
 void ParticlesManager::updateParticles(){
-  std::vector<Particle*>::const_iterator iterator;
   for (auto i = this->particles.begin(); i != this->particles.end(); ++i) { 
     if(dynamic_cast<LifeParticle *>(*i) != NULL){
       dynamic_cast<LifeParticle *>(*i)->update(); 
