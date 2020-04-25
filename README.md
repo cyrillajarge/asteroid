@@ -1,5 +1,7 @@
 # asteroid
 
+![CI](https://github.com/cyrillajarge/asteroid/workflows/CI/badge.svg?branch=master)
+
 ## Pré-requis
 
 Les librairies SDL2 et GLM sont utilisées. Elles sont normalement incluses dans le dépôt.
