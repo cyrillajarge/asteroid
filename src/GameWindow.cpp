@@ -516,6 +516,7 @@ void GameWindow::mainLoop(void) {
           p->resetDelta();
           p->spaceship->deactivateBoost();
           p->spaceship->weapon->updateCooldown(deltaTime);
+          p->spaceship->weapon->updateDuration(deltaTime);
         }
         lastTime = currentTime;
       }

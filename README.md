@@ -4,6 +4,8 @@
 
 Les librairies SDL2 et GLM sont utilisées. Elles sont normalement incluses dans le dépôt.
 
+Le projet nécessite C++17.
+
 ## Compilation
 `cmake CMakeLists.txt`
 puis
@@ -15,6 +17,8 @@ L'exécutable se trouve dans le répertoire `bin`(`bin/main` par défaut).
 
 Notre jeu Asteroids permet de jouer en solo ou à 2 en coopération (le tir ami est désactivé).
 Un tableau des scores est disponible, il est sauvegardé dans le fichier `.hemoroids` qui est généré dans le répertoire `HOME` de l'utilisateur.
+
+Les scores sont encodés en base 64 grâce aux fonctions de [René Nyffenegger](https://github.com/ReneNyffenegger/cpp-base64).
 
 ## Commandes
 
@@ -38,4 +42,6 @@ Deux armes sont disponibles actuellement : la gattling et le lance-rocket.
 
 * Gattling : son spécial double la vitesse de tir pendant un court instant
 * Lance-rocket : son spécial tire des rockets dans toutes les directions
+
+
 

@@ -6,6 +6,7 @@
 
 #define GT_ROF 7
 #define GT_CD 15
+#define GT_DUR 5
 
 class Gattling : public Weapon {
 public:

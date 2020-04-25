@@ -8,6 +8,7 @@ Gattling::Gattling(double &angle, glm::vec2 &pos)
   this->cooldown = GT_CD * 1000;
   this->rockets.reserve(40);
   this->name = "Gattling";
+  this->spec_duration = 0;
 }
 
 void Gattling::fire() {
@@ -22,6 +23,7 @@ void Gattling::fireSpecial() {
   }
   this->fire_rate *= 2;
   this->cooldown = GT_CD * 1000;
+  this->spec_duration = GT_DUR * 1000;
 }
 
 void Gattling::update(int width, int height) {
@@ -35,14 +37,18 @@ void Gattling::update(int width, int height) {
       ++it;
     }
   }
-  if (this->cooldown / 1000 < 8) {
+  if (!this->spec_duration) {
     this->fire_rate = GT_ROF;
   }
 }
 
 void Gattling::draw(SDL_Renderer *renderer) {
+  SDL_Color rocket_color = { 255, 255, 0, 255 };
+  if (this->spec_duration) {
+    rocket_color.g = 100;
+  }
   for (Rocket *r : this->rockets) {
-    r->draw(renderer, { 255, 255, 0, 255 });
+    r->draw(renderer, rocket_color);
   }
 }
 

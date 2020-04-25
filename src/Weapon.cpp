@@ -3,14 +3,21 @@
 #include <iostream>
 #include <sstream>
 
+int updateTime(int cur, int delta) {
+  if (cur > delta) {
+    return cur - delta;
+  }
+  return 0;
+}
+
 Weapon::Weapon(double &ng, glm::vec2 &p) : angle(ng), pos(p) {}
 
 void Weapon::updateCooldown(int delta) {
-  if (this->cooldown >= delta) {
-    this->cooldown -= delta;
-  } else {
-    this->cooldown = 0;
-  }
+  this->cooldown = updateTime(this->cooldown, delta);
+}
+
+void Weapon::updateDuration(int delta) {
+  this->spec_duration = updateTime(this->spec_duration, delta);
 }
 
 std::string Weapon::getCDStr() {
@@ -23,7 +30,7 @@ std::string Weapon::getCDStr() {
   return "Ready";
 }
 
-Weapon::~Weapon() { std::cout << "Weapon destroyed" << std::endl; }
+Weapon::~Weapon() {}
 void Weapon::debug() {
   std::cout << "(angle: " << this->angle << ") "
             << "(pos: " << this->pos.x << ", " << this->pos.y << ")"

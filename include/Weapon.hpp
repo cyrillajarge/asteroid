@@ -28,6 +28,12 @@ public:
   int fire_rate;
 
   /**
+   * @brief Duration of special effect (might be unused).
+   * 
+   */
+  int spec_duration;
+
+  /**
    * @brief Angle, must be a reference to the object that holds it (i.e:
    * Spaceship)
    *
@@ -55,6 +61,13 @@ public:
    * @param delta int (time elapsed)
    */
   void updateCooldown(int delta);
+
+  /**
+   * @brief Updates the duration of the special effect
+   * 
+   * @param delta  int (time elapsed)
+   */
+  void updateDuration(int delta);
 
   /**
    * @brief Returns the current cooldown as a string, rounded to the first
