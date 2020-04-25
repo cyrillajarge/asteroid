@@ -25,6 +25,7 @@ public:
   std::unique_ptr<LevelsManager> levels_manager;
   std::unique_ptr<Player> players[2];
   std::unique_ptr<Scoreboard> scoreboard;
+  bool coop_mode = false;
   int width;
   int height;
   GAME_STATE state;
@@ -62,6 +63,11 @@ public:
   void initAsteroids(int number);
   
   /**
+   * @brief Inits players depending on coop mode or not
+   */
+  void initPlayers();
+
+  /**
   * @brief Initialize game and everything that depends on it
   */
   void initGame();
@@ -78,8 +84,11 @@ public:
 
   /**
   * @brief Updates score
+  * 
+  * @param player
+  * @param level
   */
-  void updateScore(int level);
+  void updateScore(const std::unique_ptr<Player> &p, int level);
 
   /**
   * @brief Main draw, called at a regular time interval
@@ -95,7 +104,7 @@ public:
   * @brief Manages asteroids: checks collisions, debris(particles), asteroids subdivisions
   * @param collided
   */
-  void computeAsteroids(std::vector<int> collided);
+  void computeAsteroids(const std::unique_ptr<Player> &p);
 };
 
 #endif

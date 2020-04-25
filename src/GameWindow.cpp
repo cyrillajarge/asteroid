@@ -35,9 +35,8 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   }
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
-  // Setting up game entities
-  this->players[0] = std::make_unique<Player>(MAPPING_P1);
-  // this->players[1] = std::make_unique<Player>(MAPPING_P2);
+  // // Setting up game entities
+  this->initPlayers();
 
   // Setting up UI
   this->font = new Font({255, 255, 255, 255});
@@ -56,11 +55,10 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   // Setting up level manager
   this->levels_manager = std::make_unique<LevelsManager>();
 
-
-  // this->initAsteroids(1);
   this->state = MENU;
   dynamic_cast<Clickable *>(this->menu->components["play"])
       ->handler = [this]() {
+    this->initPlayers();
     this->players[0]->name =
         dynamic_cast<TextInput *>(this->menu->components["gamertag"])->input;
     this->end_menu->components["message"]->label =
@@ -73,6 +71,18 @@ GameWindow::GameWindow(const char *name, int width, int height) {
     ->handler = [this]() {
       this->previous_state = this->state;
       this->state = SCOREBOARD_MENU;
+  };
+
+  dynamic_cast<Clickable *>(this->menu->components["coop"])
+  ->handler = [this]() {
+    dynamic_cast<Checkbox *>(this->menu->components["coop"])->checked = !dynamic_cast<Checkbox *>(this->menu->components["coop"])->checked;
+    this->coop_mode = !this->coop_mode;
+    if(this->menu->components["gamertag"]->label == "Enter Squad name: "){
+      this->menu->components["gamertag"]->label = "Enter Gamertag: ";
+    }
+    else{
+      this->menu->components["gamertag"]->label = "Enter Squad name: ";
+    }
   };
 
   dynamic_cast<Clickable *>(this->end_menu->components["playa"])->handler =
@@ -99,13 +109,16 @@ void GameWindow::initMenu() {
   this->menu->components["play"]->border = true;
   this->menu->components["play"]->border_color = {0, 255, 0, 255};
   this->menu->components["play"]->center(width, height);
-  this->menu->components["play"]->moveY(-25);
+  this->menu->components["play"]->moveY(-50);
+
+  this->menu->addCheckbox("coop", "Co-op", {200,200});
+  this->menu->components["coop"]->center(width, height);
 
   this->menu->addButton("scoreboard", "Show scoreboard", {200,200});
   this->menu->components["scoreboard"]->border = true;
   this->menu->components["scoreboard"]->border_color = {0, 0, 255, 255};
   this->menu->components["scoreboard"]->center(width, height);
-  this->menu->components["scoreboard"]->moveY(25);
+  this->menu->components["scoreboard"]->moveY(50);
 
   this->menu->addTextInput("gamertag", "Enter Gamertag: ", {400, 400});
   this->menu->components["gamertag"]->center(width, height);
@@ -167,43 +180,57 @@ void GameWindow::initAsteroids(int number) {
   }
 }
 
+void GameWindow::initPlayers(){
+  // Setting up game entities
+  this->players[0] = std::make_unique<Player>(MAPPING_P1);
+  if(coop_mode) this->players[1] = std::make_unique<Player>(MAPPING_P2);
+}
+
 void GameWindow::initGame() {
   if (this->state != GAME) {
-    this->state = GAME;
-    this->levels_manager->resetLevels();
     this->players[0]->score = 0;
     this->players[0]->level = 1;
     glm::vec2 position = glm::vec2(this->width / 2.0f, this->height / 2.0f);
     this->players[0]->initShip(position, 20);
-    if (this->players[1]) {
-      position = glm::vec2(this->width / 2.0f, this->height / 2.0f);
+    if(coop_mode){
       this->players[1]->score = 0;
-      this->players[1]->initShip(position, 20);
+      this->players[1]->level = 1;
+      position = glm::vec2(this->width / 2.0f, this->height / 2.0f);
+      this->players[1]->initShip(position, 20); 
     }
+
+    this->state = GAME;
+    this->levels_manager->resetLevels();
     this->initAsteroids(this->levels_manager->nb_asteroids);
   }
 }
 
 void GameWindow::endGame() {
+  int total_score = (coop_mode)? this->players[0]->score + this->players[1]->score : this->players[0]->score;
   this->end_menu->components["message"]->label =
       "LMAO u ded " + this->players[0]->name + "!!";
   this->end_menu->components["message"]->centerHorizontally(width);
   this->end_menu->components["score"]->label =
-      "Your score : " + std::to_string(this->players[0]->score);
+      "Your score : " + std::to_string(total_score);
   this->end_menu->components["score"]->centerHorizontally(width);
   this->end_menu->components["level"]->label =
       "You reached level " + std::to_string(this->players[0]->level) + "!";
   this->end_menu->components["level"]->centerHorizontally(width);
   this->players[0]->spaceship->invincible = true;
+  if(coop_mode){
+    this->players[1]->spaceship->invincible = true;
+  }
   this->state = END_MENU;
   this->asteroids.clear();
-  this->scoreboard->saveScore(this->players[0]->name, this->players[0]->score);
-  
+  this->scoreboard->saveScore(this->players[0]->name, total_score);
 }
 
 void GameWindow::nextLevel(){
   this->levels_manager->nextLevel();
   this->players[0]->level++;
+  if(coop_mode){
+    this->players[1]->level++;
+  }
   this->initAsteroids(this->levels_manager->nb_asteroids);
 }
 
@@ -229,16 +256,16 @@ void GameWindow::updateAsteroids() {
   }
 }
 
-void GameWindow::updateScore(int level) {
+void GameWindow::updateScore(const std::unique_ptr<Player> &p, int level) {
   switch (level) {
   case 2:
-    this->players[0]->score += 20;
+    p->score += 20;
     break;
   case 1:
-    this->players[0]->score += 50;
+    p->score += 50;
     break;
   case 0:
-    this->players[0]->score += 100;
+    p->score += 100;
     break;
   }
 }
@@ -303,8 +330,9 @@ void GameWindow::draw() {
   SDL_RenderPresent(renderer);
 }
 
-void GameWindow::computeAsteroids(std::vector<int> collided) {
+void GameWindow::computeAsteroids(const std::unique_ptr<Player> &p) {
   static auto gen_float = alea_generator(-1.0f, 1.0f);
+  std::vector<int> collided = p->spaceship->weapon->collided(this->asteroids);
 
   for (int inter : collided) {
     glm::vec2 aster_pos = this->asteroids[inter]->center;
@@ -312,7 +340,7 @@ void GameWindow::computeAsteroids(std::vector<int> collided) {
     int nr = this->asteroids[inter]->nrays;
     int lev = this->asteroids[inter]->level;
 
-    this->updateScore(lev);
+    this->updateScore(p, lev);
 
     this->asteroids.erase(this->asteroids.begin() + inter);
     for (int i = 0; i < 10; i++) {
@@ -387,6 +415,7 @@ void GameWindow::mainLoop(void) {
             this->menu->components["gamertag"]->centerHorizontally(width);
           }
           if (windowEvent.key.keysym.sym == SDLK_RETURN) {
+            this->initPlayers();
             this->players[0]->name =
                 dynamic_cast<TextInput *>(this->menu->components["gamertag"])
                     ->input;
@@ -413,7 +442,17 @@ void GameWindow::mainLoop(void) {
       deltaTime = currentTime - lastTime;
       invincibleTime += currentTime - lastTime;
       levelMessageTime += currentTime - lastTime;
-      (invincibleTime < 2000000)? this->players[0]->spaceship->invincible = true : this->players[0]->spaceship->invincible = false;
+      if(invincibleTime < 2000000){
+        this->players[0]->spaceship->invincible = true;
+        if(coop_mode){
+          this->players[1]->spaceship->invincible = true;
+        }
+      } else {
+        this->players[0]->spaceship->invincible = false;
+        if(coop_mode){
+          this->players[1]->spaceship->invincible = false;
+        }
+      }
       (levelMessageTime < 5000000)? this->levels_manager->message = true: this->levels_manager->message = false;
       if (deltaTime > 30) /* Si 30 ms se sont écoulées */
       {
@@ -422,8 +461,7 @@ void GameWindow::mainLoop(void) {
             continue;
           }
           p->input_manager->process(currentTime);
-          this->computeAsteroids(
-              p->spaceship->weapon->collided(this->asteroids));
+          this->computeAsteroids(p);
 
           if (!p->spaceship->invincible &&
               p->spaceship->intersectsAsteroid(this->asteroids)) {
