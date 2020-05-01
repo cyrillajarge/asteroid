@@ -11,8 +11,8 @@ class Scoreboard {
     std::string path;
     std::vector<std::pair<std::string, int>> scores;
 
-  public:
     Scoreboard();
+    
     /**
      * @brief Saves the player/team score in the score file
      * 

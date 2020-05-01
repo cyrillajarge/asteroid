@@ -12,18 +12,48 @@
 
 class Asteroid {
 public:
+  /**
+  * @brief Position of the center of the asteroid
+  */
   glm::vec2 center;
+  
+  /**
+  * @brief Defines the rays used to generate the polygon representing the asteroid
+  * 
+  * @param rays
+  */
   std::vector<int> rays;
+  
+  /**
+  * @brief Defines the average length of a ray
+  * Used to compute the bounding circle for collisions
+  */
   int averageray;
-  std::vector<glm::vec2> BB;
+  
+  /**
+  * @brief Number of rays(sides) of the polygon
+  */
   int nrays;
+  
+  /**
+  * @brief Current asteroid level (3 in total)
+  */
   int level;
+  
+  /**
+  * @brief Speed vector of the asteroid
+  */
   glm::vec2 direction;
 
-public:
   Asteroid(glm::vec2 position, glm::vec2 direction, int averageray, int nrays,
            int level);
   ~Asteroid();
+
+  /**
+  * @brief Draws the asteroid
+  *
+  * @param renderer
+  */
   void draw(SDL_Renderer *renderer);
 };
 

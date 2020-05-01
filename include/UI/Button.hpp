@@ -12,16 +12,7 @@ class Button : public Clickable {
     Button(std::string label, glm::vec2 label_pos,
           std::function<void()> handler);
 
-    /**
-    * @brief Computes the bounding box
-    */
     void computeBox();
-    
-    /**
-    * @brief Draws element in window
-    * 
-    * @param renderer
-    */
     void draw(SDL_Renderer *renderer);
 };
 

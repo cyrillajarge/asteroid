@@ -5,10 +5,11 @@ void ParticlesManager::addParticle(Particle* p){
 }
 
 void ParticlesManager::updateParticles(){
-  for (auto i = this->particles.begin(); i != this->particles.end(); ++i) { 
-    if(dynamic_cast<LifeParticle *>(*i) != NULL){
-      dynamic_cast<LifeParticle *>(*i)->update(); 
-      if(dynamic_cast<LifeParticle *>(*i)->life < 0) {
+  for (auto i = this->particles.begin(); i != this->particles.end(); ++i) {
+    LifeParticle* lp = dynamic_cast<LifeParticle *>(*i);
+    if(lp != NULL){
+      lp->update(); 
+      if(lp->life < 0) {
         this->particles.erase(i); 
         i--; 
       }

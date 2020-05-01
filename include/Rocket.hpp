@@ -12,10 +12,17 @@
 
 class Rocket {
 public:
+
+  /**
+  * @brief Rocket position
+  */
   glm::vec2 position;
+
+  /**
+  * @brief Rocket direction
+  */
   glm::vec2 direction;
 
-public:
   /**
    * @brief Construct a new Rocket object
    * 

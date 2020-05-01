@@ -65,7 +65,6 @@ public:
    */
   bool invincible;
 
-public:
   Spaceship(glm::vec2 position, int size);
   ~Spaceship();
 

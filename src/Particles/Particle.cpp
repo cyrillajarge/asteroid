@@ -1,6 +1,5 @@
 #include "Particles/Particle.hpp"
 
-
 void Particle::update(){
   this->position += SPEED_FACTOR * this->speed;
 }

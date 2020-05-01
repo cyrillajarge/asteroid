@@ -52,10 +52,10 @@ public:
    */
   std::unique_ptr<InputManager> input_manager;
 
-public:
   Player(input_mapping_t m, glm::vec4 color);
   Player(std::string name);
   ~Player();
+  
   /**
    * @brief Instanciates a spaceship and attaches it to the input manager
    *

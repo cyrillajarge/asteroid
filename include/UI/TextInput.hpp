@@ -11,7 +11,6 @@ class TextInput : public UIComponent{
      */
     std::string input = "";
 
-  public:
     TextInput(std::string label);
     TextInput(std::string label, glm::vec2 position);
     
@@ -27,16 +26,7 @@ class TextInput : public UIComponent{
      */
     void removeLetter(SDL_Event e);
 
-    /**
-    * @brief Computes the bounding box
-    */
     void computeBox();
-
-    /**
-    * @brief Draws element in window
-    * 
-    * @param renderer
-    */
     void draw(SDL_Renderer *renderer);
 };
 

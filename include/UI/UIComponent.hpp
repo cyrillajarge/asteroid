@@ -61,8 +61,6 @@ class UIComponent {
      */
     glm::vec4 border_color = {255,255,255,255};
 
-  public:
-    
     /**
     * @brief Sets padding using values for each direction
     * 

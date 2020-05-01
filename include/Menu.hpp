@@ -21,9 +21,9 @@ public:
    */
   std::unordered_map<std::string, UIComponent *> components;
 
-public:
   Menu(Font *font);
   ~Menu();
+
   /**
    * @brief Adds a new Button to the menu
    * 

@@ -47,8 +47,9 @@ public:
    */
   glm::vec2 &pos;
 
-public:
   Weapon(double &ng, glm::vec2 &p);
+  virtual ~Weapon();
+
   /**
    * @brief Prints angle and position in stdout.
    *
@@ -76,8 +77,6 @@ public:
    * @return std::string
    */
   std::string getCDStr();
-
-  virtual ~Weapon();
 
   /**
    * @brief Main shot

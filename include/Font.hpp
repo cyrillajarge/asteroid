@@ -25,7 +25,6 @@ public:
    */
   SDL_Color color;
 
-public:
   Font();
   Font(double size);
   Font(SDL_Color color);
