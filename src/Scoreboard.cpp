@@ -3,8 +3,7 @@
 #include <algorithm>
 
 Scoreboard::Scoreboard() {
-  this->path = getenv("HOME") + std::string("/.asteroids");
-  std::cout << "Scoreboard dir : " << this->path << std::endl;
+  this->path = DATA_PATH + ".asteroids_score";
   this->initScores();
 }
 
