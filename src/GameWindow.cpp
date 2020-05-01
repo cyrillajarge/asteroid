@@ -54,9 +54,10 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   this->scoreboard = std::make_unique<Scoreboard>();
 
   // Setting up level manager
-  this->levels_manager = std::make_unique<LevelsManager>("config/levels.txt");
+  this->levels_manager = std::make_unique<LevelsManager>(DATA_PATH+"config/levels.txt");
 
   this->state = MENU;
+
   dynamic_cast<Clickable *>(this->menu->components["play"])
       ->handler = [this]() {
     this->initPlayers();
