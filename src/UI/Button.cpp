@@ -1,5 +1,11 @@
 #include "UI/Button.hpp"
 
+Button::Button(std::string label) {
+  this->label = label;
+  this->position = glm::vec2(0,0);
+  this->computeBox();
+}
+
 Button::Button(std::string label, glm::vec2 label_pos) {
   this->label = label;
   this->position = label_pos;

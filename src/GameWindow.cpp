@@ -20,14 +20,14 @@ GameWindow::GameWindow(const char *name, int width, int height) {
     std::exit(EXIT_FAILURE);
   }
 
-  // Setting game window properties
+  // Setting window size
   this->width = width;
   this->height = height;
 
-  // Particle Manager
+  // Creating particle manger
   this->particleManager = std::make_unique<ParticlesManager>();
 
-  // Create renderer
+  // Creating renderer
   this->renderer =
       SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
   if (this->renderer == NULL) {
@@ -36,7 +36,7 @@ GameWindow::GameWindow(const char *name, int width, int height) {
   }
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
-  // // Setting up game entities
+  // Setting up players
   this->initPlayers();
 
   // Setting up UI
@@ -102,53 +102,51 @@ GameWindow::GameWindow(const char *name, int width, int height) {
 }
 
 void GameWindow::initMenu() {
-  this->menu->addPlainText("title", "ASTEROID", {200, 200});
+  this->menu->addPlainText("title", "ASTEROID");
   this->menu->components["title"]->center(width, height);
   this->menu->components["title"]->moveY(-150);
 
-  this->menu->addButton("play", "PLAY", {200, 200});
+  this->menu->addButton("play", "PLAY");
   this->menu->components["play"]->border = true;
   this->menu->components["play"]->border_color = {0, 255, 0, 255};
   this->menu->components["play"]->center(width, height);
   this->menu->components["play"]->moveY(-50);
 
-  this->menu->addCheckbox("coop", "Co-op", {200,200});
+  this->menu->addCheckbox("coop", "Co-op");
   this->menu->components["coop"]->center(width, height);
 
-  this->menu->addButton("scoreboard", "Show scoreboard", {200,200});
+  this->menu->addButton("scoreboard", "Show scoreboard");
   this->menu->components["scoreboard"]->border = true;
   this->menu->components["scoreboard"]->border_color = {0, 0, 255, 255};
   this->menu->components["scoreboard"]->center(width, height);
   this->menu->components["scoreboard"]->moveY(50);
 
-  this->menu->addTextInput("gamertag", "Enter Gamertag: ", {400, 400});
+  this->menu->addTextInput("gamertag", "Enter Gamertag: ");
   this->menu->components["gamertag"]->center(width, height);
   this->menu->components["gamertag"]->moveY(150);
 }
 
 void GameWindow::initEndMenu() {
-  this->end_menu->addPlainText("message", "LMAO u ded!!", {200, 200});
+  this->end_menu->addPlainText("message", "LMAO u ded!!");
   this->end_menu->components["message"]->center(width, height);
   this->end_menu->components["message"]->moveY(-200);
 
   this->end_menu->addPlainText(
-      "score", "Your score : " + std::to_string(this->players[0]->score),
-      {400, 400});
+      "score", "Your score : " + std::to_string(this->players[0]->score));
   this->end_menu->components["score"]->center(width, height);
   this->end_menu->components["score"]->moveY(-75);
 
   this->end_menu->addPlainText(
-      "level", "You reached level " + std::to_string(this->players[0]->level) + "!",
-      {400, 400});
+      "level", "You reached level " + std::to_string(this->players[0]->level) + "!");
   this->end_menu->components["level"]->center(width, height);
 
-  this->end_menu->addButton("scoreboard", "Show scoreboard",{200,200});
+  this->end_menu->addButton("scoreboard", "Show scoreboard");
   this->end_menu->components["scoreboard"]->border = true;
   this->end_menu->components["scoreboard"]->border_color = {0, 0, 255, 255};
   this->end_menu->components["scoreboard"]->center(width, height);
   this->end_menu->components["scoreboard"]->moveY(75);
 
-  this->end_menu->addButton("playa", "Play Again", {200, 200});
+  this->end_menu->addButton("playa", "Play Again");
   this->end_menu->components["playa"]->center(width, height);
   this->end_menu->components["playa"]->moveY(200);
   this->end_menu->components["playa"]->border = true;

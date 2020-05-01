@@ -16,9 +16,35 @@ public:
   glm::vec2 direction;
 
 public:
+  /**
+   * @brief Construct a new Rocket object
+   * 
+   * @param position 
+   * @param direction 
+   */
   Rocket(glm::vec2 position, glm::vec2 direction);
+
+  /**
+   * @brief Checks in the rocket collided with an asteroid
+   * 
+   * @param asteroids vector of asteroids
+   * @return index of the collided asteroid in the vector (-1 if no collision)
+   */
   int intersectsAsteroid(std::vector<Asteroid *> asteroids);
+
+  /**
+   * @brief Draws the rocket with default color
+   * 
+   * @param renderer 
+   */
   void draw(SDL_Renderer *renderer);
+
+  /**
+   * @brief Draws the rocket with custom color
+   * 
+   * @param renderer 
+   * @param c 
+   */
   void draw(SDL_Renderer *renderer, SDL_Color c);
 };
 

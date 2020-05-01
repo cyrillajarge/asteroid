@@ -1,6 +1,12 @@
 #include "UI/TextInput.hpp"
 #include "SDL2/SDL.h"
 
+TextInput::TextInput(std::string label){
+  this->label = label;
+  this->position = glm::vec2(0,0);
+  this->computeBox();
+};
+
 TextInput::TextInput(std::string label, glm::vec2 position){
   this->label = label;
   this->position = position;

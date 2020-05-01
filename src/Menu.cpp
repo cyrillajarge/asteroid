@@ -12,8 +12,18 @@ void Menu::addButton(std::string tag, std::string label, glm::vec2 position) {
   this->components.insert({tag, b});
 }
 
+void Menu::addButton(std::string tag, std::string label) {
+  Button *b = new Button(label);
+  this->components.insert({tag, b});
+}
+
 void Menu::addCheckbox(std::string tag, std::string label, glm::vec2 position) {
   Checkbox *cb = new Checkbox(label, position);
+  this->components.insert({tag, cb});
+}
+
+void Menu::addCheckbox(std::string tag, std::string label) {
+  Checkbox *cb = new Checkbox(label);
   this->components.insert({tag, cb});
 }
 
@@ -23,9 +33,19 @@ void Menu::addPlainText(std::string tag, std::string label,
   this->components.insert({tag, pt});
 }
 
+void Menu::addPlainText(std::string tag, std::string label) {
+  PlainText *pt = new PlainText(label);
+  this->components.insert({tag, pt});
+}
+
 void Menu::addTextInput(std::string tag, std::string label,
                         glm::vec2 position) {
   TextInput *ti = new TextInput(label, position);
+  this->components.insert({tag, ti});
+}
+
+void Menu::addTextInput(std::string tag, std::string label) {
+  TextInput *ti = new TextInput(label);
   this->components.insert({tag, ti});
 }
 

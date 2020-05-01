@@ -13,6 +13,7 @@ class Checkbox : public Clickable{
     bool checked = false;
 
   public:
+    Checkbox(std::string label);
     Checkbox(std::string label, glm::vec2 position);
     Checkbox(std::string label, glm::vec2 position,
           std::function<void()> handler);

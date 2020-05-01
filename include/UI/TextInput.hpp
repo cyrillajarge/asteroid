@@ -12,6 +12,7 @@ class TextInput : public UIComponent{
     std::string input = "";
 
   public:
+    TextInput(std::string label);
     TextInput(std::string label, glm::vec2 position);
     
     /**

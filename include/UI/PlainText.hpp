@@ -5,6 +5,7 @@
 
 class PlainText : public UIComponent{
   public:
+    PlainText(std::string label);
     PlainText(std::string label, glm::vec2 position);
 
     /**

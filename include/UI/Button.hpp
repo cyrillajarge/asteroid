@@ -7,6 +7,7 @@
 
 class Button : public Clickable {
   public:
+    Button(std::string label);
     Button(std::string label, glm::vec2 label_pos);
     Button(std::string label, glm::vec2 label_pos,
           std::function<void()> handler);

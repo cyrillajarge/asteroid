@@ -1,5 +1,11 @@
 #include "UI/PlainText.hpp"
 
+PlainText::PlainText(std::string label){
+  this->label = label;
+  this->position = glm::vec2(0,0);
+  this->computeBox();
+}
+
 PlainText::PlainText(std::string label, glm::vec2 position){
   this->label = label;
   this->position = position;
