@@ -15,7 +15,7 @@ TextInput::TextInput(std::string label, glm::vec2 position){
 };
 
 void TextInput::addLetter(SDL_Event e){
-  if(strncmp(e.text.text,":",1)){
+  if(std::strncmp(e.text.text,":",1)){
     input += e.text.text;
   }
   else{

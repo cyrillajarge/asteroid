@@ -23,11 +23,13 @@ include_directories(include)
 
 # add_subdirectory(src)
 set(BINDIR bin)
-set(TARGET main)
+set(TARGET asteroids)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/${BINDIR})
 
 file(GLOB_RECURSE sources "src/*.cpp")
 add_executable(${TARGET} ${sources})
+
+target_compile_definitions(${TARGET} PUBLIC "DATA_PATH=std::string\(\"${CMAKE_CURRENT_SOURCE_DIR}/\"\)")
 
 target_link_libraries(${TARGET} 
   ${SDL2_LIBRARY}
