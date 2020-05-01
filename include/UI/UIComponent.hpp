@@ -2,7 +2,7 @@
 #define UICOMP_H
 
 #include "Font.hpp"
-#include "SDL2/SDL.h"
+#include <SDL.h>
 #include "glm/vec2.hpp"
 #include "glm/vec4.hpp"
 #include <iostream>

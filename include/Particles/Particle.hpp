@@ -1,7 +1,7 @@
 #ifndef PARTICLE_H
 #define PARTICLE_H
 
-#include "SDL2/SDL.h"
+#include <SDL.h>
 #include "glm/glm.hpp"
 
 #define SPEED_FACTOR 10.0f

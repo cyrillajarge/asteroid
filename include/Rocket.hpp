@@ -2,7 +2,7 @@
 #define ROCKET_H
 
 #include "Asteroid.hpp"
-#include "SDL2/SDL.h"
+#include <SDL.h>
 #include "glm/glm.hpp"
 #include <cmath>
 #include <iostream>

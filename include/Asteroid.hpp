@@ -1,7 +1,7 @@
 #ifndef ASTEROID_H
 #define ASTEROID_H
 
-#include "SDL2/SDL.h"
+#include <SDL.h>
 #include "glm/glm.hpp"
 #include <cmath>
 #include <iostream>

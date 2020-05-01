@@ -1,7 +1,7 @@
 #ifndef LEVELSMANAGER_H
 #define LEVELSMANAGER_H
 
-#include "SDL2/SDL.h"
+#include <SDL.h>
 #include <iostream>
 #include <fstream>
 #include <memory>

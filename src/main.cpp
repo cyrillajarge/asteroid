@@ -5,7 +5,7 @@
 #include <cmath>
 
 #include "GameWindow.hpp"
-#include "SDL2/SDL.h"
+#include <SDL.h>
 #include "Spaceship.hpp"
 
 #define WIDTH 1080

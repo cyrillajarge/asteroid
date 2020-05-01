@@ -4,7 +4,7 @@
 #include "Asteroid.hpp"
 #include "Particles/LifeParticle.hpp"
 #include "Particles/ParticlesManager.hpp"
-#include "SDL2/SDL.h"
+#include <SDL.h>
 #include "Weapon.hpp"
 #include "glm/glm.hpp"
 #include <iterator>

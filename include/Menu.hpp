@@ -1,7 +1,7 @@
 #ifndef MENU_H
 #define MENU_H
 #include "Font.hpp"
-#include "SDL2/SDL.h"
+#include <SDL.h>
 #include "UI/UIComponent.hpp"
 #include <string>
 #include <unordered_map>

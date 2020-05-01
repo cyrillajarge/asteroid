@@ -1,7 +1,7 @@
 #ifndef WEAPON_H
 #define WEAPON_H
 #include "Asteroid.hpp"
-#include "SDL2/SDL.h"
+#include <SDL.h>
 #include "glm/vec2.hpp"
 #include <memory>
 #include <string>

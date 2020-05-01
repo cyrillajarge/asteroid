@@ -1,7 +1,7 @@
 # Minimum version of CMake required to build this project
 cmake_minimum_required(VERSION 3.0)
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+# set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
@@ -12,14 +12,21 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 # Name of the project
 project(Asteroid)
 
-find_package(SDL2 REQUIRED)
-find_package(glm REQUIRED)
+add_subdirectory(external/SDL2)
+add_subdirectory(external/glm)
+
+# find_package(SDL2 REQUIRED)
+# find_package(glm REQUIRED)
 find_package (Threads REQUIRED)
 
-include_directories(${SDL2_INCLUDE_DIR})
+# include_directories(${SDL2_INCLUDE_DIR})
 # include_directories(${GLM_INCLUDE_DIR})
 
 include_directories(include)
+include_directories(
+  external/glm
+  external/SDL2/include
+)
 
 # add_subdirectory(src)
 set(BINDIR bin)
@@ -30,7 +37,8 @@ file(GLOB_RECURSE sources "src/*.cpp")
 add_executable(${TARGET} ${sources})
 
 target_link_libraries(${TARGET} 
-  ${SDL2_LIBRARY}
+  # ${SDL2_LIBRARY}
+  SDL2main SDL2-static
   glm
   ${CMAKE_THREAD_LIBS_INIT}
 )

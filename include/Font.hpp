@@ -2,7 +2,7 @@
 #define FONT_H
 
 #include "Hershey.hpp"
-#include "SDL2/SDL.h"
+#include <SDL.h>
 #include <iostream>
 
 class Font {
