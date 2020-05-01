@@ -26,7 +26,7 @@ set(BINDIR bin)
 set(TARGET main)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/${BINDIR})
 
-file(GLOB_RECURSE sources "src/*.cpp")
+file(GLOB_RECURSE sources "${PROJECT_SOURCE_DIR}/src/*.cpp")
 add_executable(${TARGET} ${sources})
 
 target_link_libraries(${TARGET} 

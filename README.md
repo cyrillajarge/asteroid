@@ -18,7 +18,7 @@ L'exécutable se trouve dans le répertoire `bin`(`bin/main` par défaut).
 ## Fonctionnalités
 
 Notre jeu Asteroids permet de jouer en solo ou à 2 en coopération (le tir ami est désactivé).
-Un tableau des scores est disponible, il est sauvegardé dans le fichier `.hemoroids` qui est généré dans le répertoire `HOME` de l'utilisateur.
+Un tableau des scores est disponible, il est sauvegardé dans le fichier `.asteroids` qui est généré dans le répertoire `HOME` de l'utilisateur.
 
 Les scores sont encodés en base 64 grâce aux fonctions de [René Nyffenegger](https://github.com/ReneNyffenegger/cpp-base64).
 

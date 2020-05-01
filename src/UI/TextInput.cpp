@@ -1,3 +1,4 @@
+// #include <cstring>
 #include "UI/TextInput.hpp"
 #include "SDL2/SDL.h"
 

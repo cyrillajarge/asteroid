@@ -18,7 +18,7 @@ int main() {
     return EXIT_FAILURE;
   }
 
-  GameWindow *window = new GameWindow("Hemoroids", WIDTH, HEIGHT);
+  GameWindow *window = new GameWindow("Asteroids", WIDTH, HEIGHT);
 
   window->mainLoop();
 
