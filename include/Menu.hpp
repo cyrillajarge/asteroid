@@ -24,6 +24,7 @@ public:
 public:
   Menu(Font *font);
   ~Menu();
+
   void addButton(std::string tag, std::string label, glm::vec2 position);
   void addCheckbox(std::string tag, std::string label, glm::vec2 position);
   void addPlainText(std::string tag, std::string label, glm::vec2 position);

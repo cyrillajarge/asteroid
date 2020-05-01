@@ -22,40 +22,6 @@ void Button::computeBox() {
   this->hbox = TEXT_HEIGHT + 3 + this->padding.bottom + this->padding.top;
 }
 
-// void Button::setX(int x) {
-//   this->label_pos.x = x;
-//   this->computeBox();
-// }
-
-// void Button::setY(int y) {
-//   this->label_pos.y = y;
-//   this->computeBox();
-// }
-
-// void Button::setPos(int x, int y) {
-//   this->label_pos = {x, y};
-//   this->computeBox();
-// }
-
-// void Button::centerVertically(int height) {
-//     int buttonmiddley = TEXT_HEIGHT/2;
-//     int windmiddley = height/2;
-//     this->label_pos.y = windmiddley + buttonmiddley;
-//     this->computeBox();
-//   }
-
-//   void Button::centerHorizontally(int width) {
-//     int buttonmiddlex = (this->font->getEndPos(this->label, this->label_pos.x) - this->label_pos.x)/2;
-//     int windmiddlex = width/2;
-//     this->label_pos.x = windmiddlex - buttonmiddlex;
-//     this->computeBox();
-//   }
-
-//   void Button::center(int width, int height) {
-//     this->centerVertically(height);
-//     this->centerHorizontally(width);
-//   }
-
 void Button::draw(SDL_Renderer *renderer) {
   SDL_Rect r = { this->xbox, this->ybox, this->wbox, this->hbox };
 

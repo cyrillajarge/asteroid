@@ -13,7 +13,7 @@ void TextInput::addLetter(SDL_Event e){
     input += e.text.text;
   }
   else{
-    std::cout << "Symbol not allowed!" << std::endl;
+    std::cerr << "Symbol not allowed!" << std::endl;
   }
 }
 

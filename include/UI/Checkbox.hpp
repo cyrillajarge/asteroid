@@ -7,6 +7,9 @@
 
 class Checkbox : public Clickable{
   public:
+    /**
+     * Checkbox status
+     */
     bool checked = false;
 
   public:
@@ -14,8 +17,16 @@ class Checkbox : public Clickable{
     Checkbox(std::string label, glm::vec2 position,
           std::function<void()> handler);
 
-  public:
+    /**
+    * @brief Computes the bounding box
+    */
     void computeBox();
+    
+    /**
+    * @brief Draws element in window
+    * 
+    * @param renderer
+    */
     void draw(SDL_Renderer* renderer);
 };
 
