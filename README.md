@@ -4,16 +4,23 @@
 
 ## Pré-requis
 
-Les librairies SDL2 et GLM sont utilisées. Elles sont normalement incluses dans le dépôt.
-
+Les librairies SDL2 et GLM sont utilisées.
 Le projet nécessite C++17.
+
+Pour installer les librairies sur Linux, installer les paquets `libglm-dev` et `libsdl2-dev`.
 
 ## Compilation
 `cmake CMakeLists.txt`
 puis
 `make`
 
-L'exécutable se trouve dans le répertoire `bin`(`bin/main` par défaut).
+ou
+
+```
+mkdir build && cd build && cmake ..
+```
+
+L'exécutable se trouve dans le répertoire `bin`(`bin/asteroids` par défaut).
 
 ## Fonctionnalités
 
@@ -35,7 +42,7 @@ Un niveau par ligne. Le premier élément désigne le numéro du niveau, le seco
 
 Un tableau des scores est disponible, il est sauvegardé dans le fichier `.asteroids` qui est généré dans le répertoire `HOME` de l'utilisateur.
 
-Les scores sont encodés en base 64 grâce aux fonctions de [René Nyffenegger](https://github.com/ReneNyffenegger/cpp-base64).
+Les scores sont encodés en base 64 grâce aux fonctions de [René Nyffenegger](https://github.com/ReneNyffenegger/cpp-base64). Ce n'est absolument pas une manière sécurisée de les stocker, c'est plus "par principe" pour ne pas les stocker en clair.
 
 ## Commandes
 
