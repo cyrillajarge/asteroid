@@ -40,7 +40,7 @@ Un niveau par ligne. Le premier élément désigne le numéro du niveau, le seco
 
 ## Scores
 
-Un tableau des scores est disponible, il est sauvegardé dans le fichier `.asteroids` qui est généré dans le répertoire `HOME` de l'utilisateur.
+Un tableau des scores est disponible, il est sauvegardé dans le fichier `.asteroids` qui est généré dans le répertoire racine du projet.
 
 Les scores sont encodés en base 64 grâce aux fonctions de [René Nyffenegger](https://github.com/ReneNyffenegger/cpp-base64). Ce n'est absolument pas une manière sécurisée de les stocker, c'est plus "par principe" pour ne pas les stocker en clair.
 
